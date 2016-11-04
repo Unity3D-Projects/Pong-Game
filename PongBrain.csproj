@@ -47,9 +47,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\AI\Neural\NeuralPaddleAI.cs" />
     <Compile Include="src\AI\Trivial\TrivialPaddleAI.cs" />
     <Compile Include="src\Components\AI\BrainComponent.cs" />
     <Compile Include="src\Components\Graphical\SpriteComponent.cs" />
+    <Compile Include="src\Components\Graphical\TextComponent.cs" />
     <Compile Include="src\Components\Input\ControlsComponent.cs" />
     <Compile Include="src\Components\Input\InputComponent.cs" />
     <Compile Include="src\Components\LifetimeComponent.cs" />
@@ -67,6 +69,7 @@
     <Compile Include="src\Core\Subsystem.cs" />
     <Compile Include="src\Components\Physical\PositionComponent.cs" />
     <Compile Include="src\Entities\Graphical\RectangleEntity.cs" />
+    <Compile Include="src\Entities\Graphical\ScoreEntity.cs" />
     <Compile Include="src\Entities\Mechanical\BallEntity.cs" />
     <Compile Include="src\Effects\BounceEffect.cs" />
     <Compile Include="src\Effects\Effect.cs" />

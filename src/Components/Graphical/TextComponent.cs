@@ -4,22 +4,21 @@
  * USINGS
  *-----------------------------------*/
 
+using System;
 using System.Drawing;
 
 /*-------------------------------------
  * CLASSES
  *-----------------------------------*/
 
-public sealed class SpriteComponent {
+public sealed class TextComponent {
     /*-------------------------------------
      * PUBLIC PROPERTIES
      *-----------------------------------*/
-    
-    public float ScaleX { get; set; } = 1.0f;
 
-    public float ScaleY { get; set; } = 1.0f;
+    public Font Font { get; set; } = SystemFonts.DefaultFont;
 
-    public Bitmap Texture { get; set; }
+    public Func<string> Text { get; set; }
 }
 
 }

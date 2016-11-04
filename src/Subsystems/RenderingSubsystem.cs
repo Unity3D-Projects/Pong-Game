@@ -98,6 +98,30 @@ public class RenderingSubsystem: Subsystem {
             g.DrawImage(sprite.Texture, x-0.5f*w, y-0.5f*h, 2.0f*w, 2.0f*h);
         }
 
+        foreach (var entity in Game.Inst.GetEntities<TextComponent>()) {
+            var text     = entity.GetComponent<TextComponent>();
+            var position = entity.GetComponent<PositionComponent>();
+
+            var x = 0.0f;
+            var y = 0.0f;
+
+            if (position != null) {
+                x = position.X;
+                y = position.Y;
+            }
+
+            x *= scale;
+            y *= -scale;
+            
+            x += cx;
+            y += cy;
+
+            x = (int)x;
+            y = (int)y;
+
+            g.DrawString(text.Text(), text.Font, Brushes.White, x, y);
+        }
+
         Present();
     }
 

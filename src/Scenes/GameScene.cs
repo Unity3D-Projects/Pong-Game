@@ -28,9 +28,14 @@ public class GameScene: Scene {
      * PRIVATE FIELDS
      *-----------------------------------*/
 
+    private bool m_AboutToScore;
+
     private Entity m_Ball;
     private Entity m_LeftPaddle;
+    private Entity m_LeftScore;
     private Entity m_RightPaddle;
+    private Entity m_RightScore;
+
 
     /*-------------------------------------
      * CONSTRUCTORS
@@ -76,6 +81,9 @@ public class GameScene: Scene {
         CreateLeftPaddle();
         CreateRightPaddle(m_Ball);
 
+        CreateLeftScore();
+        CreateRightScore();
+        
         CreateNet();
     }
 
@@ -119,6 +127,12 @@ public class GameScene: Scene {
         AddEntity(m_LeftPaddle);
     }
 
+    private void CreateLeftScore() {
+        m_LeftScore = new ScoreEntity(-0.96f, 0.68f, () => string.Format("P1 SCORE: {0}", 1000));
+
+        AddEntity(m_LeftScore);
+    }
+
     private void CreateNet() {
         var entities = new List<Entity>();
 
@@ -155,11 +169,16 @@ public class GameScene: Scene {
         AddEntity(m_RightPaddle);
     }
 
+    private void CreateRightScore() {
+        m_RightScore = new ScoreEntity(0.24f, 0.68f, () => string.Format("P2 SCORE: {0}", 1000));
+
+        AddEntity(m_RightScore);
+    }
+
     private void SetupEffects() {
-        return;
         Game.Inst.OnMessage<CollisionMessage>(msg => {
             var entity = ((CollisionMessage)msg).Entity1;
-            new BounceEffect(entity).Create();
+            new BounceEffect(entity, 0.2f).Create();
         });
     }
 
@@ -168,11 +187,14 @@ public class GameScene: Scene {
 
         ballPosition.X = 0.0f;
         ballPosition.Y = 0.0f;
+
+        m_AboutToScore = false;
     }
 
     private void SolveCollisions() {
         var lpb = m_LeftPaddle.GetComponent<PositionComponent>().Y - 0.5f*m_LeftPaddle.GetComponent<BoundingBoxComponent>().Height;
         var lpt = m_LeftPaddle.GetComponent<PositionComponent>().Y + 0.5f*m_LeftPaddle.GetComponent<BoundingBoxComponent>().Height;
+        var lpl  = m_LeftPaddle.GetComponent<PositionComponent>().X - 0.5f*m_LeftPaddle.GetComponent<BoundingBoxComponent>().Width;
         var lpr  = m_LeftPaddle.GetComponent<PositionComponent>().X + 0.5f*m_LeftPaddle.GetComponent<BoundingBoxComponent>().Width;
 
         var bb = m_Ball.GetComponent<PositionComponent>().Y - 0.5f * m_Ball.GetComponent<BoundingBoxComponent>().Height;
@@ -183,25 +205,34 @@ public class GameScene: Scene {
         var rpb = m_RightPaddle.GetComponent<PositionComponent>().Y - 0.5f*m_RightPaddle.GetComponent<BoundingBoxComponent>().Height;
         var rpt = m_RightPaddle.GetComponent<PositionComponent>().Y + 0.5f*m_RightPaddle.GetComponent<BoundingBoxComponent>().Height;
         var rpl  = m_RightPaddle.GetComponent<PositionComponent>().X - 0.5f*m_RightPaddle.GetComponent<BoundingBoxComponent>().Width;
+        var rpr  = m_RightPaddle.GetComponent<PositionComponent>().X + 0.5f*m_RightPaddle.GetComponent<BoundingBoxComponent>().Width;
 
         if (bl < lpr) {
-            if (bb < lpt && bt > lpb) {
+            if (bb < lpt && bt > lpb && !m_AboutToScore) {
                 m_Ball.GetComponent<PositionComponent>().X = lpr + 0.5f*m_Ball.GetComponent<BoundingBoxComponent>().Width;
                 m_Ball.GetComponent<VelocityComponent>().X *= -1.0f;
                 Game.Inst.PostMessage(new CollisionMessage(m_LeftPaddle, m_Ball));
             }
             else {
-                Score(1);
+                m_AboutToScore = true;
+
+                if (br < lpl) {
+                    Score(2);
+                }
             }
         }
         else if (br > rpl) {
-            if (bb < rpt && bt > rpb) {
+            if (bb < rpt && bt > rpb && !m_AboutToScore) {
                 m_Ball.GetComponent<PositionComponent>().X = rpl - 0.5f*m_Ball.GetComponent<BoundingBoxComponent>().Width;
                 m_Ball.GetComponent<VelocityComponent>().X *= -1.0f;
                 Game.Inst.PostMessage(new CollisionMessage(m_RightPaddle, m_Ball));
             }
             else {
-                Score(2);
+                m_AboutToScore = true;
+
+                if (bl > rpr) {
+                    Score(1);
+                }
             }
         }
     }

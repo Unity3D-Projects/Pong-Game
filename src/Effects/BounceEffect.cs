@@ -28,7 +28,7 @@ public sealed class BounceEffect: Effect {
      * CONSTRUCTORS
      *-----------------------------------*/
 
-    public BounceEffect(Entity entity) {
+    public BounceEffect(Entity entity, float duration=1.0f): base(duration) {
         m_Entity = entity;
     }
 
@@ -45,14 +45,24 @@ public sealed class BounceEffect: Effect {
             m_ScaleY = sprite.ScaleY;
         }
     }
-    
+
+    public override void End() {
+        base.End();
+
+        /*var sprite = m_Entity.GetComponent<SpriteComponent>();
+        if (sprite != null) {
+            sprite.ScaleX = m_ScaleX;
+            sprite.ScaleY = m_ScaleY;
+        }*/
+    }
+
     public override void Update(float x) {
         base.Update(x);
 
         var t = 2.0f * (float)Math.PI * x;
 
-        var scaleX = m_ScaleX * 0.1f*(float)Math.Sin(t*3.0f);
-        var scaleY = m_ScaleY * 0.1f*(float)Math.Sin(t*5.0f);
+        var scaleX = m_ScaleX * 0.1f*(float)Math.Sin(t*1.0f);
+        var scaleY = m_ScaleY * 0.1f*(float)Math.Sin(t*1.0f);
 
         var sprite = m_Entity.GetComponent<SpriteComponent>();
         if (sprite != null) {
