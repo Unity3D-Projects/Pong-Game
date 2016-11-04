@@ -4,11 +4,13 @@ namespace PongBrain.Core {
  * USINGS
  *-----------------------------------*/
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Threading;
 using System.Windows.Forms;
+
+using Messaging;
 
 /*-------------------------------------
  * CLASSES
@@ -19,8 +21,8 @@ public class Game {
      * PRIVATE CONSTANTS
      *-----------------------------------*/
 
-    private const double INV_UPDATES_PER_SEC = 1.0 / 120.0;
     private const double INV_DRAWS_PER_SEC = 1.0 / 60.0;
+    private const double INV_UPDATES_PER_SEC = 1.0 / 120.0;
 
     /*-------------------------------------
      * PRIVATE FIELDS
@@ -28,10 +30,13 @@ public class Game {
 
     private bool m_Done;
 
+    private readonly Dictionary<Type, List<Action<IMessage>>> m_MessageHandlers;
+
+    private readonly Queue<IMessage> m_MessageQueue;
+
     private Scene m_Scene;
 
     private Form m_Window;
-
 
     /*-------------------------------------
      * PUBLIC PROPERTIES
@@ -52,6 +57,8 @@ public class Game {
      *-----------------------------------*/
 
     private Game() {
+        m_MessageHandlers = new Dictionary<Type, List<Action<IMessage>>>();
+        m_MessageQueue    = new Queue<IMessage>();
     }
 
     /*-------------------------------------
@@ -82,7 +89,7 @@ public class Game {
     }
 
     public void Init(string title, int width, int height) {        
-        m_Window = CreateForm(title, width, height);
+        m_Window = CreateWindow(title, width, height);
     }
 
     public void LeaveScene() {
@@ -96,6 +103,24 @@ public class Game {
         if (m_Scene == null) {
             Exit();
         }
+    }
+
+    public void OnMessage<T>(Action<IMessage> cb) where T: IMessage {
+        OnMessage(typeof (T), cb);
+    }
+
+    public void OnMessage(Type type, Action<IMessage> cb) {
+        List<Action<IMessage>> callbacks;
+        if (!m_MessageHandlers.TryGetValue(type, out callbacks)) {
+            callbacks = new List<Action<IMessage>>();
+            m_MessageHandlers[type] = callbacks;
+        }
+
+        callbacks.Add(cb);
+    }
+
+    public void PostMessage(IMessage message) {
+        m_MessageQueue.Enqueue(message);
     }
 
     public bool RemoveEntity(int id) {
@@ -127,6 +152,8 @@ public class Game {
                 t2 -= INV_DRAWS_PER_SEC;
             }
 
+            DispatchMessages();
+
             Application.DoEvents();
         }
 
@@ -137,7 +164,7 @@ public class Game {
      * PRIVATE METHODS
      *-----------------------------------*/
 
-    private Form CreateForm(string title, int width, int height) {
+    private Form CreateWindow(string title, int width, int height) {
         var form = new GameForm();
 
         form.FormClosed += (sender, e) => Exit();
@@ -148,6 +175,21 @@ public class Game {
         form.Show();
 
         return form;
+    }
+
+    private void DispatchMessages() {
+        while (m_MessageQueue.Count > 0) {
+            var msg = m_MessageQueue.Dequeue();
+
+            List<Action<IMessage>> callbacks;
+            if (!m_MessageHandlers.TryGetValue(msg.GetType(), out callbacks)) {
+                continue;
+            }
+
+            foreach (var cb in callbacks) {
+                cb(msg);
+            }
+        }
     }
 }
 

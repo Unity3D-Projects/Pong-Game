@@ -1,4 +1,4 @@
-namespace PongBrain.Entities {
+﻿namespace PongBrain.Entities.Graphical {
 
 /*-------------------------------------
  * USINGS
@@ -7,24 +7,23 @@ namespace PongBrain.Entities {
 using Components.Graphical;
 using Components.Physical;
 using Core;
+using Graphics;
 
 /*-------------------------------------
  * CLASSES
  *-----------------------------------*/
 
-public class BallEntity: Entity {
+public class RectangleEntity: Entity {
     /*-------------------------------------
      * CONSTRUCTORS
      *-----------------------------------*/
 
-    public BallEntity() {
-        var r = 0.03f;
-
+    public RectangleEntity(float x, float y, float width, float height) {
         AddComponents(
-            new BoundingBoxComponent { Width=2.0f*r, Height=2.0f*r },
-            new CircleComponent      { Radius=r },
-            new PositionComponent    { X=0.0f, Y=0.0f },
-            new VelocityComponent    { X=0.5f, Y=0.5f }
+            new SpriteComponent   { ScaleX  = width,
+                                    ScaleY  = height,
+                                    Texture = Textures.White },
+            new PositionComponent { X=x, Y=y }
         );
     }
 }

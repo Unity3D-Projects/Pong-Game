@@ -4,8 +4,11 @@
  * USINGS
  *-----------------------------------*/
 
+using System.Drawing;
+
 using Components.Physical;
 using Core;
+using Messaging.Messages;
 
 /*-------------------------------------
  * CLASSES
@@ -80,59 +83,33 @@ public class PhysicsSubsystem: Subsystem {
                     position.X = worldLeft + 0.5f*boundingBox.Width;
                     velocity.X *= -e;
                     velocity.Y -= velocity.Y * f;
+
+                    Game.Inst.PostMessage(new CollisionMessage(entity));
                 }
                 else if (position.X > worldRight - 0.5f*boundingBox.Width) {
                     position.X = worldRight - 0.5f*boundingBox.Width;
                     velocity.X *= -e;
                     velocity.Y -= velocity.Y * f;
+
+                    Game.Inst.PostMessage(new CollisionMessage(entity));
                 }
 
                 if (position.Y < worldBottom + 0.5f*boundingBox.Height) {
                     position.Y = worldBottom + 0.5f*boundingBox.Height;
                     velocity.X -= velocity.X * f;
                     velocity.Y *= -e;
+
+                    Game.Inst.PostMessage(new CollisionMessage(entity));
                 }
                 else if (position.Y > worldTop - 0.5f*boundingBox.Height) {
                     position.Y = worldTop - 0.5f*boundingBox.Height;
                     velocity.X -= velocity.X * f;
                     velocity.Y *= -e;
-                }
 
-                foreach (var otherEntity in Game.Inst.GetEntities<BoundingBoxComponent>()) {
-                    if (otherEntity.ID <= entity.ID) {
-                        continue;
-                    }
-
-                    SolveIntersection(entity, otherEntity);
+                    Game.Inst.PostMessage(new CollisionMessage(entity));
                 }
             }
         }
-    }
-
-    /*-------------------------------------
-     * PRIVATE METHODS
-     *-----------------------------------*/
-
-    private void SolveIntersection(Entity e1, Entity e2) {
-        var bb1 = e1.GetComponent<BoundingBoxComponent>();
-        var bb2 = e2.GetComponent<BoundingBoxComponent>();
-
-        var p1 = e1.GetComponent<PositionComponent>();
-        var p2 = e2.GetComponent<PositionComponent>();
-
-        var bb1w = bb1.Width;
-        var bb1h = bb1.Height;
-        var bb1l = p1.X - 0.5f*bb1w;
-        var bb1r = p1.X + 0.5f*bb1w;
-        var bb1b = p1.Y - 0.5f*bb1h;
-        var bb1t = p1.Y + 0.5f*bb1h;
-
-        var bb2w = bb2.Width;
-        var bb2h = bb2.Height;
-        var bb2l = p1.X - 0.5f*bb2w;
-        var bb2r = p1.X + 0.5f*bb2w;
-        var bb2b = p1.Y - 0.5f*bb2h;
-        var bb2t = p1.Y + 0.5f*bb2h;
     }
 }
 

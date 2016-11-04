@@ -4,14 +4,14 @@
  * USINGS
  *-----------------------------------*/
 
-using Components.AI;
+using Components;
 using Core;
 
 /*-------------------------------------
  * CLASSES
  *-----------------------------------*/
 
-public class AISubsystem: Subsystem {
+public class LifetimeSubsystem: Subsystem {
     /*-------------------------------------
      * PUBLIC METHODS
      *-----------------------------------*/
@@ -19,18 +19,15 @@ public class AISubsystem: Subsystem {
     public override void Update(float dt) {
         base.Update(dt);
 
-        foreach (var entity in Game.Inst.GetEntities<BrainComponent>()) {
-            var brain = entity.GetComponent<BrainComponent>();
+        foreach (var entity in Game.Inst.GetEntities<LifetimeComponent>()) {
+            var lifetime = entity.GetComponent<LifetimeComponent>();
 
-            var t = brain.ThinkTimer + dt;
+            lifetime.Age += dt;
 
-            var invThinkRate = 1.0f / brain.ThinkRate;
-            while (t >= invThinkRate) {
-                brain.ThinkFunc?.Invoke(dt);
-                t -= invThinkRate;
+            if (lifetime.Age >= lifetime.Lifetime) {
+                lifetime.EndOfLife?.Invoke();
+                entity.Destroy();
             }
-
-            brain.ThinkTimer = t;
         }
     }
 }

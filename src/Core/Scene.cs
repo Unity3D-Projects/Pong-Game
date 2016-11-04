@@ -19,12 +19,13 @@ public abstract class Scene {
 
     private readonly Dictionary<Type, List<Entity>> m_ComponentTypeToEntityMap;
     private readonly Dictionary<int, Entity> m_Entities;
+    private readonly HashSet<int> m_EntitiesToRemove;
 
-        /*-------------------------------------
-         * PUBLIC PROPERTIES
-         *-----------------------------------*/
+    /*-------------------------------------
+     * PUBLIC PROPERTIES
+     *-----------------------------------*/
 
-        public IEnumerable<Entity> Entities {
+    public IEnumerable<Entity> Entities {
         get { return m_Entities.Values; }
     }
 
@@ -38,7 +39,8 @@ public abstract class Scene {
 
     public Scene() {
         m_ComponentTypeToEntityMap = new Dictionary<Type, List<Entity>>();
-        m_Entities   = new Dictionary<int, Entity>();
+        m_Entities                 = new Dictionary<int, Entity>();
+        m_EntitiesToRemove         = new HashSet<int>();
     }
 
     /*-------------------------------------
@@ -96,18 +98,11 @@ public abstract class Scene {
     }
 
     public virtual bool RemoveEntity(int id) {
-        Entity entity;
-        if (!m_Entities.TryGetValue(id, out entity)) {
-            return false;    
+        if (!m_Entities.ContainsKey(id)) {
+            return false;
         }
 
-        foreach (var component in entity.GetComponents()) {
-            var type = component.GetType();
-            var entities = m_ComponentTypeToEntityMap[type];
-
-            entities.Remove(entity);
-        }
-
+        m_EntitiesToRemove.Add(id);
         return true;
     }
 
@@ -121,6 +116,23 @@ public abstract class Scene {
         foreach (var subsystem in Subsystems) {
             subsystem.Update(dt);
         }
+
+        foreach (var id in m_EntitiesToRemove) {
+            Entity entity;
+
+            if (!m_Entities.TryGetValue(id, out entity)) {
+                continue;
+            }
+
+            foreach (var component in entity.GetComponents()) {
+                var type     = component.GetType();
+                var entities = m_ComponentTypeToEntityMap[type];
+
+                entities.Remove(entity);
+            }
+        }
+
+        m_EntitiesToRemove.Clear();
     }
 }
 

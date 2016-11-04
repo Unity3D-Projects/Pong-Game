@@ -6,6 +6,7 @@ namespace PongBrain.Subsystems {
 
 using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 using Components.Graphical;
@@ -23,8 +24,8 @@ public class RenderingSubsystem: Subsystem {
 
     private Bitmap m_BackBuffer;
     private Graphics m_BackBufferGraphics;
-    private Graphics m_FormGraphics;
-    private readonly Form m_Form;
+    private Graphics m_WindowGraphics;
+    private readonly Form m_Window;
 
     /*-------------------------------------
      * PUBLIC PROPERTIES
@@ -36,8 +37,8 @@ public class RenderingSubsystem: Subsystem {
      * CONSTRUCTORS
      *-----------------------------------*/
 
-    public RenderingSubsystem(Form form) {
-        m_Form = form;
+    public RenderingSubsystem(Form window) {
+        m_Window = window;
     }
 
     /*-------------------------------------
@@ -49,7 +50,7 @@ public class RenderingSubsystem: Subsystem {
 
         m_BackBuffer.Dispose();
         m_BackBufferGraphics.Dispose();
-        m_FormGraphics.Dispose();
+        m_WindowGraphics.Dispose();
     }
 
     public override void Draw(float dt) {
@@ -59,67 +60,42 @@ public class RenderingSubsystem: Subsystem {
 
         g.Clear(ClearColor);
 
-        var width  = m_Form.ClientRectangle.Width;
-        var height = m_Form.ClientRectangle.Height;
-        var cx     = width  / 2.0f;
-        var cy     = height / 2.0f;
+        var width  = m_Window.ClientRectangle.Width;
+        var height = m_Window.ClientRectangle.Height;
+        var cx     = 0.5f*width;
+        var cy     = 0.5f*height;
         var scale  = 0.5f*Math.Max(width, height);
 
-        foreach (var entity in Game.Inst.GetEntities<CircleComponent>()) {
-            var r = 0.0f;
-            var x = 0.0f;
-            var y = 0.0f;
-
-            var circle   = entity.GetComponent<CircleComponent>();
+        foreach (var entity in Game.Inst.GetEntities<SpriteComponent>()) {
+            var sprite   = entity.GetComponent<SpriteComponent>();
             var position = entity.GetComponent<PositionComponent>();
 
-            if (circle != null) {
-                r = circle.Radius;
-            }
-
-            if (position != null) {
-                x = position.X;
-                y = position.Y;
-            }
-
-            r *= scale;
-            x *= scale;
-            y *= -scale;
-            
-            x += cx;
-            y += cy;
-
-            g.FillEllipse(Brushes.White, x-r, y-r, 2.0f*r, 2.0f*r);
-        }
-
-        foreach (var entity in Game.Inst.GetEntities<RectangleComponent>()) {
-            var w = 0.0f;
-            var h = 0.0f;
             var x = 0.0f;
             var y = 0.0f;
-
-            var rectangle = entity.GetComponent<RectangleComponent>();
-            var position  = entity.GetComponent<PositionComponent>();
-
-            if (rectangle != null) {
-                w = rectangle.Width;
-                h = rectangle.Height;
-            }
+            var w = (float)sprite.Texture.Width;
+            var h = (float)sprite.Texture.Height;
 
             if (position != null) {
                 x = position.X;
                 y = position.Y;
             }
 
-            w *= scale;
-            h *= scale;
+            w *= scale * sprite.ScaleX;
+            h *= scale * sprite.ScaleY;
             x *= scale;
             y *= -scale;
             
             x += cx;
             y += cy;
 
-            g.FillRectangle(Brushes.White, x-0.5f*w, y-0.5f*h, w, h);
+            x = (int)x;
+            y = (int)y;
+            w = (int)w;
+            h = (int)h;
+
+            // GDI interpolates source pixels to outside the texture by rounding
+            // so multiply w and h by 2.... lmao
+            g.DrawImage(sprite.Texture, x-0.5f*w, y-0.5f*h, 2.0f*w, 2.0f*h);
         }
 
         Present();
@@ -128,12 +104,24 @@ public class RenderingSubsystem: Subsystem {
     public override void Init() {
         base.Init();
 
-        var width  = m_Form.ClientRectangle.Width;
-        var height = m_Form.ClientRectangle.Height;
+        var width  = m_Window.ClientRectangle.Width;
+        var height = m_Window.ClientRectangle.Height;
 
         m_BackBuffer         = new Bitmap(width, height);
         m_BackBufferGraphics = Graphics.FromImage(m_BackBuffer);
-        m_FormGraphics       = m_Form.CreateGraphics();
+        m_WindowGraphics     = m_Window.CreateGraphics();
+        
+        var g = m_BackBufferGraphics;
+        g.CompositingQuality = CompositingQuality.HighSpeed;
+        g.InterpolationMode  = InterpolationMode.NearestNeighbor;
+        g.PixelOffsetMode    = PixelOffsetMode.HighSpeed;
+        g.SmoothingMode      = SmoothingMode.HighSpeed;
+
+        g = m_WindowGraphics;
+        g.CompositingQuality = CompositingQuality.HighSpeed;
+        g.InterpolationMode  = InterpolationMode.NearestNeighbor;
+        g.PixelOffsetMode    = PixelOffsetMode.HighSpeed;
+        g.SmoothingMode      = SmoothingMode.HighSpeed;
     }
 
     /*-------------------------------------
@@ -141,7 +129,7 @@ public class RenderingSubsystem: Subsystem {
      *-----------------------------------*/
 
     private void Present() {
-        m_FormGraphics.DrawImageUnscaled(m_BackBuffer, 0, 0);
+        m_WindowGraphics.DrawImageUnscaled(m_BackBuffer, 0, 0);
     }
 }
 

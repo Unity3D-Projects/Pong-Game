@@ -1,4 +1,4 @@
-﻿namespace PongBrain.Entities {
+﻿namespace PongBrain.Entities.Mechanical {
 
 /*-------------------------------------
  * USINGS
@@ -9,6 +9,7 @@ using Components.Graphical;
 using Components.Input;
 using Components.Physical;
 using Core;
+using Graphics;
 
 /*-------------------------------------
  * CLASSES
@@ -22,12 +23,14 @@ public class PaddleEntity: Entity {
     public PaddleEntity() {
         AddComponents(
             new BodyComponent        { },
-            new BoundingBoxComponent { Width=0.04f, Height=0.2f },
+            new BoundingBoxComponent { Width=0.06f, Height=0.28f },
             new ControlsComponent    { },
-            new RectangleComponent   { Width=0.04f, Height=0.2f },
+            new SpriteComponent      { ScaleX=0.06f,
+                                       ScaleY =0.28f,
+                                       Texture =Textures.White },
             new PaddleInfoComponent  { },
-            new PositionComponent    { X=-0.9f, Y=0.0f },
-            new VelocityComponent    { X=0.0f, Y=-0.1f }
+            new PositionComponent    { X=0.0f, Y=0.0f },
+            new VelocityComponent    { X=0.0f, Y=0.0f }
         );
     }
 }

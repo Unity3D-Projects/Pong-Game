@@ -1,8 +1,10 @@
-﻿namespace PongBrain.AI {
+﻿namespace PongBrain.AI.Trivial {
     
 /*-------------------------------------
  * USINGS
  *-----------------------------------*/
+
+using System;
 
 using Components.Input;
 using Components.Physical;
@@ -12,19 +14,20 @@ using Core;
  * CLASSES
  *-----------------------------------*/
 
-public class SimplePaddleAI {
+public class TrivialPaddleAI {
     /*-------------------------------------
      * PRIVATE FIELDS
      *-----------------------------------*/
 
     private Entity m_Ball;
+
     private Entity m_Paddle;
 
     /*-------------------------------------
      * CONSTRUCTORS
      *-----------------------------------*/
 
-    public SimplePaddleAI(Entity ball, Entity paddle) {
+    public TrivialPaddleAI(Entity paddle, Entity ball) {
         m_Ball   = ball;
         m_Paddle = paddle;
     }
@@ -36,18 +39,14 @@ public class SimplePaddleAI {
     public void Think(float dt) {
         var ballPos   = m_Ball.GetComponent<PositionComponent>();
         var paddlePos = m_Paddle.GetComponent<PositionComponent>();
-        var paddleVel = m_Paddle.GetComponent<VelocityComponent>();
+        var controls  = m_Paddle.GetComponent<ControlsComponent>().Controls;
 
-        var controls = m_Paddle.GetComponent<ControlsComponent>().Controls;
+        var d = ballPos.Y - paddlePos.Y;
+        var r = 10.0f*Math.Abs(d);
+        var y = Math.Min(r, 1.0f) * Math.Sign(d);
 
-        controls["Y"] = 0.0f;
+        controls["Y"] = y;
 
-        if (ballPos.Y < paddlePos.Y) {
-            controls["Y"] = -1.0f;
-        }
-        else {
-            controls["Y"] = 1.0f;
-        }
     }
 }
 

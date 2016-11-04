@@ -51,6 +51,10 @@ public class Entity {
         }
     }
 
+    public void Destroy() {
+        Game.Inst.RemoveEntity(ID);
+    }
+
     public T GetComponent<T>() {
         return (T)GetComponent(typeof (T));
     }
