@@ -18,11 +18,7 @@ public abstract class Effect {
      * PRIVATE FIELDS
      *-----------------------------------*/
 
-    private bool m_Done;
-
     private float m_Time;
-
-    private static readonly Stack<Effect> s_EffectStack = new Stack<Effect>();
 
     /*-------------------------------------
      * PUBLIC PROPERTIES
@@ -61,15 +57,14 @@ public abstract class Effect {
             } 
         });
 
+        Begin();
+
         if (Duration > 0.0f) {
             entity.AddComponent(new LifetimeComponent { EndOfLife = End,
                                                         Lifetime  = Duration });
+            Game.Inst.AddEntity(entity);
         }
 
-        Game.Inst.AddEntity(entity);
-
-        s_EffectStack.Push(this);
-        Begin();
     }
 
     public virtual void End() {

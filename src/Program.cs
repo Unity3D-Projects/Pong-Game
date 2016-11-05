@@ -7,6 +7,7 @@
 using System;
 using System.Windows.Forms;
 
+using AI.Neural;
 using Core;
 
 /*-------------------------------------
@@ -25,7 +26,7 @@ internal static class Program {
         var game = Game.Inst;
 
         game.Init("PongBrain", 640, 480);
-        game.Run(new Scenes.GameScene());
+        game.Run(new Scenes.MainScene());
     }
 }
 

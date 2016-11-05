@@ -1,20 +1,16 @@
-﻿namespace PongBrain.AI.Trivial {
+﻿namespace PongBrain.AI.Neural {
     
 /*-------------------------------------
  * USINGS
  *-----------------------------------*/
 
-using System;
-
-using Components.Input;
-using Components.Physical;
 using Core;
 
 /*-------------------------------------
  * CLASSES
  *-----------------------------------*/
 
-public class TrivialPaddleAI {
+public class NeuralAI {
     /*-------------------------------------
      * PRIVATE FIELDS
      *-----------------------------------*/
@@ -23,11 +19,13 @@ public class TrivialPaddleAI {
 
     private Entity m_Paddle;
 
+    private NeuralNetwork m_Brain;
+
     /*-------------------------------------
      * CONSTRUCTORS
      *-----------------------------------*/
 
-    public TrivialPaddleAI(Entity paddle, Entity ball) {
+    public NeuralAI(Entity paddle, Entity ball) {
         m_Ball   = ball;
         m_Paddle = paddle;
     }
@@ -37,16 +35,6 @@ public class TrivialPaddleAI {
      *-----------------------------------*/
 
     public void Think(float dt) {
-        var ballPos   = m_Ball.GetComponent<PositionComponent>();
-        var paddlePos = m_Paddle.GetComponent<PositionComponent>();
-        var controls  = m_Paddle.GetComponent<ControlsComponent>().Controls;
-
-        var d = ballPos.Y - paddlePos.Y;
-        var r = 10.0f*Math.Abs(d);
-        var y = Math.Min(r, 1.0f) * Math.Sign(d);
-
-        controls["Y"] = y;
-
     }
 }
 

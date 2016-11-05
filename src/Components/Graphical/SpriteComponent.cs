@@ -14,7 +14,7 @@ public sealed class SpriteComponent {
     /*-------------------------------------
      * PUBLIC PROPERTIES
      *-----------------------------------*/
-    
+
     public float ScaleX { get; set; } = 1.0f;
 
     public float ScaleY { get; set; } = 1.0f;

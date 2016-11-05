@@ -4,6 +4,7 @@ namespace PongBrain.Scenes {
  * USINGS
  *-----------------------------------*/
 
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 
@@ -23,7 +24,7 @@ using Subsystems;
  * CLASSES
  *-----------------------------------*/
 
-public class GameScene: Scene {
+public class MainScene: Scene {
     /*-------------------------------------
      * PRIVATE FIELDS
      *-----------------------------------*/
@@ -32,16 +33,18 @@ public class GameScene: Scene {
 
     private Entity m_Ball;
     private Entity m_LeftPaddle;
-    private Entity m_LeftScore;
+    private int m_LeftScore;
+    private Entity m_LeftScoreText;
     private Entity m_RightPaddle;
-    private Entity m_RightScore;
+    private int m_RightScore;
+    private Entity m_RightScoreText;
 
 
     /*-------------------------------------
      * CONSTRUCTORS
      *-----------------------------------*/
 
-    public GameScene() {
+    public MainScene() {
         var clearColor = Color.SlateGray;
 
         var w      = (float)Game.Inst.Window.ClientRectangle.Width;
@@ -81,8 +84,8 @@ public class GameScene: Scene {
         CreateLeftPaddle();
         CreateRightPaddle(m_Ball);
 
-        CreateLeftScore();
-        CreateRightScore();
+        CreateLeftScoreText();
+        CreateRightScoreText();
         
         CreateNet();
     }
@@ -127,10 +130,10 @@ public class GameScene: Scene {
         AddEntity(m_LeftPaddle);
     }
 
-    private void CreateLeftScore() {
-        m_LeftScore = new ScoreEntity(-0.96f, 0.68f, () => string.Format("P1 SCORE: {0}", 1000));
+    private void CreateLeftScoreText() {
+        m_LeftScoreText = new ScoreEntity(-0.96f, 0.68f, () => string.Format("P1 SCORE: {0}", m_LeftScore));
 
-        AddEntity(m_LeftScore);
+        AddEntity(m_LeftScoreText);
     }
 
     private void CreateNet() {
@@ -158,10 +161,8 @@ public class GameScene: Scene {
     private void CreateRightPaddle(Entity ball) {
         m_RightPaddle = new PaddleEntity();
 
-        var ai = new TrivialPaddleAI(m_RightPaddle, ball);
-
         m_RightPaddle.AddComponent(new BrainComponent {
-            ThinkFunc = ai.Think,
+            ThinkFunc = new TrivialAI(m_RightPaddle, ball).Think,
         });
 
         m_RightPaddle.GetComponent<PositionComponent>().X = 0.9f;
@@ -169,29 +170,63 @@ public class GameScene: Scene {
         AddEntity(m_RightPaddle);
     }
 
-    private void CreateRightScore() {
-        m_RightScore = new ScoreEntity(0.24f, 0.68f, () => string.Format("P2 SCORE: {0}", 1000));
+    private void CreateRightScoreText() {
+        m_RightScoreText = new ScoreEntity(0.24f, 0.68f, () => string.Format("P2 SCORE: {0}", m_RightScore));
 
-        AddEntity(m_RightScore);
+        AddEntity(m_RightScoreText);
     }
 
     private void SetupEffects() {
         Game.Inst.OnMessage<CollisionMessage>(msg => {
-            var entity = ((CollisionMessage)msg).Entity1;
-            new BounceEffect(entity, 0.2f).Create();
+            var o = ((CollisionMessage)msg);
+
+            if (o.Entity1 == m_Ball || o.Entity2 != null) {
+                new BounceEffect(o.Entity1, 0.2f).Create();
+
+                if (o.Entity2 != null) {
+                    new BounceEffect(o.Entity2, 0.2f).Create();
+
+                    var x = o.Entity1.GetComponent<PositionComponent>().X;
+                    var y = o.Entity1.GetComponent<PositionComponent>().Y;
+
+                    new ExplosionEffect(x, y).Create();
+                }
+            }
         });
     }
 
     private void Score(int player) {
         var ballPosition = m_Ball.GetComponent<PositionComponent>();
+        var ballVelocity = m_Ball.GetComponent<VelocityComponent>();
 
         ballPosition.X = 0.0f;
         ballPosition.Y = 0.0f;
 
+        ballVelocity.X = 0.0f;
+        ballVelocity.Y = 0.0f;
+
         m_AboutToScore = false;
+
+        if (player == 1) {
+            m_LeftScore += 100;
+        }
+        else if (player == 2) {
+            m_RightScore += 100;
+        }
+
+        Game.Inst.SetTimeout(() => {
+            var random = new Random();
+
+            var theta = 2.0f*(float)Math.PI*(float)random.NextDouble();
+            var r = 0.9f+0.6f*(float)random.NextDouble();
+        
+            ballVelocity.X = (float)Math.Cos(theta)*r;
+            ballVelocity.Y = (float)Math.Sin(theta)*r;
+        }, 0.5f);
     }
 
     private void SolveCollisions() {
+        // Clean up this method. Oh my lord.
         var lpb = m_LeftPaddle.GetComponent<PositionComponent>().Y - 0.5f*m_LeftPaddle.GetComponent<BoundingBoxComponent>().Height;
         var lpt = m_LeftPaddle.GetComponent<PositionComponent>().Y + 0.5f*m_LeftPaddle.GetComponent<BoundingBoxComponent>().Height;
         var lpl  = m_LeftPaddle.GetComponent<PositionComponent>().X - 0.5f*m_LeftPaddle.GetComponent<BoundingBoxComponent>().Width;
@@ -211,7 +246,7 @@ public class GameScene: Scene {
             if (bb < lpt && bt > lpb && !m_AboutToScore) {
                 m_Ball.GetComponent<PositionComponent>().X = lpr + 0.5f*m_Ball.GetComponent<BoundingBoxComponent>().Width;
                 m_Ball.GetComponent<VelocityComponent>().X *= -1.0f;
-                Game.Inst.PostMessage(new CollisionMessage(m_LeftPaddle, m_Ball));
+                Game.Inst.PostMessage(new CollisionMessage(m_Ball, m_LeftPaddle));
             }
             else {
                 m_AboutToScore = true;
@@ -225,7 +260,7 @@ public class GameScene: Scene {
             if (bb < rpt && bt > rpb && !m_AboutToScore) {
                 m_Ball.GetComponent<PositionComponent>().X = rpl - 0.5f*m_Ball.GetComponent<BoundingBoxComponent>().Width;
                 m_Ball.GetComponent<VelocityComponent>().X *= -1.0f;
-                Game.Inst.PostMessage(new CollisionMessage(m_RightPaddle, m_Ball));
+                Game.Inst.PostMessage(new CollisionMessage(m_Ball, m_RightPaddle));
             }
             else {
                 m_AboutToScore = true;

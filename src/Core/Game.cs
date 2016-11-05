@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
+using Components;
 using Messaging;
 
 /*-------------------------------------
@@ -158,6 +159,16 @@ public class Game {
         }
 
         LeaveScene();
+    }
+
+    public Entity SetTimeout(Action cb, float time) {
+        var timer = new Entity();
+
+        timer.AddComponent(new LifetimeComponent { EndOfLife = cb,
+                                                   Lifetime  = time });
+
+        AddEntity(timer);
+        return timer;
     }
 
     /*-------------------------------------

@@ -41,8 +41,9 @@ public class Entity {
      * PUBLIC METHODS
      *-----------------------------------*/
 
-    public void AddComponent(object component) {
+    public T AddComponent<T>(T component) where T: class {
         m_Components.Add(component.GetType(),  component);
+        return component;
     }
 
     public void AddComponents(params object[] components) {

@@ -47,8 +47,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\AI\Neural\NeuralPaddleAI.cs" />
-    <Compile Include="src\AI\Trivial\TrivialPaddleAI.cs" />
+    <Compile Include="src\AI\Neural\NeuralNetwork.cs" />
+    <Compile Include="src\AI\Neural\NeuralAI.cs" />
+    <Compile Include="src\AI\Trivial\TrivialAI.cs" />
     <Compile Include="src\Components\AI\BrainComponent.cs" />
     <Compile Include="src\Components\Graphical\SpriteComponent.cs" />
     <Compile Include="src\Components\Graphical\TextComponent.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="src\Core\Scene.cs" />
     <Compile Include="src\Core\Subsystem.cs" />
     <Compile Include="src\Components\Physical\PositionComponent.cs" />
+    <Compile Include="src\Effects\ExplosionEffect.cs" />
     <Compile Include="src\Entities\Graphical\RectangleEntity.cs" />
     <Compile Include="src\Entities\Graphical\ScoreEntity.cs" />
     <Compile Include="src\Entities\Mechanical\BallEntity.cs" />
@@ -81,7 +83,7 @@
     <Compile Include="src\Messaging\MessageInfo.cs" />
     <Compile Include="src\Messaging\Messages\CollisionMessage.cs" />
     <Compile Include="src\Program.cs" />
-    <Compile Include="src\Scenes\GameScene.cs" />
+    <Compile Include="src\Scenes\MainScene.cs" />
     <Compile Include="src\Subsystems\AISubsystem.cs" />
     <Compile Include="src\Subsystems\ControlsSubsystem.cs" />
     <Compile Include="src\Subsystems\EffectsSubsystem.cs" />
@@ -101,6 +103,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="img\Screenshot0.png" />
+    <Content Include="img\Screenshot1.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
