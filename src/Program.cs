@@ -7,8 +7,8 @@
 using System;
 using System.Windows.Forms;
 
-using AI.Neural;
-using Core;
+using Base.Core;
+using Pong.Scenes;
 
 /*-------------------------------------
  * CLASSES
@@ -26,7 +26,7 @@ internal static class Program {
         var game = Game.Inst;
 
         game.Init("PongBrain", 640, 480);
-        game.Run(new Scenes.MainScene());
+        game.Run(new MainScene());
     }
 }
 
