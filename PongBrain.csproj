@@ -47,6 +47,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\Base\Graphics\Color.cs" />
+    <Compile Include="src\Base\Graphics\Font.cs" />
+    <Compile Include="src\Base\Graphics\Texture.cs" />
     <Compile Include="src\Pong\AI\Neural\NeuralNetwork.cs" />
     <Compile Include="src\Pong\AI\Neural\NeuralAI.cs" />
     <Compile Include="src\Pong\AI\Trivial\TrivialAI.cs" />
@@ -76,7 +79,6 @@
     <Compile Include="src\Pong\Effects\BounceEffect.cs" />
     <Compile Include="src\Pong\Effects\Effect.cs" />
     <Compile Include="src\Pong\Entities\Mechanical\PaddleEntity.cs" />
-    <Compile Include="src\Base\Graphics\Textures.cs" />
     <Compile Include="src\Base\Input\Keyboard.cs" />
     <Compile Include="src\Base\Input\Key.cs" />
     <Compile Include="src\Base\Core\IMessage.cs" />

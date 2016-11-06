@@ -22,7 +22,7 @@ public class RectangleEntity: Entity {
         AddComponents(
             new SpriteComponent   { ScaleX  = width,
                                     ScaleY  = height,
-                                    Texture = Textures.White },
+                                    Texture = Texture.White },
             new PositionComponent { X=x, Y=y }
         );
     }

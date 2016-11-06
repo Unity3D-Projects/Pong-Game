@@ -21,9 +21,9 @@ public class BallEntity: Entity {
     public BallEntity() {
         AddComponents(
             new AxisAlignedBoxComponent { Width=0.06f, Height=0.06f },
-            new SpriteComponent         { ScaleX=0.06f,
-                                          ScaleY =0.06f,
-                                          Texture =Textures.White },
+            new SpriteComponent         { ScaleX  = 0.06f,
+                                          ScaleY  = 0.06f,
+                                          Texture = Texture.White },
             new PositionComponent       { X=0.0f, Y=0.0f },
             new VelocityComponent       { X=1.1f, Y=1.1f }
         );

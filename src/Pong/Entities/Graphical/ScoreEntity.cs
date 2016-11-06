@@ -5,7 +5,6 @@
  *-----------------------------------*/
 
 using System;
-using System.Drawing;
 
 using Base.Components.Graphical;
 using Base.Components.Physical;
@@ -22,7 +21,7 @@ public class ScoreEntity: Entity {
 
     public ScoreEntity(float x, float y, Func<string> textFunc) {
         AddComponents(
-            new TextComponent     { Font = new Font("Segoe UI", 22.0f, FontStyle.Bold),
+            new TextComponent     { /*Font = new Font("Segoe UI", 22.0f, FontStyle.Bold),*/
                                     Text = textFunc },
             new PositionComponent { X=x, Y=y }
         );

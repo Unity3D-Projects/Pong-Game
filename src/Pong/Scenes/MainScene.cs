@@ -6,12 +6,12 @@ namespace PongBrain.Pong.Scenes {
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 
 using Base.Components.AI;
 using Base.Components.Input;
 using Base.Components.Physical;
 using Base.Core;
+using Base.Graphics;
 using Base.Input;
 using Base.Messages;
 using Base.Subsystems;
@@ -47,7 +47,7 @@ public class MainScene: Scene {
      *-----------------------------------*/
 
     public MainScene() {
-        var clearColor = Color.SlateGray;
+        var clearColor = new Color(0xff708090);
 
         var w      = (float)Game.Inst.Window.ClientRectangle.Width;
         var h      = (float)Game.Inst.Window.ClientRectangle.Height;

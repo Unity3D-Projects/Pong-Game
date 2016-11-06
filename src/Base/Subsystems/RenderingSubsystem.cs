@@ -31,7 +31,8 @@ public class RenderingSubsystem: Subsystem {
      * PUBLIC PROPERTIES
      *-----------------------------------*/
 
-    public Color ClearColor { get; set; } = Color.Black;
+    public Base.Graphics.Color ClearColor { get; set; } =
+        Base.Graphics.Color.Black;
 
     /*-------------------------------------
      * CONSTRUCTORS
@@ -58,7 +59,8 @@ public class RenderingSubsystem: Subsystem {
 
         var g = m_BackBufferGraphics;
 
-        g.Clear(ClearColor);
+        var clearColor = Color.FromArgb(ClearColor.ToInt());
+        g.Clear(clearColor);
 
         var width  = m_Window.ClientRectangle.Width;
         var height = m_Window.ClientRectangle.Height;
@@ -95,7 +97,8 @@ public class RenderingSubsystem: Subsystem {
 
             // GDI interpolates source pixels to outside the texture by rounding
             // so multiply w and h by 2.... lmao
-            g.DrawImage(sprite.Texture, x-0.5f*w, y-0.5f*h, 2.0f*w, 2.0f*h);
+            var bmp = sprite.Texture.m_Bitmap;
+            g.DrawImage(bmp, x-0.5f*w, y-0.5f*h, 2.0f*w, 2.0f*h);
         }
 
         foreach (var entity in Game.Inst.GetEntities<TextComponent>()) {
@@ -119,7 +122,8 @@ public class RenderingSubsystem: Subsystem {
             x = (int)x;
             y = (int)y;
 
-            g.DrawString(text.Text(), text.Font, Brushes.White, x, y);
+            var font = text.Font.m_Font;
+            g.DrawString(text.Text(), font, Brushes.White, x, y);
         }
 
         Present();

@@ -4,7 +4,7 @@
  * USINGS
  *-----------------------------------*/
 
-using System.Drawing;
+using Graphics;
 
 /*-------------------------------------
  * CLASSES
@@ -19,7 +19,7 @@ public sealed class SpriteComponent {
 
     public float ScaleY { get; set; } = 1.0f;
 
-    public Bitmap Texture { get; set; }
+    public Texture Texture { get; set; }
 }
 
 }
