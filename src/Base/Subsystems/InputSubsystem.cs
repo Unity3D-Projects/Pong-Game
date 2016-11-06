@@ -22,7 +22,8 @@ public class InputSubsystem: Subsystem {
 
         var keyboard = new Keyboard();
 
-        foreach (var entity in Game.Inst.GetEntities<InputComponent>()) {
+        var entities = Game.Inst.Scene.GetEntities<InputComponent>();
+        foreach (var entity in entities) {
             var input = entity.GetComponent<InputComponent>();
 
             input.ResetControls?.Invoke();

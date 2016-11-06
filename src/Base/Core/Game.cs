@@ -11,6 +11,7 @@ using System.Drawing;
 using System.Windows.Forms;
 
 using Components;
+using Graphics;
 
 /*-------------------------------------
  * CLASSES
@@ -42,6 +43,8 @@ public class Game {
      * PUBLIC PROPERTIES
      *-----------------------------------*/
 
+    public IGraphicsImpl Graphics { get; private set; }
+
     public static Game Inst { get; } = new Game();
 
     public Scene Scene {
@@ -65,10 +68,6 @@ public class Game {
      * PUBLIC METHODS
      *-----------------------------------*/
 
-    public void AddEntity(Entity entity) {
-        m_Scene.AddEntity(entity);
-    }
-
     public void EnterScene(Scene scene) {
         scene.Parent = m_Scene;
         scene.Init();
@@ -80,16 +79,14 @@ public class Game {
         m_Done = true;
     }
 
-    public IEnumerable<Entity> GetEntities() {
-        return m_Scene.Entities;
-    }
-
-    public IEnumerable<Entity> GetEntities<T>() {
-        return m_Scene.GetEntities<T>();
-    }
-
-    public void Init(string title, int width, int height) {        
+    public void Init(IGraphicsImpl graphics,
+                     string title,
+                     int width,
+                     int height)
+    {        
         m_Window = CreateWindow(title, width, height);
+
+        Graphics = graphics;
     }
 
     public void LeaveScene() {
@@ -121,10 +118,6 @@ public class Game {
 
     public void PostMessage(IMessage message) {
         m_MessageQueue.Enqueue(message);
-    }
-
-    public bool RemoveEntity(int id) {
-        return m_Scene.RemoveEntity(id);
     }
 
     public void Run(Scene scene) {
@@ -166,7 +159,7 @@ public class Game {
         timer.AddComponent(new LifetimeComponent { EndOfLife = cb,
                                                    Lifetime  = time });
 
-        AddEntity(timer);
+        Scene.AddEntity(timer);
         return timer;
     }
 

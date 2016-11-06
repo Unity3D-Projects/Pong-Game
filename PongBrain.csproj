@@ -34,13 +34,92 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
+    <Reference Include="SharpDX, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\SharpDX\SharpDX.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Animation, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\SharpDX\SharpDX.Animation.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.D3DCompiler, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\SharpDX\SharpDX.D3DCompiler.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Desktop, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\SharpDX\SharpDX.Desktop.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct2D1, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\SharpDX\SharpDX.Direct2D1.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct3D10, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\SharpDX\SharpDX.Direct3D10.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct3D11, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\SharpDX\SharpDX.Direct3D11.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct3D11.Effects, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\SharpDX\SharpDX.Direct3D11.Effects.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct3D12, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\SharpDX\SharpDX.Direct3D12.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct3D9, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\SharpDX\SharpDX.Direct3D9.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.DirectComposition, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\SharpDX\SharpDX.DirectComposition.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.DirectInput, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\SharpDX\SharpDX.DirectInput.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.DirectManipulation, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\SharpDX\SharpDX.DirectManipulation.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.DirectSound, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\SharpDX\SharpDX.DirectSound.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.DXGI, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\SharpDX\SharpDX.DXGI.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Mathematics, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\SharpDX\SharpDX.Mathematics.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.MediaFoundation, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\SharpDX\SharpDX.MediaFoundation.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.RawInput, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\SharpDX\SharpDX.RawInput.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.XAudio2, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\SharpDX\SharpDX.XAudio2.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.XInput, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\SharpDX\SharpDX.XInput.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
@@ -49,7 +128,13 @@
   <ItemGroup>
     <Compile Include="src\Base\Graphics\Color.cs" />
     <Compile Include="src\Base\Graphics\Font.cs" />
+    <Compile Include="src\Base\Graphics\IGraphicsImpl.cs" />
+    <Compile Include="src\Base\Graphics\GdiPlus\GdiPlusGraphicsImpl.cs" />
+    <Compile Include="src\Base\Graphics\GdiPlus\GdiPlusTexture.cs" />
+    <Compile Include="src\Base\Graphics\ITexture.cs" />
     <Compile Include="src\Base\Graphics\Texture.cs" />
+    <Compile Include="src\Base\Math\Matrix33.cs" />
+    <Compile Include="src\Base\Math\Vector3.cs" />
     <Compile Include="src\Pong\AI\Neural\NeuralNetwork.cs" />
     <Compile Include="src\Pong\AI\Neural\NeuralAI.cs" />
     <Compile Include="src\Pong\AI\Trivial\TrivialAI.cs" />
@@ -107,6 +192,49 @@
   <ItemGroup>
     <Content Include="img\Screenshot0.png" />
     <Content Include="img\Screenshot1.png" />
+    <Content Include="lib\SharpDX\SharpDX.Animation.dll" />
+    <Content Include="lib\SharpDX\SharpDX.Animation.xml" />
+    <Content Include="lib\SharpDX\SharpDX.D3DCompiler.dll" />
+    <Content Include="lib\SharpDX\SharpDX.D3DCompiler.xml" />
+    <Content Include="lib\SharpDX\SharpDX.Desktop.dll" />
+    <Content Include="lib\SharpDX\SharpDX.Desktop.xml" />
+    <Content Include="lib\SharpDX\SharpDX.Direct2D1.dll" />
+    <Content Include="lib\SharpDX\SharpDX.Direct2D1.xml" />
+    <Content Include="lib\SharpDX\SharpDX.Direct3D10.dll" />
+    <Content Include="lib\SharpDX\SharpDX.Direct3D10.xml" />
+    <Content Include="lib\SharpDX\SharpDX.Direct3D11.dll" />
+    <Content Include="lib\SharpDX\SharpDX.Direct3D11.Effects.dll" />
+    <Content Include="lib\SharpDX\SharpDX.Direct3D11.Effects.xml" />
+    <Content Include="lib\SharpDX\SharpDX.Direct3D11.xml" />
+    <Content Include="lib\SharpDX\SharpDX.Direct3D12.dll" />
+    <Content Include="lib\SharpDX\SharpDX.Direct3D12.xml" />
+    <Content Include="lib\SharpDX\SharpDX.Direct3D9.dll" />
+    <Content Include="lib\SharpDX\SharpDX.Direct3D9.xml" />
+    <Content Include="lib\SharpDX\SharpDX.DirectComposition.dll" />
+    <Content Include="lib\SharpDX\SharpDX.DirectComposition.xml" />
+    <Content Include="lib\SharpDX\SharpDX.DirectInput.dll" />
+    <Content Include="lib\SharpDX\SharpDX.DirectInput.xml" />
+    <Content Include="lib\SharpDX\SharpDX.DirectManipulation.dll" />
+    <Content Include="lib\SharpDX\SharpDX.DirectManipulation.xml" />
+    <Content Include="lib\SharpDX\SharpDX.DirectSound.dll" />
+    <Content Include="lib\SharpDX\SharpDX.DirectSound.xml" />
+    <Content Include="lib\SharpDX\SharpDX.dll" />
+    <Content Include="lib\SharpDX\SharpDX.DXGI.dll" />
+    <Content Include="lib\SharpDX\SharpDX.DXGI.xml" />
+    <Content Include="lib\SharpDX\SharpDX.Mathematics.dll" />
+    <Content Include="lib\SharpDX\SharpDX.Mathematics.xml" />
+    <Content Include="lib\SharpDX\SharpDX.MediaFoundation.dll" />
+    <Content Include="lib\SharpDX\SharpDX.MediaFoundation.xml" />
+    <Content Include="lib\SharpDX\SharpDX.RawInput.dll" />
+    <Content Include="lib\SharpDX\SharpDX.RawInput.xml" />
+    <Content Include="lib\SharpDX\SharpDX.XAudio2.dll" />
+    <Content Include="lib\SharpDX\SharpDX.XAudio2.xml" />
+    <Content Include="lib\SharpDX\SharpDX.XInput.dll" />
+    <Content Include="lib\SharpDX\SharpDX.XInput.xml" />
+    <Content Include="lib\SharpDX\SharpDX.xml" />
+    <Content Include="lib\SharpDX\sharpdx_direct3d11_1_effects_arm.dll" />
+    <Content Include="lib\SharpDX\sharpdx_direct3d11_1_effects_x64.dll" />
+    <Content Include="lib\SharpDX\sharpdx_direct3d11_1_effects_x86.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

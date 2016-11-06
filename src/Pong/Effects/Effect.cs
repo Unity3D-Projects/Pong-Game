@@ -62,7 +62,7 @@ public abstract class Effect {
         if (Duration > 0.0f) {
             entity.AddComponent(new LifetimeComponent { EndOfLife = End,
                                                         Lifetime  = Duration });
-            Game.Inst.AddEntity(entity);
+            Game.Inst.Scene.AddEntity(entity);
         }
 
     }

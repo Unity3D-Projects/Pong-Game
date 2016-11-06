@@ -59,7 +59,7 @@ public sealed class ExplosionEffect: Effect {
 
             particle.AddComponent(new LifetimeComponent { Lifetime = a });
 
-            Game.Inst.AddEntity(particle);
+            Game.Inst.Scene.AddEntity(particle);
         }
     }
 }

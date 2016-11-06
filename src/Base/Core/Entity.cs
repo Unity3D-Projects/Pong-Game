@@ -26,6 +26,7 @@ public class Entity {
      *-----------------------------------*/
 
     public int ID { get; }
+    public Scene Scene { get; internal set; }
 
     /*-------------------------------------
      * CONSTRUCTORS
@@ -53,7 +54,9 @@ public class Entity {
     }
 
     public void Destroy() {
-        Game.Inst.RemoveEntity(ID);
+        if (Scene != null) {
+            Scene.RemoveEntity(ID);
+        }
     }
 
     public T GetComponent<T>() {

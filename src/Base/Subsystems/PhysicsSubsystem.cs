@@ -49,7 +49,8 @@ public class PhysicsSubsystem: Subsystem {
         var worldBottom = m_WorldBottom;
         var worldTop    = m_WorldTop;
 
-        foreach (var entity in Game.Inst.GetEntities<VelocityComponent>()) {
+        var entities = Game.Inst.Scene.GetEntities<VelocityComponent>();
+        foreach (var entity in entities) {
             var body     = entity.GetComponent<BodyComponent>();
             var position = entity.GetComponent<PositionComponent>();
             var velocity = entity.GetComponent<VelocityComponent>();

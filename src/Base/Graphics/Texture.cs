@@ -7,31 +7,21 @@
 using System.Drawing;
 
 /*-------------------------------------
- * CLASSES
+ * interfaces
  *-----------------------------------*/
 
-public sealed class Texture {
+public static class Texture {
     /*-------------------------------------
      * PRIVATE FIELDS
      *-----------------------------------*/
     
-    internal readonly Bitmap m_Bitmap;
-
-    private static Texture s_White;
+    private static ITexture s_White;
 
     /*-------------------------------------
      * PUBLIC PROPERTIES
      *-----------------------------------*/
 
-    public int Height {
-        get { return m_Bitmap.Height; }
-    }
-
-    public int Width {
-        get { return m_Bitmap.Width; }
-    }
-
-    public static Texture White {
+    public static ITexture White {
         get {
             if (s_White != null) {
                 return s_White;
@@ -40,18 +30,10 @@ public sealed class Texture {
             var bmp = new Bitmap(1, 1);
             bmp.SetPixel(0, 0, System.Drawing.Color.White);
 
-            s_White = new Texture(bmp);
+            s_White = new GdiPlus.GdiPlusTexture(bmp);
 
             return s_White;
         }
-    }
-
-    /*-------------------------------------
-     * CONSTRUCTORS
-     *-----------------------------------*/
-
-    public Texture(Bitmap bmp) {
-        m_Bitmap = bmp;
     }
 }
 

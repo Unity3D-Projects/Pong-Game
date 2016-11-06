@@ -68,7 +68,7 @@ public class MainScene: Scene {
             new PhysicsSubsystem(wl, wr, wb, wt),
 
             new EffectsSubsystem(),
-            new RenderingSubsystem(Game.Inst.Window) { ClearColor=clearColor },
+            new RenderingSubsystem() { ClearColor=clearColor },
             new FpsCounterSubsystem()
         );
     }

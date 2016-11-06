@@ -138,6 +138,8 @@ public abstract class Scene {
 
             components.Add(entity);
         }
+
+        entity.Scene = this;
     }
 
     private void RemoveEntityInternal(int id) {
@@ -153,6 +155,8 @@ public abstract class Scene {
 
             entities.Remove(entity);
         }
+
+        entity.Scene = null;
     }
 }
 

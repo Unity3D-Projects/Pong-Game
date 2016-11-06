@@ -19,7 +19,8 @@ public class AISubsystem: Subsystem {
     public override void Update(float dt) {
         base.Update(dt);
 
-        foreach (var entity in Game.Inst.GetEntities<BrainComponent>()) {
+        var entities = Game.Inst.Scene.GetEntities<BrainComponent>();
+        foreach (var entity in entities) {
             var brain = entity.GetComponent<BrainComponent>();
 
             var t = brain.ThinkTimer + dt;

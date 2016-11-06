@@ -19,7 +19,8 @@ public class LifetimeSubsystem: Subsystem {
     public override void Update(float dt) {
         base.Update(dt);
 
-        foreach (var entity in Game.Inst.GetEntities<LifetimeComponent>()) {
+        var entities = Game.Inst.Scene.GetEntities<LifetimeComponent>();
+        foreach (var entity in entities) {
             var lifetime = entity.GetComponent<LifetimeComponent>();
 
             lifetime.Age += dt;

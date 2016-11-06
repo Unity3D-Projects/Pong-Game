@@ -19,7 +19,7 @@ public sealed class SpriteComponent {
 
     public float ScaleY { get; set; } = 1.0f;
 
-    public Texture Texture { get; set; }
+    public ITexture Texture { get; set; }
 }
 
 }

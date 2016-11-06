@@ -17,6 +17,9 @@ public class GameForm: Form {
         DoubleBuffered  = true;
         FormBorderStyle = FormBorderStyle.FixedSingle;
         MaximizeBox     = false;
+
+        SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint,
+                 true);
     }
 }
 

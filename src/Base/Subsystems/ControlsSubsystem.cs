@@ -19,7 +19,8 @@ public abstract class ControlsSubsystem: Subsystem {
     public override void Update(float dt) {
         base.Update(dt);
 
-        foreach (var entity in Game.Inst.GetEntities<ControlsComponent>()) {
+        var entities = Game.Inst.Scene.GetEntities<ControlsComponent>();
+        foreach (var entity in entities) {
             var controls = entity.GetComponent<ControlsComponent>();
 
             UpdateControls(entity, controls, dt);
