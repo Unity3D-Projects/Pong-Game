@@ -14,7 +14,7 @@ using Math;
  * CLASSES
  *-----------------------------------*/
 
-public class GdiPlusGraphicsImpl: IGraphicsImpl {
+public class GdiPlusGraphics: IGraphicsImpl {
     /*-------------------------------------
      * PRIVATE FIELDS
      *-----------------------------------*/

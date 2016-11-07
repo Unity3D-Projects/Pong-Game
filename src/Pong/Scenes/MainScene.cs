@@ -43,42 +43,11 @@ public class MainScene: Scene {
 
 
     /*-------------------------------------
-     * CONSTRUCTORS
-     *-----------------------------------*/
-
-    public MainScene() {
-        var clearColor = new Color(0xff708090);
-
-        var w      = (float)Game.Inst.Window.ClientRectangle.Width;
-        var h      = (float)Game.Inst.Window.ClientRectangle.Height;
-        var aspect = h / w;
-        var wl     = -1.0f;
-        var wr     = 1.0f;
-        var wb     = -aspect;
-        var wt     = aspect;
-
-        SetSubsystems(
-            new LifetimeSubsystem(),
-
-            new AISubsystem(),
-            new InputSubsystem(),
-
-            new PongControlsSubsystem(),
-
-            new PhysicsSubsystem(wl, wr, wb, wt),
-
-            new EffectsSubsystem(),
-            new RenderingSubsystem() { ClearColor=clearColor },
-            new FpsCounterSubsystem()
-        );
-    }
-
-    /*-------------------------------------
      * PUBLIC METHODS
      *-----------------------------------*/
 
     public override void Init() {
-        base.Init();
+        SetupSubsystems();
 
         SetupEffects();
 
@@ -90,6 +59,9 @@ public class MainScene: Scene {
         CreateRightScoreText();
         
         CreateNet();
+
+        base.Init();
+
     }
 
     public override void Update(float dt) {
@@ -195,6 +167,33 @@ public class MainScene: Scene {
                 }
             }
         });
+    }
+
+    private void SetupSubsystems() {
+        var clearColor = new Color(0xff708090);
+
+        var w      = (float)Game.Inst.Window.ClientRectangle.Width;
+        var h      = (float)Game.Inst.Window.ClientRectangle.Height;
+        var aspect = h / w;
+        var wl     = -1.0f;
+        var wr     = 1.0f;
+        var wb     = -aspect;
+        var wt     = aspect;
+
+        SetSubsystems(
+            new LifetimeSubsystem(),
+
+            new AISubsystem(),
+            new InputSubsystem(),
+
+            new PongControlsSubsystem(),
+
+            new PhysicsSubsystem(wl, wr, wb, wt),
+
+            new EffectsSubsystem(),
+            new RenderingSubsystem() { ClearColor=clearColor },
+            new FpsCounterSubsystem()
+        );
     }
 
     private void Score(int player) {

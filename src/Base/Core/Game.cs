@@ -83,17 +83,6 @@ public class Game {
         m_Done = true;
     }
 
-    public void Init(IGraphicsImpl graphics,
-                     string title,
-                     int width,
-                     int height)
-    {        
-        m_Window = CreateWindow(title, width, height);
-
-        graphics.Init(m_Window);
-        m_Graphics = graphics;
-    }
-
     public void LeaveScene() {
         if (m_Scene == null) {
             return;
@@ -125,9 +114,15 @@ public class Game {
         m_MessageQueue.Enqueue(message);
     }
 
-    public void Run(Scene scene) {
+    public void Run(IGraphicsImpl graphics,
+                    string title,
+                    int width,
+                    int height,
+                    Scene scene)
+    {
         m_Done = false;
 
+        Init(graphics, title, width, height);
         EnterScene(scene);
 
         var t1 = 0.0;
@@ -175,6 +170,17 @@ public class Game {
     /*-------------------------------------
      * PRIVATE METHODS
      *-----------------------------------*/
+
+    private void Init(IGraphicsImpl graphics,
+                      string title,
+                      int width,
+                      int height)
+    {        
+        m_Window = CreateWindow(title, width, height);
+
+        graphics.Init(m_Window);
+        m_Graphics = graphics;
+    }
 
     private void Cleanup() {
         m_Graphics.Cleanup();

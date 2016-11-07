@@ -129,10 +129,10 @@
     <Compile Include="src\Base\Graphics\Color.cs" />
     <Compile Include="src\Base\Graphics\Font.cs" />
     <Compile Include="src\Base\Graphics\IGraphicsImpl.cs" />
-    <Compile Include="src\Base\Graphics\GdiPlusImpl\GdiPlusGraphicsImpl.cs" />
+    <Compile Include="src\Base\Graphics\GdiPlusImpl\GdiPlusGraphics.cs" />
     <Compile Include="src\Base\Graphics\GdiPlusImpl\GdiPlusTexture.cs" />
     <Compile Include="src\Base\Graphics\ITexture.cs" />
-    <Compile Include="src\Base\Graphics\SharpDXImpl\SharpDXGraphicsImpl.cs" />
+    <Compile Include="src\Base\Graphics\SharpDXImpl\SharpDXGraphics.cs" />
     <Compile Include="src\Base\Graphics\SharpDXImpl\SharpDXTexture.cs" />
     <Compile Include="src\Base\Graphics\Texture.cs" />
     <Compile Include="src\Base\Math\Matrix3x3.cs" />

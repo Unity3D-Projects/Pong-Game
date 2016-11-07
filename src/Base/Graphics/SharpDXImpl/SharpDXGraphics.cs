@@ -20,7 +20,7 @@ using D3D11 = SharpDX.Direct3D11;
  * CLASSES
  *-----------------------------------*/
 
-public class SharpDXGraphicsImpl: IGraphicsImpl {
+public class SharpDXGraphics: IGraphicsImpl {
     private D3D11.Buffer m_ShaderParams;
     /*-------------------------------------
      * PRIVATE FIELDS
