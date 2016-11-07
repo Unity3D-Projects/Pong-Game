@@ -129,12 +129,16 @@
     <Compile Include="src\Base\Graphics\Color.cs" />
     <Compile Include="src\Base\Graphics\Font.cs" />
     <Compile Include="src\Base\Graphics\IGraphicsImpl.cs" />
-    <Compile Include="src\Base\Graphics\GdiPlus\GdiPlusGraphicsImpl.cs" />
-    <Compile Include="src\Base\Graphics\GdiPlus\GdiPlusTexture.cs" />
+    <Compile Include="src\Base\Graphics\GdiPlusImpl\GdiPlusGraphicsImpl.cs" />
+    <Compile Include="src\Base\Graphics\GdiPlusImpl\GdiPlusTexture.cs" />
     <Compile Include="src\Base\Graphics\ITexture.cs" />
+    <Compile Include="src\Base\Graphics\SharpDXImpl\SharpDXGraphicsImpl.cs" />
+    <Compile Include="src\Base\Graphics\SharpDXImpl\SharpDXTexture.cs" />
     <Compile Include="src\Base\Graphics\Texture.cs" />
-    <Compile Include="src\Base\Math\Matrix33.cs" />
+    <Compile Include="src\Base\Math\Matrix3x3.cs" />
+    <Compile Include="src\Base\Math\Matrix4x4.cs" />
     <Compile Include="src\Base\Math\Vector3.cs" />
+    <Compile Include="src\Base\Math\Vector4.cs" />
     <Compile Include="src\Pong\AI\Neural\NeuralNetwork.cs" />
     <Compile Include="src\Pong\AI\Neural\NeuralAI.cs" />
     <Compile Include="src\Pong\AI\Trivial\TrivialAI.cs" />
@@ -185,6 +189,12 @@
     <None Include=".projectile" />
     <None Include="LICENSE.md" />
     <None Include="README.md" />
+    <None Include="src\Shaders\DX\DefaultVS.hlsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="src\Shaders\DX\DefaultPS.hlsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="doc\" />

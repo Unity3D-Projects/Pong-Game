@@ -31,6 +31,8 @@ public class Game {
 
     private bool m_Done;
 
+    private IGraphicsImpl m_Graphics;
+
     private readonly Dictionary<Type, List<Action<IMessage>>> m_MessageHandlers;
 
     private readonly Queue<IMessage> m_MessageQueue;
@@ -43,7 +45,9 @@ public class Game {
      * PUBLIC PROPERTIES
      *-----------------------------------*/
 
-    public IGraphicsImpl Graphics { get; private set; }
+    public IGraphicsImpl Graphics {
+        get { return m_Graphics; }
+    }
 
     public static Game Inst { get; } = new Game();
 
@@ -86,7 +90,8 @@ public class Game {
     {        
         m_Window = CreateWindow(title, width, height);
 
-        Graphics = graphics;
+        graphics.Init(m_Window);
+        m_Graphics = graphics;
     }
 
     public void LeaveScene() {
@@ -150,7 +155,11 @@ public class Game {
             Application.DoEvents();
         }
 
-        LeaveScene();
+        while (m_Scene != null) {
+            LeaveScene();
+        }
+
+        Cleanup();
     }
 
     public Entity SetTimeout(Action cb, float time) {
@@ -167,12 +176,21 @@ public class Game {
      * PRIVATE METHODS
      *-----------------------------------*/
 
+    private void Cleanup() {
+        m_Graphics.Cleanup();
+        m_Graphics = null;
+
+        m_Window.Close();
+        m_Window.Dispose();
+        m_Window = null;
+    }
+
     private Form CreateWindow(string title, int width, int height) {
         var form = new GameForm();
 
         form.FormClosed += (sender, e) => Exit();
 
-        form.Size = new Size(width, height);
+        form.ClientSize = new Size(width, height);
         form.Text = title;
 
         form.Show();

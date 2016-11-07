@@ -55,7 +55,16 @@ public struct Color {
      * PUBLIC METHODS
      *-----------------------------------*/
 
-    public int ToInt() {
+    public int ToIntABGR() {
+        byte r = (byte)(R*255.0f);
+        byte g = (byte)(G*255.0f);
+        byte b = (byte)(B*255.0f);
+        byte a = (byte)(A*255.0f);
+
+        return (a<<24)|(b<<16)|(g<<8)|r;
+    }
+
+    public int ToIntARGB() {
         byte r = (byte)(R*255.0f);
         byte g = (byte)(G*255.0f);
         byte b = (byte)(B*255.0f);
@@ -63,6 +72,25 @@ public struct Color {
 
         return (a<<24)|(r<<16)|(g<<8)|b;
     }
+
+    public int ToIntBGRA() {
+        byte r = (byte)(R*255.0f);
+        byte g = (byte)(G*255.0f);
+        byte b = (byte)(B*255.0f);
+        byte a = (byte)(A*255.0f);
+
+        return (b<<24)|(g<<16)|(r<<8)|a;
+    }
+
+    public int ToIntRGBA() {
+        byte r = (byte)(R*255.0f);
+        byte g = (byte)(G*255.0f);
+        byte b = (byte)(B*255.0f);
+        byte a = (byte)(A*255.0f);
+
+        return (r<<24)|(g<<16)|(b<<8)|a;
+    }
+
 }
 
 }

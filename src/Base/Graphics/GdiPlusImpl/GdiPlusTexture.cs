@@ -1,4 +1,4 @@
-﻿namespace PongBrain.Base.Graphics.GdiPlus {
+﻿namespace PongBrain.Base.Graphics.GdiPlusImpl {
 
 /*-------------------------------------
  * USINGS

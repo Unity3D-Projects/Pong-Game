@@ -40,7 +40,7 @@ public class FpsCounterSubsystem: Subsystem {
 
         m_Time += dt;
         while (m_Time >= 1.0f) {
-            Game.Inst.Window.Text = string.Format("{0} (draws: {1}/s, updates: {2}/s)", m_Text, m_NumDraws, m_NumUpdates);
+            Game.Inst.Window.Text = string.Format("{0} ({1}, draws: {2}/s, updates: {3}/s)", m_Text, Game.Inst.Graphics.Name, m_NumDraws, m_NumUpdates);
 
             m_NumDraws   = 0;
             m_NumUpdates = 0;

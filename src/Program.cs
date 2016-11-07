@@ -8,7 +8,8 @@ using System;
 using System.Windows.Forms;
 
 using Base.Core;
-using Base.Graphics.GdiPlus;
+using Base.Graphics.GdiPlusImpl;
+using Base.Graphics.SharpDXImpl;
 using Pong.Scenes;
 
 /*-------------------------------------
@@ -26,7 +27,7 @@ internal static class Program {
 
         var game = Game.Inst;
 
-        game.Init(new GdiPlusGraphicsImpl(), "PongBrain", 640, 480);
+        game.Init(new SharpDXGraphicsImpl(), "PongBrain", 480, 480);
         game.Run(new MainScene());
     }
 }

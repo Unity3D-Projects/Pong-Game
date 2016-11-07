@@ -14,15 +14,26 @@ using Math;
 
 public interface IGraphicsImpl {
     /*-------------------------------------
+     * PROPERTIES
+     *-----------------------------------*/
+
+    string Name { get; }
+
+    /*-------------------------------------
      * METHODS
      *-----------------------------------*/
 
+    void BeginFrame();
+
     void Cleanup();
+
     void Clear(Color clearColor);
-    void DrawTexture(ITexture texture, float x, float y);
-    void DrawTexture(ITexture texture, Matrix33 transform);
+
+    void DrawTexture(ITexture texture, Matrix4x4 transform);
+
+    void EndFrame();
+
     void Init(Form window);
-    void SwapBuffers();
 }
 
 }

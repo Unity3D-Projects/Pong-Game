@@ -30,7 +30,7 @@ public static class Texture {
             var bmp = new Bitmap(1, 1);
             bmp.SetPixel(0, 0, System.Drawing.Color.White);
 
-            s_White = new GdiPlus.GdiPlusTexture(bmp);
+            s_White = new GdiPlusImpl.GdiPlusTexture(bmp);
 
             return s_White;
         }
