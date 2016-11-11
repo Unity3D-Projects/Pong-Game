@@ -41,6 +41,8 @@ public class MainScene: Scene {
     private int m_RightScore;
     private Entity m_RightScoreText;
 
+    private RenderingSubsystem m_RenderingSubsystem;
+
 
     /*-------------------------------------
      * PUBLIC METHODS
@@ -60,6 +62,8 @@ public class MainScene: Scene {
         
         CreateNet();
 
+        Score(0);
+
         base.Init();
 
     }
@@ -78,6 +82,8 @@ public class MainScene: Scene {
         m_Ball = new BallEntity();
 
         AddEntity(m_Ball);
+
+        new TrailEffect(m_Ball).Create();
     }
 
     private void CreateLeftPaddle() {
@@ -113,8 +119,7 @@ public class MainScene: Scene {
     private void CreateNet() {
         var entities = new List<Entity>();
 
-        var numRectangles = 8;
-        var margin        = 0.1f;
+        var numRectangles = 18;
 
         var w      = (float)Game.Inst.Window.ClientRectangle.Width;
         var h      = (float)Game.Inst.Window.ClientRectangle.Height;
@@ -123,7 +128,7 @@ public class MainScene: Scene {
 
         var y = -aspect + 0.5f*dY;
         for (var i = 0; i < numRectangles; i++) {
-            var rectangle = new RectangleEntity(0.0f, y, 0.04f, 0.04f);
+            var rectangle = new RectangleEntity(0.0f, y, 0.01f, 0.03f);
             entities.Add(rectangle);
 
             y += dY;
@@ -155,6 +160,7 @@ public class MainScene: Scene {
             var o = ((CollisionMessage)msg);
 
             if (o.Entity1 == m_Ball || o.Entity2 != null) {
+                new CameraShakeEffect(m_RenderingSubsystem).Create();
                 new BounceEffect(o.Entity1, 0.2f).Create();
 
                 if (o.Entity2 != null) {
@@ -191,7 +197,7 @@ public class MainScene: Scene {
             new PhysicsSubsystem(wl, wr, wb, wt),
 
             new EffectsSubsystem(),
-            new RenderingSubsystem() { ClearColor=clearColor },
+            m_RenderingSubsystem = new RenderingSubsystem() { ClearColor=clearColor },
             new FpsCounterSubsystem()
         );
     }
@@ -218,12 +224,13 @@ public class MainScene: Scene {
         Game.Inst.SetTimeout(() => {
             var random = new Random();
 
-            var theta = 2.0f*(float)Math.PI*(float)random.NextDouble();
+            var theta = 0.6f*(float)Math.PI*(float)random.NextDouble()-0.3f*(float)Math.PI;
             var r = 0.9f+0.6f*(float)random.NextDouble();
+            var d = Math.Sign(random.Next(0, 2)-0.5f);
         
-            ballVelocity.X = (float)Math.Cos(theta)*r;
+            ballVelocity.X = (float)Math.Cos(theta)*r*d;
             ballVelocity.Y = (float)Math.Sin(theta)*r;
-        }, 0.5f);
+        }, 0.65f);
     }
 
     private void SolveCollisions() {
@@ -245,8 +252,11 @@ public class MainScene: Scene {
 
         if (bl < lpr) {
             if (bb < lpt && bt > lpb && !m_AboutToScore) {
+                var v = m_Ball.GetComponent<VelocityComponent>();
+                var s = 4.0f * (float)Math.Sqrt(v.X*v.X+v.Y*v.Y);
                 m_Ball.GetComponent<PositionComponent>().X = lpr + 0.5f*m_Ball.GetComponent<AxisAlignedBoxComponent>().Width;
                 m_Ball.GetComponent<VelocityComponent>().X *= -1.0f;
+                m_Ball.GetComponent<VelocityComponent>().Y += s * (m_Ball.GetComponent<PositionComponent>().Y - m_LeftPaddle.GetComponent<PositionComponent>().Y);
                 Game.Inst.PostMessage(new CollisionMessage(m_Ball, m_LeftPaddle));
             }
             else {
@@ -259,8 +269,11 @@ public class MainScene: Scene {
         }
         else if (br > rpl) {
             if (bb < rpt && bt > rpb && !m_AboutToScore) {
+                var v = m_Ball.GetComponent<VelocityComponent>();
+                var s = 4.0f * (float)Math.Sqrt(v.X*v.X+v.Y*v.Y);
                 m_Ball.GetComponent<PositionComponent>().X = rpl - 0.5f*m_Ball.GetComponent<AxisAlignedBoxComponent>().Width;
                 m_Ball.GetComponent<VelocityComponent>().X *= -1.0f;
+                m_Ball.GetComponent<VelocityComponent>().Y += s * (m_Ball.GetComponent<PositionComponent>().Y - m_RightPaddle.GetComponent<PositionComponent>().Y);
                 Game.Inst.PostMessage(new CollisionMessage(m_Ball, m_RightPaddle));
             }
             else {

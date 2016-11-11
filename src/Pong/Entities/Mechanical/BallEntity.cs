@@ -25,7 +25,7 @@ public class BallEntity: Entity {
                                           ScaleY  = 0.06f,
                                           Texture = Texture.White },
             new PositionComponent       { X=0.0f, Y=0.0f },
-            new VelocityComponent       { X=1.1f, Y=1.1f }
+            new VelocityComponent       { X=0.0f, Y=0.0f }
         );
     }
 }

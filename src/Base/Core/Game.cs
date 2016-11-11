@@ -74,9 +74,9 @@ public class Game {
 
     public void EnterScene(Scene scene) {
         scene.Parent = m_Scene;
-        scene.Init();
-
         m_Scene = scene;
+
+        scene.Init();
     }
 
     public void Exit() {

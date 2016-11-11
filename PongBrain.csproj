@@ -161,7 +161,9 @@
     <Compile Include="src\Base\Core\Scene.cs" />
     <Compile Include="src\Base\Core\Subsystem.cs" />
     <Compile Include="src\Base\Components\Physical\PositionComponent.cs" />
+    <Compile Include="src\Pong\Effects\CameraShakeEffect.cs" />
     <Compile Include="src\Pong\Effects\ExplosionEffect.cs" />
+    <Compile Include="src\Pong\Effects\TrailEffect.cs" />
     <Compile Include="src\Pong\Entities\Graphical\RectangleEntity.cs" />
     <Compile Include="src\Pong\Entities\Graphical\ScoreEntity.cs" />
     <Compile Include="src\Pong\Entities\Mechanical\BallEntity.cs" />

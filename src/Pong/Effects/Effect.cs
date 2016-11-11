@@ -26,6 +26,8 @@ public abstract class Effect {
     
     public float Duration { get; }
 
+    public static bool DisableAll { get; set; }
+
     /*-------------------------------------
      * CONSTRUCTORS
      *-----------------------------------*/
@@ -42,6 +44,10 @@ public abstract class Effect {
     }
 
     public void Create() {
+        if (DisableAll) {
+            return;
+        }
+
         var entity = new Entity();
 
         entity.AddComponents(new EffectComponent {

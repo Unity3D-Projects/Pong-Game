@@ -9,6 +9,5 @@ float4x4 g_Model;
  *-----------------------------------*/
 
 float4 main(float4 p: POSITION) : SV_POSITION {
-    float4 v = mul(g_Model, p);
-    return v;
+    return mul(g_Model, p);
 }

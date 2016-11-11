@@ -21,6 +21,8 @@ public class RenderingSubsystem: Subsystem {
 
     public Color ClearColor { get; set; } = Color.Black;
 
+    public Matrix4x4 ViewTransform { get; set; } = Matrix4x4.Identity();
+
     /*-------------------------------------
      * CONSTRUCTORS
      *-----------------------------------*/
@@ -73,7 +75,8 @@ public class RenderingSubsystem: Subsystem {
                 y = position.Y;
             }
 
-            var transform = Matrix4x4.Translate(x, y, 0.0f)
+            var transform = ViewTransform
+                          * Matrix4x4.Translate(x, y, 0.0f)
                           * Matrix4x4.Scale    (w, h, 1.0f);
 
             transform.Transpose();
