@@ -1,4 +1,4 @@
-﻿namespace PongBrain.Base.Graphics {
+﻿namespace PongBrain.Base.Graphics.Textures {
 
 /*-------------------------------------
  * interfaces

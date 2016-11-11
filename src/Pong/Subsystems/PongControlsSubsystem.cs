@@ -28,7 +28,7 @@ public class PongControlsSubsystem: ControlsSubsystem {
         var velocity   = entity.GetComponent<VelocityComponent>();
 
         if (controls.Controls.ContainsKey("Y")) {
-            velocity.Y += paddleInfo.Velocity * controls.Controls["Y"] * dt;
+            velocity.Y += paddleInfo.Speed * controls.Controls["Y"] * dt;
         }
     }
 }

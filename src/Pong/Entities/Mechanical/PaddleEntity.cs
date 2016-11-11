@@ -28,7 +28,7 @@ public class PaddleEntity: Entity {
             new ControlsComponent       { },
             new SpriteComponent         { ScaleX  = 0.06f,
                                           ScaleY  = 0.28f,
-                                          Texture = Texture.White },
+                                          Texture = Game.Inst.Graphics.Texture.White },
             new PaddleInfoComponent     { },
             new PositionComponent       { X=0.0f, Y=0.0f },
             new VelocityComponent       { X=0.0f, Y=0.0f }

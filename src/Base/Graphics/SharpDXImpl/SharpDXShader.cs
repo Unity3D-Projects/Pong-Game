@@ -1,45 +1,42 @@
-﻿namespace PongBrain.Base.Math {
+﻿namespace PongBrain.Base.Graphics.Shaders {
 
 /*-------------------------------------
  * USINGS
  *-----------------------------------*/
 
-using System.Runtime.InteropServices;
+using D3D11 = SharpDX.Direct3D11;
 
 /*-------------------------------------
  * CLASSES
  *-----------------------------------*/
 
-[StructLayout(LayoutKind.Sequential)]
-public struct Vector4 {
+internal sealed class SharpDXShader: IShader {
     /*-------------------------------------
-     * PUBLIC PROPERTIES
+     * PUBLIC FIELDS
      *-----------------------------------*/
 
-    public float X;
-    public float Y;
-    public float Z;
-    public float W;
+    public readonly D3D11.InputLayout InputLayout;
+
+    public readonly D3D11.DeviceChild Shader;
 
     /*-------------------------------------
      * CONSTRUCTORS
      *-----------------------------------*/
 
-    public Vector4(float x=0.0f, float y=0.0f, float z=0.0f, float w=0.0f) {
-        X = x;
-        Y = y;
-        Z = z;
-        W = w;
+    public SharpDXShader(D3D11.DeviceChild shader,
+                         D3D11.InputLayout inputLayout=null)
+    {
+        InputLayout = inputLayout;
+        Shader      = shader;
     }
 
     /*-------------------------------------
      * PUBLIC METHODS
      *-----------------------------------*/
 
-    public float Dot(Vector4 v) {
-        return X*v.X + Y*v.Y + Z*v.Z + W*v.W;
-    }
+    public void SetShaderParam(string name, ref object data) {
 
+    }
 }
 
 }

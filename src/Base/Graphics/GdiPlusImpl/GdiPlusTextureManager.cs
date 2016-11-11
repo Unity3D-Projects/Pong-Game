@@ -12,31 +12,44 @@ using System.Drawing;
  * CLASSES
  *-----------------------------------*/
 
-internal sealed class GdiPlusTexture: ITexture {
+internal class GdiPlusTextureManager: ITextureManager {
     /*-------------------------------------
      * PRIVATE FIELDS
      *-----------------------------------*/
     
-    internal readonly Bitmap m_Bitmap;
+    private GdiPlusTexture m_White;
 
     /*-------------------------------------
      * PUBLIC PROPERTIES
      *-----------------------------------*/
 
-    public int Height {
-        get { return m_Bitmap.Height; }
-    }
+    public ITexture White {
+        get {
+            if (m_White != null) {
+                return m_White;
+            }
 
-    public int Width {
-        get { return m_Bitmap.Width; }
+            var bmp = new Bitmap(1, 1);
+            bmp.SetPixel(0, 0, Color.White);
+
+            m_White = new GdiPlusTexture(bmp);
+
+            return m_White;
+        }
     }
 
     /*-------------------------------------
-     * CONSTRUCTORS
+     * PUBLIC METHODS
      *-----------------------------------*/
 
-    public GdiPlusTexture(Bitmap bmp) {
-        m_Bitmap = bmp;
+    public void Cleanup() {
+        if (m_White != null) {
+            m_White.m_Bitmap.Dispose();
+            m_White = null;
+        }
+    }
+
+    public void Init() {
     }
 }
 

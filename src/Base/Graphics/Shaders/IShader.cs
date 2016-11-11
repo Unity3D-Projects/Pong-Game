@@ -1,15 +1,15 @@
-﻿namespace PongBrain.Pong.Components {
+﻿namespace PongBrain.Base.Graphics.Shaders {
 
 /*-------------------------------------
- * CLASSES
+ * INTERFACES
  *-----------------------------------*/
 
-public sealed class PaddleInfoComponent {
+public interface IShader {
     /*-------------------------------------
-     * PUBLIC PROPERTIES
+     * METHODS
      *-----------------------------------*/
 
-    public float Speed { get; set; } = 8.0f;
+    void SetShaderParam(string name, ref object data);
 }
 
 }

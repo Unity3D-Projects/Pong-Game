@@ -5,24 +5,19 @@
  *-----------------------------------*/
 
 using Graphics.Shaders;
-using Graphics.Textures;
 
 /*-------------------------------------
  * CLASSES
  *-----------------------------------*/
 
-public sealed class SpriteComponent {
+public sealed class ShaderComponent {
     /*-------------------------------------
      * PUBLIC PROPERTIES
      *-----------------------------------*/
 
-    public float ScaleX { get; set; } = 1.0f;
+    public IShader PixelShader { get; set; }
 
-    public float ScaleY { get; set; } = 1.0f;
-
-    public IShader Shader { get; set; }
-
-    public ITexture Texture { get; set; }
+    public IShader VertexShader { get; set; }
 }
 
 }

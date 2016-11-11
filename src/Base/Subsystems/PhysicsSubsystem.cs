@@ -6,6 +6,7 @@
 
 using Components.Physical;
 using Core;
+using Math;
 using Messages;
 
 /*-------------------------------------
@@ -17,24 +18,15 @@ public class PhysicsSubsystem: Subsystem {
      * CONSTRUCTORS
      *-----------------------------------*/
 
-    private float m_WorldBottom;
-    private float m_WorldLeft;
-    private float m_WorldRight;
-    private float m_WorldTop;
+    private Rectangle m_WorldBounds;
 
     /*-------------------------------------
      * CONSTRUCTORS
      *-----------------------------------*/
 
-    public PhysicsSubsystem(float worldLeft,
-                            float worldRight,
-                            float worldBottom,
-                            float worldTop)
+    public PhysicsSubsystem(Rectangle worldBounds)
     {
-        m_WorldBottom = worldBottom;
-        m_WorldLeft   = worldLeft;
-        m_WorldRight  = worldRight;
-        m_WorldTop    = worldTop;
+        m_WorldBounds = worldBounds;
     }
 
     /*-------------------------------------
@@ -44,10 +36,10 @@ public class PhysicsSubsystem: Subsystem {
     public override void Update(float dt) {
         base.Update(dt);
 
-        var worldLeft   = m_WorldLeft;
-        var worldRight  = m_WorldRight;
-        var worldBottom = m_WorldBottom;
-        var worldTop    = m_WorldTop;
+        var worldLeft   = m_WorldBounds.Left;
+        var worldRight  = m_WorldBounds.Right;
+        var worldBottom = m_WorldBounds.Bottom;
+        var worldTop    = m_WorldBounds.Top;
 
         var entities = Game.Inst.Scene.GetEntities<VelocityComponent>();
         foreach (var entity in entities) {

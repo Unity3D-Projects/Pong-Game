@@ -4,6 +4,7 @@
  * USINGS
  *-----------------------------------*/
 
+using System;
 using System.Runtime.InteropServices;
 
 /*-------------------------------------
@@ -53,6 +54,39 @@ public struct Matrix3x3 {
         return new Matrix3x3(1.0f, 0.0f, 0.0f,
                              0.0f, 1.0f, 0.0f,
                              0.0f, 0.0f, 1.0f);
+    }
+
+    public static Matrix3x3 RotateX(float a) {
+        var cosa = (float)Math.Cos(a);
+        var sina = (float)Math.Sin(a);
+
+        var m = new Matrix3x3(1.0f, 0.0f, 0.0f,
+                              0.0f, cosa, -sina,
+                              0.0f, sina, cosa);
+
+        return m;
+    }
+
+    public static Matrix3x3 RotateY(float a) {
+        var cosa = (float)Math.Cos(a);
+        var sina = (float)Math.Sin(a);
+
+        var m = new Matrix3x3(cosa , 0.0f, sina,
+                              0.0f , 1.0f, 0.0f,
+                              -sina, 0.0f, cosa);
+
+        return m;
+    }
+
+    public static Matrix3x3 RotateZ(float a) {
+        var cosa = (float)Math.Cos(a);
+        var sina = (float)Math.Sin(a);
+
+        var m = new Matrix3x3(cosa, -sina, 0.0f,
+                              sina, cosa , 0.0f,
+                              0.0f, 0.0f , 1.0f);
+
+        return m;
     }
 
     public static Matrix3x3 Scale(float x, float y) {

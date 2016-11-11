@@ -8,7 +8,6 @@ using System;
 using System.Windows.Forms;
 
 using Base.Core;
-using Base.Graphics.GdiPlusImpl;
 using Base.Graphics.SharpDXImpl;
 using Pong.Scenes;
 

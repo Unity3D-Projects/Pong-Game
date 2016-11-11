@@ -7,17 +7,27 @@
 using System.Windows.Forms;
 
 using Math;
+using Shaders;
+using Textures;
 
 /*-------------------------------------
  * INTERFACES
  *-----------------------------------*/
 
-public interface IGraphicsImpl {
+public interface IGraphicsManager {
     /*-------------------------------------
      * PROPERTIES
      *-----------------------------------*/
 
     string Name { get; }
+
+    IShader PixelShader { get; set; }
+
+    IShaderManager Shader { get; }
+
+    ITextureManager Texture { get; }
+
+    IShader VertexShader { get; set; }
 
     /*-------------------------------------
      * METHODS

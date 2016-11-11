@@ -1,9 +1,16 @@
 ﻿namespace PongBrain.Base.Math {
 
 /*-------------------------------------
+ * USINGS
+ *-----------------------------------*/
+
+using System.Runtime.InteropServices;
+
+/*-------------------------------------
  * CLASSES
  *-----------------------------------*/
 
+[StructLayout(LayoutKind.Sequential)]
 public struct Vector3 {
     /*-------------------------------------
      * PUBLIC PROPERTIES

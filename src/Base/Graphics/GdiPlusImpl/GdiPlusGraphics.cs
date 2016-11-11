@@ -1,4 +1,6 @@
-﻿namespace PongBrain.Base.Graphics.GdiPlusImpl {
+﻿#if false
+
+namespace PongBrain.Base.Graphics.GdiPlusImpl {
 
 /*-------------------------------------
  * USINGS
@@ -14,7 +16,7 @@ using Math;
  * CLASSES
  *-----------------------------------*/
 
-public class GdiPlusGraphics: IGraphicsImpl {
+public class GdiPlusGraphics: IGraphicsManager {
     /*-------------------------------------
      * PRIVATE FIELDS
      *-----------------------------------*/
@@ -29,6 +31,8 @@ public class GdiPlusGraphics: IGraphicsImpl {
 
     private float m_Height;
 
+    private GdiPlusTextureManager m_TextureManager;
+
     private float m_Width;
 
     private Form m_Window;
@@ -41,6 +45,10 @@ public class GdiPlusGraphics: IGraphicsImpl {
 
     public string Name {
         get { return "GDI+"; }
+    }
+
+    public ITextureManager Texture {
+        get { return m_TextureManager; }
     }
     
     /*-------------------------------------
@@ -56,6 +64,9 @@ public class GdiPlusGraphics: IGraphicsImpl {
 
         m_BackBufferGraphics.Dispose();
         m_BackBufferGraphics = null;
+
+        m_TextureManager.Cleanup();
+        m_TextureManager = null;
 
         m_WindowGraphics.Dispose();
         m_WindowGraphics = null;
@@ -73,7 +84,7 @@ public class GdiPlusGraphics: IGraphicsImpl {
         var w   = m_Width  * transform.M11 / bmp.Width;
         var h   = m_Height * transform.M22 / bmp.Height;
 
-        m_BackBufferGraphics.DrawImage(bmp, x - 0.5f*w, y - 0.5f*h, w, h);
+        m_BackBufferGraphics.DrawImage(bmp, x - 0.25f*w, y - 0.25f*h, w, h);
     }
 
     public void EndFrame() {
@@ -106,7 +117,11 @@ public class GdiPlusGraphics: IGraphicsImpl {
         m_Width      = m_Window.ClientRectangle.Width;
         m_HalfHeight = 0.5f*m_Height;
         m_HalfWidth  = 0.5f*m_Width;
+
+        m_TextureManager = new GdiPlusTextureManager();
     }
 }
 
 }
+
+#endif

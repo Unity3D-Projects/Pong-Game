@@ -14,7 +14,7 @@ using Math;
  * CLASSES
  *-----------------------------------*/
 
-public class RenderingSubsystem: Subsystem {
+public class GraphicsSubsystem: Subsystem {
     /*-------------------------------------
      * PUBLIC PROPERTIES
      *-----------------------------------*/
@@ -27,7 +27,7 @@ public class RenderingSubsystem: Subsystem {
      * CONSTRUCTORS
      *-----------------------------------*/
 
-    public RenderingSubsystem() {
+    public GraphicsSubsystem() {
     }
 
     /*-------------------------------------
@@ -59,7 +59,7 @@ public class RenderingSubsystem: Subsystem {
      * PRIVATE METHODS
      *-----------------------------------*/
 
-    private void DrawSprites(IGraphicsImpl g) {
+    private void DrawSprites(IGraphicsManager g) {
         var entities = Game.Inst.Scene.GetEntities<SpriteComponent>();
         foreach (var entity in entities) {
             var sprite   = entity.GetComponent<SpriteComponent>();
@@ -80,7 +80,16 @@ public class RenderingSubsystem: Subsystem {
                           * Matrix4x4.Scale    (w, h, 1.0f);
 
             transform.Transpose();
-            g.DrawTexture(sprite.Texture, transform);
+
+            if (sprite.Shader != null) {
+                g.PixelShader = sprite.Shader;
+                g.DrawTexture(sprite.Texture, transform);
+                g.PixelShader  = null;
+            }
+            else {
+                g.DrawTexture(sprite.Texture, transform);
+
+            }
         }
     }
 }

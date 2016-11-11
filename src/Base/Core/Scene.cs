@@ -26,7 +26,7 @@ public abstract class Scene {
      * PUBLIC PROPERTIES
      *-----------------------------------*/
 
-    public IEnumerable<Entity> Entities {
+    public ICollection<Entity> Entities {
         get { return m_Entities.Values; }
     }
 
@@ -157,6 +157,8 @@ public abstract class Scene {
         }
 
         entity.Scene = null;
+
+        m_Entities.Remove(id);
     }
 }
 

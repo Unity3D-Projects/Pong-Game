@@ -13,6 +13,8 @@ using SharpDX.DXGI;
 
 using Core;
 using Math;
+using Shaders;
+using Textures;
 
 using D3D11 = SharpDX.Direct3D11;
 
@@ -20,25 +22,35 @@ using D3D11 = SharpDX.Direct3D11;
  * CLASSES
  *-----------------------------------*/
 
-public class SharpDXGraphics: IGraphicsImpl {
+public class SharpDXGraphics: IGraphicsManager {
     private D3D11.Buffer m_ShaderParams;
     /*-------------------------------------
      * PRIVATE FIELDS
      *-----------------------------------*/
 
+    private SharpDXShader m_DefaultPixelShader;
+
+    private SharpDXRenderTarget m_DefaultRenderTarget;
+
+    private SharpDXShader m_DefaultVertexShader;
+
     private D3D11.Device m_Device;
 
     private D3D11.DeviceContext m_DeviceContext;
 
-    private D3D11.PixelShader m_PixelShader;
+    private SharpDXShader m_PixelShader;
 
     private D3D11.Buffer m_Quad;
 
-    private D3D11.RenderTargetView m_RenderTargetView;
+    private SharpDXRenderTarget m_RenderTarget;
+
+    private SharpDXShaderManager m_ShaderManager;
 
     private SwapChain m_SwapChain;
 
-    private D3D11.VertexShader m_VertexShader;
+    private SharpDXTextureManager m_TextureManager;
+
+    private SharpDXShader m_VertexShader;
 
     private Form m_Window;
 
@@ -50,6 +62,70 @@ public class SharpDXGraphics: IGraphicsImpl {
         get { return "SharpDX"; }
     }
 
+    public IShader PixelShader {
+        get { return m_PixelShader; }
+        set {
+            var shader = (SharpDXShader)value;
+
+            if (shader == null) {
+                shader = m_DefaultPixelShader;
+            }
+
+            if (shader == m_PixelShader) {
+                return;
+            }
+
+            m_DeviceContext.PixelShader.Set((D3D11.PixelShader)shader.Shader);
+            m_PixelShader = shader;
+        }
+    }
+
+    public IRenderTarget RenderTarget {
+        get { return m_RenderTarget; }
+        set {
+            var renderTarget = (SharpDXRenderTarget)value;
+
+            if (renderTarget == null) {
+                renderTarget = m_DefaultRenderTarget;
+            }
+
+            if (renderTarget == m_RenderTarget) {
+                return;
+            }
+
+            m_DeviceContext.OutputMerger.SetRenderTargets(renderTarget.View);
+            m_RenderTarget = renderTarget;
+        }
+    }
+
+    public IShaderManager Shader {
+        get { return m_ShaderManager; }
+    }
+
+    public ITextureManager Texture {
+        get { return m_TextureManager; }
+    }
+
+    public IShader VertexShader {
+        get { return m_VertexShader; }
+        set {
+            var shader = (SharpDXShader)value;
+
+            if (shader == null) {
+                shader = m_DefaultVertexShader;
+            }
+
+            if (shader == m_VertexShader) {
+                return;
+            }
+
+            m_DeviceContext.VertexShader.Set((D3D11.VertexShader)shader.Shader);
+            m_DeviceContext.InputAssembler.InputLayout = shader.InputLayout;
+
+            m_VertexShader = shader;
+        }
+    }
+
     /*-------------------------------------
      * PUBLIC METHODS
      *-----------------------------------*/
@@ -58,19 +134,17 @@ public class SharpDXGraphics: IGraphicsImpl {
     }
 
     public void Cleanup() {
+        m_DeviceContext.PixelShader.Set(null);
+        m_DeviceContext.VertexShader.Set(null);
+
+        m_ShaderManager.Cleanup();
+        m_ShaderManager = null;
+
+        m_TextureManager.Cleanup();
+        m_TextureManager = null;
+        
         m_Quad.Dispose();
         m_Quad = null;
-
-        m_DeviceContext.PixelShader.Set(null);
-        m_PixelShader.Dispose();
-        m_PixelShader = null;
-
-        m_DeviceContext.VertexShader.Set(null);
-        m_VertexShader.Dispose();
-        m_VertexShader = null;
-
-        m_RenderTargetView.Dispose();
-        m_RenderTargetView = null;
 
         m_SwapChain.Dispose();
         m_SwapChain = null;
@@ -84,7 +158,11 @@ public class SharpDXGraphics: IGraphicsImpl {
 
     public void Clear(Graphics.Color clearColor) {
         var color = new Color(clearColor.ToIntABGR());
-        m_DeviceContext.ClearRenderTargetView(m_RenderTargetView, color);
+        m_DeviceContext.ClearRenderTargetView(m_RenderTarget.View, color);
+    }
+
+    public void CreateRenderTarget(int width, int height) {
+
     }
 
     public void DrawTexture(ITexture texture, Matrix4x4 transform) {
@@ -101,6 +179,8 @@ public class SharpDXGraphics: IGraphicsImpl {
 
         InitDevice();
         InitShaders();
+
+        m_TextureManager = new SharpDXTextureManager(m_Device);
 
         CreateQuad();
 
@@ -148,31 +228,22 @@ public class SharpDXGraphics: IGraphicsImpl {
         m_DeviceContext = m_Device.ImmediateContext;
 
         using (var backBuffer = m_SwapChain.GetBackBuffer<D3D11.Texture2D>(0)) {
-            m_RenderTargetView = new D3D11.RenderTargetView(m_Device, backBuffer);
+            m_DefaultRenderTarget = new SharpDXRenderTarget(new D3D11.RenderTargetView(m_Device, backBuffer));
         }
 
-        m_DeviceContext.OutputMerger.SetRenderTargets(m_RenderTargetView);
+        RenderTarget = m_DefaultRenderTarget;
+
         m_DeviceContext.Rasterizer.SetViewport(new Viewport(0, 0, width, height));
     }
 
     private void InitShaders() {
-        using (var byteCode = ShaderBytecode.CompileFromFile("src/Shaders/DX/DefaultPS.hlsl", "main", "ps_4_0", ShaderFlags.Debug)) {
-            m_PixelShader = new D3D11.PixelShader(m_Device, byteCode);
-        }
+        m_ShaderManager  = new SharpDXShaderManager(m_Device);
 
-        using (var byteCode = ShaderBytecode.CompileFromFile("src/Shaders/DX/DefaultVS.hlsl", "main", "vs_4_0", ShaderFlags.Debug)) {
-            m_VertexShader = new D3D11.VertexShader(m_Device, byteCode);
+        m_DefaultPixelShader  = (SharpDXShader)Shader.LoadPixelShader("src/Shaders/DX/DefaultPS.hlsl");
+        m_DefaultVertexShader = (SharpDXShader)Shader.LoadVertexShader("src/Shaders/DX/DefaultVS.hlsl");
 
-            var inputElements = new D3D11.InputElement[] {
-                new D3D11.InputElement("POSITION", 0, Format.R32G32_Float, 0)
-            };
-            var inputSignature = ShaderSignature.GetInputSignature(byteCode);
-            var inputLayout = new D3D11.InputLayout(m_Device, inputSignature, inputElements);
-            m_DeviceContext.InputAssembler.InputLayout = inputLayout;
-        }
-
-        m_DeviceContext.VertexShader.Set(m_VertexShader);
-        m_DeviceContext.PixelShader.Set(m_PixelShader);
+        PixelShader  = m_DefaultPixelShader;
+        VertexShader = m_DefaultVertexShader;
     }
 }
 

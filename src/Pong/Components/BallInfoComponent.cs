@@ -4,12 +4,12 @@
  * CLASSES
  *-----------------------------------*/
 
-public sealed class PaddleInfoComponent {
+public sealed class BallInfoComponent {
     /*-------------------------------------
      * PUBLIC PROPERTIES
      *-----------------------------------*/
 
-    public float Speed { get; set; } = 8.0f;
+    public float Radius { get; set; } = 0.04f;
 }
 
 }

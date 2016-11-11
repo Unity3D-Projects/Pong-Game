@@ -31,7 +31,7 @@ public class Game {
 
     private bool m_Done;
 
-    private IGraphicsImpl m_Graphics;
+    private IGraphicsManager m_Graphics;
 
     private readonly Dictionary<Type, List<Action<IMessage>>> m_MessageHandlers;
 
@@ -45,7 +45,7 @@ public class Game {
      * PUBLIC PROPERTIES
      *-----------------------------------*/
 
-    public IGraphicsImpl Graphics {
+    public IGraphicsManager Graphics {
         get { return m_Graphics; }
     }
 
@@ -114,7 +114,7 @@ public class Game {
         m_MessageQueue.Enqueue(message);
     }
 
-    public void Run(IGraphicsImpl graphics,
+    public void Run(IGraphicsManager graphics,
                     string title,
                     int width,
                     int height,
@@ -171,7 +171,7 @@ public class Game {
      * PRIVATE METHODS
      *-----------------------------------*/
 
-    private void Init(IGraphicsImpl graphics,
+    private void Init(IGraphicsManager graphics,
                       string title,
                       int width,
                       int height)

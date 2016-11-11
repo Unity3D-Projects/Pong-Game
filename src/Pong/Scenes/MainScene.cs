@@ -13,10 +13,12 @@ using Base.Components.Physical;
 using Base.Core;
 using Base.Graphics;
 using Base.Input;
+using Base.Math;
 using Base.Messages;
 using Base.Subsystems;
 
 using AI.Trivial;
+using Components;
 using Effects;
 using Entities.Graphical;
 using Entities.Mechanical;
@@ -41,7 +43,9 @@ public class MainScene: Scene {
     private int m_RightScore;
     private Entity m_RightScoreText;
 
-    private RenderingSubsystem m_RenderingSubsystem;
+    private GraphicsSubsystem m_RenderingSubsystem;
+
+    private Rectangle m_WorldBounds;
 
 
     /*-------------------------------------
@@ -176,8 +180,6 @@ public class MainScene: Scene {
     }
 
     private void SetupSubsystems() {
-        var clearColor = new Color(0xff708090);
-
         var w      = (float)Game.Inst.Window.ClientRectangle.Width;
         var h      = (float)Game.Inst.Window.ClientRectangle.Height;
         var aspect = h / w;
@@ -185,6 +187,10 @@ public class MainScene: Scene {
         var wr     = 1.0f;
         var wb     = -aspect;
         var wt     = aspect;
+        
+        var clearColor = new Color(0xff708090);
+
+        m_WorldBounds = new Rectangle(wt, wr, wb, wl);
 
         SetSubsystems(
             new LifetimeSubsystem(),
@@ -194,10 +200,10 @@ public class MainScene: Scene {
 
             new PongControlsSubsystem(),
 
-            new PhysicsSubsystem(wl, wr, wb, wt),
+            new PhysicsSubsystem(m_WorldBounds),
 
             new EffectsSubsystem(),
-            m_RenderingSubsystem = new RenderingSubsystem() { ClearColor=clearColor },
+            m_RenderingSubsystem = new GraphicsSubsystem() { ClearColor=clearColor },
             new FpsCounterSubsystem()
         );
     }
@@ -240,29 +246,40 @@ public class MainScene: Scene {
         var lpl  = m_LeftPaddle.GetComponent<PositionComponent>().X - 0.5f*m_LeftPaddle.GetComponent<AxisAlignedBoxComponent>().Width;
         var lpr  = m_LeftPaddle.GetComponent<PositionComponent>().X + 0.5f*m_LeftPaddle.GetComponent<AxisAlignedBoxComponent>().Width;
 
-        var bb = m_Ball.GetComponent<PositionComponent>().Y - 0.5f * m_Ball.GetComponent<AxisAlignedBoxComponent>().Height;
-        var bt = m_Ball.GetComponent<PositionComponent>().Y + 0.5f*m_Ball.GetComponent<AxisAlignedBoxComponent>().Height;
-        var bl  = m_Ball.GetComponent<PositionComponent>().X - 0.5f*m_Ball.GetComponent<AxisAlignedBoxComponent>().Width;
-        var br  = m_Ball.GetComponent<PositionComponent>().X + 0.5f*m_Ball.GetComponent<AxisAlignedBoxComponent>().Width;
+        var bb = m_Ball.GetComponent<PositionComponent>().Y -  m_Ball.GetComponent<BallInfoComponent>().Radius;
+        var bt = m_Ball.GetComponent<PositionComponent>().Y +  m_Ball.GetComponent<BallInfoComponent>().Radius;
+        var bl  = m_Ball.GetComponent<PositionComponent>().X - m_Ball.GetComponent<BallInfoComponent>().Radius;
+        var br  = m_Ball.GetComponent<PositionComponent>().X + m_Ball.GetComponent<BallInfoComponent>().Radius;
 
         var rpb = m_RightPaddle.GetComponent<PositionComponent>().Y - 0.5f*m_RightPaddle.GetComponent<AxisAlignedBoxComponent>().Height;
         var rpt = m_RightPaddle.GetComponent<PositionComponent>().Y + 0.5f*m_RightPaddle.GetComponent<AxisAlignedBoxComponent>().Height;
         var rpl  = m_RightPaddle.GetComponent<PositionComponent>().X - 0.5f*m_RightPaddle.GetComponent<AxisAlignedBoxComponent>().Width;
         var rpr  = m_RightPaddle.GetComponent<PositionComponent>().X + 0.5f*m_RightPaddle.GetComponent<AxisAlignedBoxComponent>().Width;
 
+        if (bt > m_WorldBounds.Top) {
+            m_Ball.GetComponent<PositionComponent>().Y = m_WorldBounds.Top - m_Ball.GetComponent<BallInfoComponent>().Radius;
+            m_Ball.GetComponent<VelocityComponent>().Y *= -1.0f;
+                Game.Inst.PostMessage(new CollisionMessage(m_Ball));
+        }
+        else if (bb < m_WorldBounds.Bottom) {
+            m_Ball.GetComponent<PositionComponent>().Y = m_WorldBounds.Bottom + m_Ball.GetComponent<BallInfoComponent>().Radius;
+            m_Ball.GetComponent<VelocityComponent>().Y *= -1.0f;
+            Game.Inst.PostMessage(new CollisionMessage(m_Ball));
+        }
+
         if (bl < lpr) {
             if (bb < lpt && bt > lpb && !m_AboutToScore) {
                 var v = m_Ball.GetComponent<VelocityComponent>();
                 var s = 4.0f * (float)Math.Sqrt(v.X*v.X+v.Y*v.Y);
-                m_Ball.GetComponent<PositionComponent>().X = lpr + 0.5f*m_Ball.GetComponent<AxisAlignedBoxComponent>().Width;
-                m_Ball.GetComponent<VelocityComponent>().X *= -1.0f;
+                m_Ball.GetComponent<PositionComponent>().X = lpr + m_Ball.GetComponent<BallInfoComponent>().Radius;
+                m_Ball.GetComponent<VelocityComponent>().X *= -1.05f;
                 m_Ball.GetComponent<VelocityComponent>().Y += s * (m_Ball.GetComponent<PositionComponent>().Y - m_LeftPaddle.GetComponent<PositionComponent>().Y);
                 Game.Inst.PostMessage(new CollisionMessage(m_Ball, m_LeftPaddle));
             }
             else {
                 m_AboutToScore = true;
 
-                if (br < lpl) {
+                if (br < m_WorldBounds.Left-0.1f) {
                     Score(2);
                 }
             }
@@ -271,15 +288,15 @@ public class MainScene: Scene {
             if (bb < rpt && bt > rpb && !m_AboutToScore) {
                 var v = m_Ball.GetComponent<VelocityComponent>();
                 var s = 4.0f * (float)Math.Sqrt(v.X*v.X+v.Y*v.Y);
-                m_Ball.GetComponent<PositionComponent>().X = rpl - 0.5f*m_Ball.GetComponent<AxisAlignedBoxComponent>().Width;
-                m_Ball.GetComponent<VelocityComponent>().X *= -1.0f;
+                m_Ball.GetComponent<PositionComponent>().X = rpl - m_Ball.GetComponent<BallInfoComponent>().Radius;
+                m_Ball.GetComponent<VelocityComponent>().X *= -1.05f;
                 m_Ball.GetComponent<VelocityComponent>().Y += s * (m_Ball.GetComponent<PositionComponent>().Y - m_RightPaddle.GetComponent<PositionComponent>().Y);
                 Game.Inst.PostMessage(new CollisionMessage(m_Ball, m_RightPaddle));
             }
             else {
                 m_AboutToScore = true;
 
-                if (bl > rpr) {
+                if (bl > m_WorldBounds.Right+0.1f) {
                     Score(1);
                 }
             }

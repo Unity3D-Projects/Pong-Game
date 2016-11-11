@@ -11,20 +11,20 @@ using Base.Subsystems;
 
 /*-------------------------------------
  * CLASSES
- *-----------------------------------*/
+  *-----------------------------------*/
 
 public sealed class CameraShakeEffect: Effect {
     /*-------------------------------------
      * PUBLIC PROPERTIES
      *-----------------------------------*/
 
-    private readonly RenderingSubsystem m_RenderingSubsystem;
+    private readonly GraphicsSubsystem m_RenderingSubsystem;
 
     /*-------------------------------------
      * CONSTRUCTORS
      *-----------------------------------*/
 
-    public CameraShakeEffect(RenderingSubsystem renderingSubsystem, float duration=0.3f): base(duration) {
+    public CameraShakeEffect(GraphicsSubsystem renderingSubsystem, float duration=0.3f): base(duration) {
         m_RenderingSubsystem = renderingSubsystem;
     }
 
