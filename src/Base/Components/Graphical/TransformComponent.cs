@@ -4,25 +4,18 @@
  * USINGS
  *-----------------------------------*/
 
-using Graphics.Shaders;
-using Graphics.Textures;
+using Math;
 
 /*-------------------------------------
  * CLASSES
  *-----------------------------------*/
 
-public sealed class SpriteComponent {
+public sealed class TransformComponent {
     /*-------------------------------------
      * PUBLIC PROPERTIES
      *-----------------------------------*/
 
-    public float LayerDepth { get; set; }
-
-    public float ScaleX { get; set; } = 1.0f;
-
-    public float ScaleY { get; set; } = 1.0f;
-
-    public ITexture Texture { get; set; }
+    public Matrix4x4 Transform { get; set; }
 }
 
 }

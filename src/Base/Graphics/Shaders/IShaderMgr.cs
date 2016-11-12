@@ -4,12 +4,13 @@
  * INTERFACES
  *-----------------------------------*/
 
-public interface IRenderTarget {
+public interface IShaderMgr {
     /*-------------------------------------
      * METHODS
      *-----------------------------------*/
 
-    void Clear(Color clearColor);
+    IShader LoadPS(string path);
+    IShader LoadVS(string path);
 }
 
 }

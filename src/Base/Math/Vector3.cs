@@ -7,7 +7,7 @@
 using System.Runtime.InteropServices;
 
 /*-------------------------------------
- * CLASSES
+ * STRUCTS
  *-----------------------------------*/
 
 [StructLayout(LayoutKind.Sequential)]
@@ -37,7 +37,6 @@ public struct Vector3 {
     public float Dot(Vector3 v) {
         return X*v.X + Y*v.Y + Z*v.Z;
     }
-
 }
 
 }

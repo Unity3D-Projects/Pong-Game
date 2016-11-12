@@ -4,19 +4,12 @@
  * INTERFACES
  *-----------------------------------*/
 
-public interface ITextureManager {
+public interface ITextureMgr {
     /*-------------------------------------
      * PROPERTIES
      *-----------------------------------*/
 
     ITexture White { get; }
-
-    /*-------------------------------------
-     * METHODS
-     *-----------------------------------*/
-
-    void Cleanup();
-    void Init();
 }
 
 }

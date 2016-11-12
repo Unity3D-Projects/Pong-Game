@@ -20,6 +20,8 @@ public class PhysicsSubsystem: Subsystem {
 
     private Rectangle m_WorldBounds;
 
+    private Vector2 m_Gravity = new Vector2(0.0f, 0.0f);
+
     /*-------------------------------------
      * CONSTRUCTORS
      *-----------------------------------*/
@@ -43,13 +45,25 @@ public class PhysicsSubsystem: Subsystem {
 
         var entities = Game.Inst.Scene.GetEntities<VelocityComponent>();
         foreach (var entity in entities) {
-            var body     = entity.GetComponent<BodyComponent>();
-            var position = entity.GetComponent<PositionComponent>();
-            var velocity = entity.GetComponent<VelocityComponent>();
+            var body            = entity.GetComponent<BodyComponent>();
+            var position        = entity.GetComponent<PositionComponent>();
+            var rotation        = entity.GetComponent<RotationComponent>();
+            var velocity        = entity.GetComponent<VelocityComponent>();
 
             if (position == null) {
                 continue;
             }
+
+            if (rotation != null) {
+                var angularVelocity = entity.GetComponent<AngularVelocityComponent>();
+
+                if (angularVelocity != null) {
+                    rotation.Angle += angularVelocity.W * dt;
+                }
+            }
+
+            velocity.X += m_Gravity.X;
+            velocity.Y += m_Gravity.Y;
 
             if (body != null) {
                 velocity.X -= velocity.X * body.LinearDrag * dt;

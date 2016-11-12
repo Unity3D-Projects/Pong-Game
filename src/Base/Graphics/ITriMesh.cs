@@ -1,15 +1,17 @@
-﻿namespace PongBrain.Base.Graphics.Shaders {
+﻿namespace PongBrain.Base.Graphics {
 
 /*-------------------------------------
  * INTERFACES
  *-----------------------------------*/
 
-public interface IRenderTarget {
+public interface ITriMesh {
     /*-------------------------------------
-     * METHODS
+     * PROPERTIES
      *-----------------------------------*/
 
-    void Clear(Color clearColor);
+    int NumTris { get; }
+
+    int NumVerts { get; }
 }
 
 }

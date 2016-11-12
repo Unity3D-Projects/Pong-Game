@@ -47,17 +47,22 @@ public sealed class TrailEffect: Effect {
         var v = m_Entity.GetComponent<VelocityComponent>();
 
         for (var i = 0; i < m_NumParticles; i++) {
-            var size     = 0.005f + 0.005f*(float)random.NextDouble();
+            var size     = 0.01f + 0.01f*(float)random.NextDouble();
             var particle = new RectangleEntity(p.X, p.Y, size, size);
             var velocity = particle.AddComponent(new VelocityComponent());
             var theta    = 2.0f*(float)Math.PI * (float)random.NextDouble();
             var r        = 0.05f + 0.1f*(float)random.NextDouble();
             var a        = 0.5f + 0.6f*(float)random.NextDouble();
+            var w        = ((float)random.NextDouble()-0.5f)*2.0f*(float)Math.PI*4.0f;
 
             velocity.X = 0.3f*v.X + (float)Math.Cos(theta)*r;
             velocity.Y = 0.3f*v.Y + (float)Math.Sin(theta)*r;
 
-            particle.AddComponent(new LifetimeComponent { Lifetime = a });
+            particle.AddComponents(
+                new AngularVelocityComponent { W=w },
+                new LifetimeComponent        { Lifetime=a },
+                new RotationComponent        { Angle=theta }
+            );
 
             Game.Inst.Scene.AddEntity(particle);
         }

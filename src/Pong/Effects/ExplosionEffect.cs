@@ -47,17 +47,22 @@ public sealed class ExplosionEffect: Effect {
         var random = new Random();
 
         for (var i = 0; i < m_NumParticles; i++) {
-            var size     = 0.01f + 0.01f*(float)random.NextDouble();
+            var size     = 0.02f + 0.02f*(float)random.NextDouble();
             var particle = new RectangleEntity(m_X, m_Y, size, size);
             var velocity = particle.AddComponent(new VelocityComponent());
             var theta    = 2.0f*(float)Math.PI * (float)random.NextDouble();
             var r        = 0.4f + 0.4f*(float)random.NextDouble();
             var a        = 0.2f + 0.2f*(float)random.NextDouble();
+            var w        = ((float)random.NextDouble()-0.5f)*2.0f*(float)Math.PI*4.0f;
 
             velocity.X = (float)Math.Cos(theta)*r;
             velocity.Y = (float)Math.Sin(theta)*r;
 
-            particle.AddComponent(new LifetimeComponent { Lifetime = a });
+            particle.AddComponents(
+                new AngularVelocityComponent { W=w },
+                new LifetimeComponent        { Lifetime=a },
+                new RotationComponent        { Angle=theta }
+            );
 
             Game.Inst.Scene.AddEntity(particle);
         }

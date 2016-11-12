@@ -4,10 +4,10 @@
  * USINGS
  *-----------------------------------*/
 
+using Shaders;
+
 using SharpDX.D3DCompiler;
 using SharpDX.DXGI;
-
-using Shaders;
 
 using D3D11 = SharpDX.Direct3D11;
 
@@ -15,7 +15,7 @@ using D3D11 = SharpDX.Direct3D11;
  * CLASSES
  *-----------------------------------*/
 
-internal sealed class SharpDXShaderManager: IShaderManager {
+internal class ShaderMgr: IShaderMgr {
     /*-------------------------------------
      * PRIVATE FIELDS
      *-----------------------------------*/
@@ -30,7 +30,7 @@ internal sealed class SharpDXShaderManager: IShaderManager {
      * CONSTRUCTORS
      *-----------------------------------*/
 
-    public SharpDXShaderManager(D3D11.Device device) {
+    public ShaderMgr(D3D11.Device device) {
         m_Device = device;
     }
 
@@ -44,7 +44,7 @@ internal sealed class SharpDXShaderManager: IShaderManager {
     public void Init() {
     }
 
-    public IShader LoadPixelShader(string path) {
+    public IShader LoadPS(string path) {
         using (var byteCode = ShaderBytecode.CompileFromFile(path, "main", "ps_4_0", ShaderFlags.Debug)) {
             var shader = new D3D11.PixelShader(m_Device, byteCode);
 
@@ -52,12 +52,13 @@ internal sealed class SharpDXShaderManager: IShaderManager {
         }
     }
 
-    public IShader LoadVertexShader(string path) {
+    public IShader LoadVS(string path) {
         using (var byteCode = ShaderBytecode.CompileFromFile(path, "main", "vs_4_0", ShaderFlags.Debug)) {
             var shader = new D3D11.VertexShader(m_Device, byteCode);
 
             var inputElements = new D3D11.InputElement[] {
-                new D3D11.InputElement("POSITION", 0, Format.R32G32_Float, 0)
+                new D3D11.InputElement("SV_POSITION", 0, Format.R32G32B32A32_Float,  0, 0),
+                new D3D11.InputElement("TEXCOORD"   , 0, Format.R32G32_Float      , 16, 0)
             };
 
             var inputSignature = ShaderSignature.GetInputSignature(byteCode);

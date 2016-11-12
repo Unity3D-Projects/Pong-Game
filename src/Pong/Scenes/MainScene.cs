@@ -187,8 +187,8 @@ public class MainScene: Scene {
         var wr     = 1.0f;
         var wb     = -aspect;
         var wt     = aspect;
-        
-        var clearColor = new Color(0xff708090);
+
+        var clearColor = new Color(0xffffffff);// new Color(0xff708090);
 
         m_WorldBounds = new Rectangle(wt, wr, wb, wl);
 
@@ -204,7 +204,7 @@ public class MainScene: Scene {
 
             new EffectsSubsystem(),
             m_RenderingSubsystem = new GraphicsSubsystem() { ClearColor=clearColor },
-            new FpsCounterSubsystem()
+            new PerformanceInfoSubsystem()
         );
     }
 

@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 
+using Components.Graphical;
+
 /*-------------------------------------
  * CLASSES
  *-----------------------------------*/
@@ -66,6 +68,27 @@ public abstract class Scene {
     }
 
     public virtual void Draw(float dt) {
+        List<Entity> sprites;
+
+        if (m_ComponentTypeToEntityMap.TryGetValue(typeof (SpriteComponent), out sprites)) {
+            var n = sprites.Count-1;
+            for (var i = 0; i < n; i++) {
+                var j = i+1;
+
+                var entityA = sprites[i];
+                var entityB = sprites[j];
+
+                var spriteA = entityA.GetComponent<SpriteComponent>();
+                var spriteB = entityB.GetComponent<SpriteComponent>();
+
+                if (spriteA.LayerDepth > spriteB.LayerDepth) {
+                    sprites[i] = entityB;
+                    sprites[j] = entityA;
+                    break;
+                }
+            }
+        }
+
         foreach (var subsystem in Subsystems) {
             subsystem.Draw(dt);
         }

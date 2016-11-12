@@ -4,29 +4,34 @@
  * USINGS
  *-----------------------------------*/
 
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
-
-using SharpDX;
-using SharpDX.D3DCompiler;
-using SharpDX.Direct3D;
-using SharpDX.DXGI;
 
 using Core;
 using Math;
 using Shaders;
 using Textures;
 
-using D3D11 = SharpDX.Direct3D11;
+using SharpDX;
+using SharpDX.Direct3D;
+using SharpDX.DXGI;
+
+using D3D11   = SharpDX.Direct3D11;
+using Vector2 = Math.Vector2;
+using Vector3 = Math.Vector2;
+using Vector4 = Math.Vector4;
 
 /*-------------------------------------
  * CLASSES
  *-----------------------------------*/
 
-public class SharpDXGraphics: IGraphicsManager {
+public class SharpDXGraphics: IGraphicsMgr {
     private D3D11.Buffer m_ShaderParams;
     /*-------------------------------------
      * PRIVATE FIELDS
      *-----------------------------------*/
+
+    private ITexture m_CurTexture;
 
     private SharpDXShader m_DefaultPixelShader;
 
@@ -34,21 +39,21 @@ public class SharpDXGraphics: IGraphicsManager {
 
     private SharpDXShader m_DefaultVertexShader;
 
-    private D3D11.Device m_Device;
+    public D3D11.Device Device;
 
     private D3D11.DeviceContext m_DeviceContext;
 
     private SharpDXShader m_PixelShader;
 
-    private D3D11.Buffer m_Quad;
-
     private SharpDXRenderTarget m_RenderTarget;
 
-    private SharpDXShaderManager m_ShaderManager;
+    private ShaderMgr m_ShaderMgr;
 
     private SwapChain m_SwapChain;
 
-    private SharpDXTextureManager m_TextureManager;
+    private SharpDXTextureMgr m_TextureMgr;
+
+    private SharpDXTriMeshMgr m_TriMeshMgr;
 
     private SharpDXShader m_VertexShader;
 
@@ -98,12 +103,16 @@ public class SharpDXGraphics: IGraphicsManager {
         }
     }
 
-    public IShaderManager Shader {
-        get { return m_ShaderManager; }
+    public IShaderMgr ShaderMgr {
+        get { return m_ShaderMgr; }
     }
 
-    public ITextureManager Texture {
-        get { return m_TextureManager; }
+    public ITextureMgr TextureMgr {
+        get { return m_TextureMgr; }
+    }
+
+    public ITriMeshMgr TriMeshMgr {
+        get { return m_TriMeshMgr; }
     }
 
     public IShader VertexShader {
@@ -137,37 +146,59 @@ public class SharpDXGraphics: IGraphicsManager {
         m_DeviceContext.PixelShader.Set(null);
         m_DeviceContext.VertexShader.Set(null);
 
-        m_ShaderManager.Cleanup();
-        m_ShaderManager = null;
-
-        m_TextureManager.Cleanup();
-        m_TextureManager = null;
+        m_ShaderMgr.Cleanup();
+        m_ShaderMgr = null;
         
-        m_Quad.Dispose();
-        m_Quad = null;
-
         m_SwapChain.Dispose();
         m_SwapChain = null;
 
-        m_Device.Dispose();
-        m_Device = null;
+        Device.Dispose();
+        Device = null;
 
         m_DeviceContext.Dispose();
         m_DeviceContext = null;
+
+        //--------
+
+        m_TextureMgr.Dispose();
+        m_TextureMgr = null;
+
+        m_TriMeshMgr.Dispose();
+        m_TriMeshMgr = null;
     }
 
-    public void Clear(Graphics.Color clearColor) {
-        var color = new Color(clearColor.ToIntABGR());
-        m_DeviceContext.ClearRenderTargetView(m_RenderTarget.View, color);
+    public IRenderTarget CreateRenderTarget() {
+        var width  = m_Window.ClientRectangle.Width;
+        var height = m_Window.ClientRectangle.Height;
+
+        var textureDescription = new D3D11.Texture2DDescription {
+            ArraySize         = 1,
+            BindFlags         = D3D11.BindFlags.RenderTarget | D3D11.BindFlags.ShaderResource,
+            Format            = Format.R8G8B8A8_UNorm,
+            MipLevels         = 1,
+            SampleDescription = new SampleDescription(1, 0),
+            Width             = width,
+            Height            = height,
+        };
+
+        var texture      = new D3D11.Texture2D(Device, textureDescription);
+        var renderTarget = new D3D11.RenderTargetView(Device, texture);
+
+        return new SharpDXRenderTarget(this, texture, width, height, renderTarget);
     }
 
-    public void CreateRenderTarget(int width, int height) {
+    public void DrawTriMesh(ITriMesh triMesh, Matrix4x4 transform) {
+        var context        = Device.ImmediateContext;
+        var inputAssembler = context.InputAssembler;
+        var vbBinding      = ((SharpDXTriMesh)triMesh).Binding;
 
-    }
+        inputAssembler.SetVertexBuffers(0, vbBinding);
+        inputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleStrip;
 
-    public void DrawTexture(ITexture texture, Matrix4x4 transform) {
-        m_DeviceContext.UpdateSubresource(ref transform, m_ShaderParams);
-        m_DeviceContext.Draw(4, 0);
+        context.UpdateSubresource(ref transform, m_ShaderParams);
+
+        context.Draw(triMesh.NumVerts, 0);
+
     }
 
     public void EndFrame() {
@@ -180,33 +211,19 @@ public class SharpDXGraphics: IGraphicsManager {
         InitDevice();
         InitShaders();
 
-        m_TextureManager = new SharpDXTextureManager(m_Device);
-
-        CreateQuad();
+        m_TextureMgr = new SharpDXTextureMgr(this);
+        m_TriMeshMgr = new SharpDXTriMeshMgr(this);
 
         var desc = new D3D11.BufferDescription(64, D3D11.ResourceUsage.Default, D3D11.BindFlags.ConstantBuffer, D3D11.CpuAccessFlags.None, D3D11.ResourceOptionFlags.None, 0);
         var o = Matrix4x4.Identity();
        
-        m_ShaderParams = D3D11.Buffer.Create(m_Device, ref o, desc);
+        m_ShaderParams = D3D11.Buffer.Create(Device, ref o, desc);
         m_DeviceContext.VertexShader.SetConstantBuffer(0, m_ShaderParams);
     }
 
     /*-------------------------------------
      * PRIVATE METHODS
      *-----------------------------------*/
-
-    private void CreateQuad() {
-        var vertices = new Vector2[] {
-            new Vector2(-0.5f, -0.5f),
-            new Vector2(-0.5f,  0.5f),
-            new Vector2( 0.5f, -0.5f),
-            new Vector2( 0.5f,  0.5f),
-        };
-
-        m_Quad = D3D11.Buffer.Create(m_Device, D3D11.BindFlags.VertexBuffer, vertices);
-        m_DeviceContext.InputAssembler.SetVertexBuffers(0, new D3D11.VertexBufferBinding(m_Quad, Utilities.SizeOf<Vector2>(), 0));
-        m_DeviceContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleStrip;
-    }
 
     private void InitDevice() {
         var width  = m_Window.ClientRectangle.Width;
@@ -224,12 +241,11 @@ public class SharpDXGraphics: IGraphicsManager {
             Usage             = Usage.RenderTargetOutput
         };
 
-        D3D11.Device.CreateWithSwapChain(DriverType.Hardware, D3D11.DeviceCreationFlags.None, swapChainDesc, out m_Device, out m_SwapChain);
-        m_DeviceContext = m_Device.ImmediateContext;
+        D3D11.Device.CreateWithSwapChain(DriverType.Hardware, D3D11.DeviceCreationFlags.None, swapChainDesc, out Device, out m_SwapChain);
+        m_DeviceContext = Device.ImmediateContext;
 
-        using (var backBuffer = m_SwapChain.GetBackBuffer<D3D11.Texture2D>(0)) {
-            m_DefaultRenderTarget = new SharpDXRenderTarget(new D3D11.RenderTargetView(m_Device, backBuffer));
-        }
+        var backBuffer = m_SwapChain.GetBackBuffer<D3D11.Texture2D>(0);
+            m_DefaultRenderTarget = new SharpDXRenderTarget(this, backBuffer, width, height, new D3D11.RenderTargetView(Device, backBuffer));
 
         RenderTarget = m_DefaultRenderTarget;
 
@@ -237,10 +253,10 @@ public class SharpDXGraphics: IGraphicsManager {
     }
 
     private void InitShaders() {
-        m_ShaderManager  = new SharpDXShaderManager(m_Device);
+        m_ShaderMgr  = new ShaderMgr(Device);
 
-        m_DefaultPixelShader  = (SharpDXShader)Shader.LoadPixelShader("src/Shaders/DX/DefaultPS.hlsl");
-        m_DefaultVertexShader = (SharpDXShader)Shader.LoadVertexShader("src/Shaders/DX/DefaultVS.hlsl");
+        m_DefaultPixelShader  = (SharpDXShader)ShaderMgr.LoadPS("src/Shaders/DX/DefaultPS.hlsl");
+        m_DefaultVertexShader = (SharpDXShader)ShaderMgr.LoadVS("src/Shaders/DX/DefaultVS.hlsl");
 
         PixelShader  = m_DefaultPixelShader;
         VertexShader = m_DefaultVertexShader;

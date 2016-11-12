@@ -1,45 +1,40 @@
-﻿#if false
-
-namespace PongBrain.Base.Graphics.GdiPlusImpl {
+﻿namespace PongBrain.Base.Math {
 
 /*-------------------------------------
  * USINGS
  *-----------------------------------*/
 
-using System.Drawing;
+using System.Runtime.InteropServices;
 
 /*-------------------------------------
- * CLASSES
+ * STRUCTS
  *-----------------------------------*/
 
-internal sealed class GdiPlusTexture: ITexture {
-    /*-------------------------------------
-     * PRIVATE FIELDS
-     *-----------------------------------*/
-    
-    internal readonly Bitmap m_Bitmap;
-
+[StructLayout(LayoutKind.Sequential)]
+public struct Vector2 {
     /*-------------------------------------
      * PUBLIC PROPERTIES
      *-----------------------------------*/
 
-    public int Height {
-        get { return m_Bitmap.Height; }
-    }
-
-    public int Width {
-        get { return m_Bitmap.Width; }
-    }
+    public float X;
+    public float Y;
 
     /*-------------------------------------
      * CONSTRUCTORS
      *-----------------------------------*/
 
-    public GdiPlusTexture(Bitmap bmp) {
-        m_Bitmap = bmp;
+    public Vector2(float x=0.0f, float y=0.0f) {
+        X = x;
+        Y = y;
+    }
+
+    /*-------------------------------------
+     * PUBLIC METHODS
+     *-----------------------------------*/
+
+    public float Dot(Vector2 v) {
+        return X*v.X + Y*v.Y;
     }
 }
 
 }
-
-#endif

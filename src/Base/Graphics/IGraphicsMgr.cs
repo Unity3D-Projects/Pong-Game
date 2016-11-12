@@ -14,7 +14,7 @@ using Textures;
  * INTERFACES
  *-----------------------------------*/
 
-public interface IGraphicsManager {
+public interface IGraphicsMgr {
     /*-------------------------------------
      * PROPERTIES
      *-----------------------------------*/
@@ -23,9 +23,13 @@ public interface IGraphicsManager {
 
     IShader PixelShader { get; set; }
 
-    IShaderManager Shader { get; }
+    IRenderTarget RenderTarget { get; set; }
 
-    ITextureManager Texture { get; }
+    IShaderMgr ShaderMgr { get; }
+
+    ITextureMgr TextureMgr { get; }
+
+    ITriMeshMgr TriMeshMgr { get; }
 
     IShader VertexShader { get; set; }
 
@@ -37,9 +41,9 @@ public interface IGraphicsManager {
 
     void Cleanup();
 
-    void Clear(Color clearColor);
+    IRenderTarget CreateRenderTarget();
 
-    void DrawTexture(ITexture texture, Matrix4x4 transform);
+    void DrawTriMesh(ITriMesh triMesh, Matrix4x4 transform);
 
     void EndFrame();
 

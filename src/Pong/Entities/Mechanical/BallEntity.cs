@@ -4,6 +4,8 @@ namespace PongBrain.Pong.Entities.Mechanical {
  * USINGS
  *-----------------------------------*/
 
+using System;
+
 using Base.Components.Graphical;
 using Base.Components.Physical;
 using Base.Core;
@@ -20,17 +22,16 @@ public class BallEntity: Entity {
      *-----------------------------------*/
 
     public BallEntity() {
-        var radius = 0.03f;
+        var radius = 0.04f;
 
         AddComponents(
-            new BallInfoComponent { Radius=radius },
-            new SpriteComponent   { ScaleX  = 2.0f*radius,
-                                    ScaleY  = 2.0f*radius,
-                                    Shader  = Game.Inst.Graphics.Shader.LoadPixelShader("src/Shaders/DX/Test.hlsl"),
-                                    Texture = Game.Inst.Graphics.Texture.White },
-            new PositionComponent { X=0.0f, Y=0.0f },
-            new VelocityComponent { X=0.0f, Y=0.0f }
-
+            new AngularVelocityComponent { W=2.0f*(float)Math.PI*2.0f },
+            new BallInfoComponent        { Radius=radius },
+            new PositionComponent        { X=0.0f, Y=0.0f },
+            new RotationComponent        { },
+            new ShaderComponent          { PixelShader=Game.Inst.Graphics.ShaderMgr.LoadPS("src/Shaders/DX/Test.hlsl") },
+            new TriMeshComponent         { TriMesh=Game.Inst.Graphics.TriMeshMgr.CreateQuad(2.0f*radius, 2.0f*radius) },
+            new VelocityComponent        { X=0.0f, Y=0.0f }
         );
     }
 }

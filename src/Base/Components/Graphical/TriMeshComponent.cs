@@ -4,6 +4,7 @@
  * USINGS
  *-----------------------------------*/
 
+using Graphics;
 using Graphics.Shaders;
 using Graphics.Textures;
 
@@ -11,18 +12,12 @@ using Graphics.Textures;
  * CLASSES
  *-----------------------------------*/
 
-public sealed class SpriteComponent {
+public sealed class TriMeshComponent {
     /*-------------------------------------
      * PUBLIC PROPERTIES
      *-----------------------------------*/
 
-    public float LayerDepth { get; set; }
-
-    public float ScaleX { get; set; } = 1.0f;
-
-    public float ScaleY { get; set; } = 1.0f;
-
-    public ITexture Texture { get; set; }
+    public ITriMesh TriMesh { get; set; }
 }
 
 }

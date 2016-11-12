@@ -1,7 +1,32 @@
 ﻿/*-------------------------------------
+ * STRUCTS
+ *-----------------------------------*/
+
+struct PS_INPUT {
+    float4 Position: SV_POSITION;
+    float2 TexCoord: TEXCOORD0;
+};
+
+/*-------------------------------------
+ * CONSTANTS
+ *-----------------------------------*/
+
+SamplerState TextureSampler {
+    AddressU = Clamp;
+    AddressV = Clamp;
+    Filter   = MIN_MAG_MIP_LINEAR;
+};
+
+/*-------------------------------------
+ * GLOBALS
+ *-----------------------------------*/
+
+Texture2D g_Texture;
+
+/*-------------------------------------
  * FUNCTIONS
  *-----------------------------------*/
 
-float4 main(float4 p: SV_POSITION) : SV_TARGET {
-    return float4(1.0, 1.0, 1.0, 1.0);
+float4 main(PS_INPUT v): SV_TARGET {
+    return g_Texture.Sample(TextureSampler, v.TexCoord);
 }

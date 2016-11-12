@@ -1,7 +1,16 @@
 ﻿/*-------------------------------------
+ * STRUCTS
+ *-----------------------------------*/
+
+struct PS_INPUT {
+    float4 Position: SV_POSITION;
+    float2 TexCoord: TEXCOORD0;
+};
+
+/*-------------------------------------
  * FUNCTIONS
  *-----------------------------------*/
 
-float4 main(float2 p: TEXCOORD0) : SV_TARGET {
-    return float4(cos(p.x*10.0), sin(p.y*10.0), 1.0, 1.0);
+float4 main(PS_INPUT v): SV_TARGET {
+    return float4(1.0f, 0.0f, 0.0f, 1.0f);
 }

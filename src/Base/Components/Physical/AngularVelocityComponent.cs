@@ -1,15 +1,15 @@
-﻿namespace PongBrain.Base.Graphics.Shaders {
+﻿namespace PongBrain.Base.Components.Physical {
 
 /*-------------------------------------
- * INTERFACES
+ * CLASSES
  *-----------------------------------*/
 
-public interface IRenderTarget {
+public sealed class AngularVelocityComponent {
     /*-------------------------------------
-     * METHODS
+     * PUBLIC PROPERTIES
      *-----------------------------------*/
 
-    void Clear(Color clearColor);
+    public float W { get; set; }
 }
 
 }

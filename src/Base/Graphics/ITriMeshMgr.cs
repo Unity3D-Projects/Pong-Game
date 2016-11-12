@@ -1,18 +1,15 @@
-﻿namespace PongBrain.Base.Graphics.Shaders {
+﻿namespace PongBrain.Base.Graphics {
 
 /*-------------------------------------
  * INTERFACES
  *-----------------------------------*/
 
-public interface IShaderManager {
+public interface ITriMeshMgr {
     /*-------------------------------------
      * METHODS
      *-----------------------------------*/
 
-    void Cleanup();
-    void Init();
-    IShader LoadPixelShader(string path);
-    IShader LoadVertexShader(string path);
+    ITriMesh CreateQuad(float width, float height);
 }
 
 }

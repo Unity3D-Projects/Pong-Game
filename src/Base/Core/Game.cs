@@ -31,7 +31,7 @@ public class Game {
 
     private bool m_Done;
 
-    private IGraphicsManager m_Graphics;
+    private IGraphicsMgr m_Graphics;
 
     private readonly Dictionary<Type, List<Action<IMessage>>> m_MessageHandlers;
 
@@ -45,7 +45,7 @@ public class Game {
      * PUBLIC PROPERTIES
      *-----------------------------------*/
 
-    public IGraphicsManager Graphics {
+    public IGraphicsMgr Graphics {
         get { return m_Graphics; }
     }
 
@@ -114,7 +114,7 @@ public class Game {
         m_MessageQueue.Enqueue(message);
     }
 
-    public void Run(IGraphicsManager graphics,
+    public void Run(IGraphicsMgr graphics,
                     string title,
                     int width,
                     int height,
@@ -135,14 +135,23 @@ public class Game {
             t1 += dt;
             t2 += dt;
 
-            while (t1 >= INV_UPDATES_PER_SEC) {
-                m_Scene.Update((float)INV_UPDATES_PER_SEC);
-                t1 -= INV_UPDATES_PER_SEC;
-            }
+            var done = false;
+            while (!done) {
+                done = true;
 
-            while (t2 >= INV_DRAWS_PER_SEC) {
-                m_Scene.Draw((float)INV_DRAWS_PER_SEC);
-                t2 -= INV_DRAWS_PER_SEC;
+                if (t1 >= INV_UPDATES_PER_SEC) {
+                    m_Scene.Update((float)INV_UPDATES_PER_SEC);
+                    t1 -= INV_UPDATES_PER_SEC;
+                    
+                    done = false;
+                }
+
+                if (t2 >= INV_DRAWS_PER_SEC) {
+                    m_Scene.Draw((float)INV_DRAWS_PER_SEC);
+                    t2 -= INV_DRAWS_PER_SEC;
+
+                    done = false;
+                }
             }
 
             DispatchMessages();
@@ -171,7 +180,7 @@ public class Game {
      * PRIVATE METHODS
      *-----------------------------------*/
 
-    private void Init(IGraphicsManager graphics,
+    private void Init(IGraphicsMgr graphics,
                       string title,
                       int width,
                       int height)

@@ -8,7 +8,7 @@ using System;
 using System.Runtime.InteropServices;
 
 /*-------------------------------------
- * CLASSES
+ * STRUCTS
  *-----------------------------------*/
 
 [StructLayout(LayoutKind.Sequential)]
