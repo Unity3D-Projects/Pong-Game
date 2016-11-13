@@ -165,47 +165,31 @@ public class MainScene: Scene {
     }
 
     private void SetupDrawing() {
-        var adsMaterial = new AdsMaterial() {
-            Ambient=new Color(0.1f, 0.1f, 0.1f, 1.0f)
-        };
+
 
         var g = Game.Inst.Graphics;
 
-        IShader bloom, chromaticAberration, noise;
-
-        var motionBlurPS0 = g.ShaderMgr.LoadPS("src/Shaders/HLSL/MotionBlur0.ps.hlsl");
-        var motionBlurPS1 = g.ShaderMgr.LoadPS("src/Shaders/HLSL/MotionBlur1.ps.hlsl");
-        var motionBlurVS = g.ShaderMgr.LoadVS<Matrix4x4>("src/Shaders/HLSL/MotionBlur.vs.hlsl");
-
-        var shaders = new[] {
-            chromaticAberration = g.ShaderMgr.LoadPS<float>("src/Shaders/HLSL/ChromaticAberration.ps.hlsl"),
-            bloom               = g.ShaderMgr.LoadPS       ("src/Shaders/HLSL/Bloom.ps.hlsl"),
-            noise               = g.ShaderMgr.LoadPS<uint> ("src/Shaders/HLSL/Noise.ps.hlsl")
-        };
-
-        var numShaders = shaders.Length;
-
-        var renderTargets = g.CreateRenderTargets(numShaders+2);
-
-        for (var i = 0; i < shaders.Length; i++) {
-            shaders[i].SetTextures(renderTargets[i+2]);
-        }
-
-        chromaticAberration.SetConstants(0.85f);
-
-        var defDrawFunc = m_GraphicsSubsystem.DrawFunc;
 
         var random = new Random();
+        var renderTargets = g.CreateRenderTargets(3);
 
-        motionBlurPS1.SetTextures(renderTargets[0], renderTargets[1]);
-
-        m_GraphicsSubsystem.DrawFunc = () => {
+        var adsMaterial = new AdsMaterial();
+        var defDrawFunc = m_GraphicsSubsystem.DrawFunc;
+        Action draw = () => {
             g.RenderTarget = renderTargets[0];
             g.PixelShader  = adsMaterial.Shader;
             g.VertexShader = null;
 
-            defDrawFunc();
+            adsMaterial.Ambient = new Color(0.1f, 0.1f, 0.1f, 1.0f);
 
+            defDrawFunc();
+        };
+
+        var motionBlurPS0 = g.ShaderMgr.LoadPS("src/Shaders/HLSL/MotionBlur0.ps.hlsl");
+        var motionBlurPS1 = g.ShaderMgr.LoadPS("src/Shaders/HLSL/MotionBlur1.ps.hlsl");
+        var motionBlurVS  = g.ShaderMgr.LoadVS<Matrix4x4>("src/Shaders/HLSL/MotionBlur.vs.hlsl");
+        motionBlurPS1.SetTextures(renderTargets[0], renderTargets[1]);
+        Action drawMotionBlur = () => {
             g.RenderTarget = renderTargets[1];
             g.PixelShader  = motionBlurPS0;
             g.VertexShader = motionBlurVS;
@@ -232,19 +216,37 @@ public class MainScene: Scene {
             }
 
             g.ApplyPostFX(renderTargets[2], motionBlurPS1);
+        };
 
+        var chromaticAberration = g.ShaderMgr.LoadPS<float>("src/Shaders/HLSL/ChromaticAberration.ps.hlsl");
+        chromaticAberration.SetTextures(renderTargets[2]);
+        chromaticAberration.SetConstants(0.85f);
+        Action drawChromaticAberration = () => {
+            g.ApplyPostFX(renderTargets[0], chromaticAberration);
+        };
+
+        var bloom = g.ShaderMgr.LoadPS("src/Shaders/HLSL/Bloom.ps.hlsl");
+        bloom.SetTextures(renderTargets[0]);
+        Action drawBloom = () => {
+            g.ApplyPostFX(renderTargets[1], chromaticAberration);
+        };
+
+        var noise = g.ShaderMgr.LoadPS<uint>("src/Shaders/HLSL/Noise.ps.hlsl");
+        noise.SetTextures(renderTargets[1]);
+        Action drawNoise = () => {
+            g.RenderTarget = null;
+            g.ApplyPostFX(null, noise);
+        };
+
+        m_GraphicsSubsystem.DrawFunc = () => {
             noise.SetConstants((uint)random.Next(1, 999));
 
-            for (int i = 0; i < numShaders; i++) {
-                IRenderTarget renderTarget = null;
-
-                if (i < numShaders - 1) {
-                    renderTarget = renderTargets[i+3];
-                }
-
-                g.ApplyPostFX(renderTarget, shaders[i]);
-            }
+            draw();
+            drawMotionBlur();
+            drawBloom();
+            drawNoise();
         };
+
     }
 
     private void SetupEffects() {

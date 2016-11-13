@@ -152,9 +152,9 @@ public class Game {
 
                     done = false;
                 }
-            }
 
-            DispatchMessages();
+                DispatchMessages();
+            }
 
             Application.DoEvents();
         }

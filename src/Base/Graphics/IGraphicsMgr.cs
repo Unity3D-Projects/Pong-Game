@@ -37,7 +37,7 @@ public interface IGraphicsMgr {
      * METHODS
      *-----------------------------------*/
 
-    void ApplyPostFX(IRenderTarget renderTarget, IShader shader);
+    void ApplyPostFX(IRenderTarget renderSource, IShader shader);
 
     void BeginFrame();
 

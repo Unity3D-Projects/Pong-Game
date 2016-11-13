@@ -308,7 +308,13 @@ public class SharpDXGraphics: IGraphicsMgr {
             Usage             = Usage.RenderTargetOutput
         };
 
-        D3D11.Device.CreateWithSwapChain(DriverType.Hardware, D3D11.DeviceCreationFlags.SingleThreaded | D3D11.DeviceCreationFlags.Debug, swapChainDesc, out Device, out m_SwapChain);
+#if DEBUG
+        const D3D11.DeviceCreationFlags DEBUG_FLAG = D3D11.DeviceCreationFlags.Debug;
+#else
+        const D3D11.DeviceCreationFlags DEBUG_FLAG = D3D11.DeviceCreationFlags.None;
+#endif
+
+            D3D11.Device.CreateWithSwapChain(DriverType.Hardware, D3D11.DeviceCreationFlags.SingleThreaded | DEBUG_FLAG, swapChainDesc, out Device, out m_SwapChain);
         m_DeviceContext = Device.ImmediateContext;
 
         var rsd = new D3D11.RasterizerStateDescription {
