@@ -68,8 +68,7 @@ public abstract class Scene {
     }
 
     public virtual void Draw(float dt) {
-        List<Entity> sprites;
-
+        /*List<Entity> sprites;
         if (m_ComponentTypeToEntityMap.TryGetValue(typeof (SpriteComponent), out sprites)) {
             var n = sprites.Count-1;
             for (var i = 0; i < n; i++) {
@@ -87,7 +86,7 @@ public abstract class Scene {
                     break;
                 }
             }
-        }
+        }*/
 
         foreach (var subsystem in Subsystems) {
             subsystem.Draw(dt);

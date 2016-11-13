@@ -21,9 +21,9 @@ public sealed class BrainComponent {
      * PUBLIC PROPERTIES
      *-----------------------------------*/
 
-    public Action<float> ThinkFunc { get; set; }
+    public Action ThinkFunc { get; set; }
 
-    public float ThinkRate { get; set; } = 30.0f;
+    public float InvThinkRate { get; set; } = 1.0f/30.0f;
 }
 
 }

@@ -36,7 +36,7 @@ public class TrivialAI {
      * PUBLIC METHODS
      *-----------------------------------*/
 
-    public void Think(float dt) {
+    public void Think() {
         var ballPos   = m_Ball.GetComponent<PositionComponent>();
         var paddlePos = m_Paddle.GetComponent<PositionComponent>();
         var controls  = m_Paddle.GetComponent<ControlsComponent>().Controls;

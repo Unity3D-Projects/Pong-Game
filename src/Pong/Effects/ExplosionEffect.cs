@@ -10,6 +10,8 @@ using Base.Components;
 using Base.Components.Physical;
 using Base.Core;
 
+using Components;
+
 using Entities.Graphical;
 
 /*-------------------------------------
@@ -53,7 +55,7 @@ public sealed class ExplosionEffect: Effect {
             var theta    = 2.0f*(float)Math.PI * (float)random.NextDouble();
             var r        = 0.4f + 0.4f*(float)random.NextDouble();
             var a        = 0.2f + 0.2f*(float)random.NextDouble();
-            var w        = ((float)random.NextDouble()-0.5f)*2.0f*(float)Math.PI*4.0f;
+            var w        = ((float)random.NextDouble()-0.5f)*2.0f*(float)Math.PI*6.0f;
 
             velocity.X = (float)Math.Cos(theta)*r;
             velocity.Y = (float)Math.Sin(theta)*r;

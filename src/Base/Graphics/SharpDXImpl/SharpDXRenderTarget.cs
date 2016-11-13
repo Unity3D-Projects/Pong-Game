@@ -17,7 +17,7 @@ internal class SharpDXRenderTarget: SharpDXTexture, IRenderTarget {
      * PUBLIC FIELDS
      *-----------------------------------*/
 
-    public readonly D3D11.RenderTargetView View;
+    public readonly D3D11.RenderTargetView RenderTarget;
 
     /*-------------------------------------
      * CONSTRUCTORS
@@ -27,10 +27,10 @@ internal class SharpDXRenderTarget: SharpDXTexture, IRenderTarget {
                                D3D11.Texture2D        texture,
                                int                    width,
                                int                    height,
-                               D3D11.RenderTargetView view)
+                               D3D11.RenderTargetView renderTarget)
         : base(graphics, texture, width, height)
     {
-        View = view;
+        RenderTarget = renderTarget;
     }
 
     /*-------------------------------------
@@ -40,7 +40,7 @@ internal class SharpDXRenderTarget: SharpDXTexture, IRenderTarget {
     public void Clear(Color clearColor) {
         var context = Graphics.Device.ImmediateContext;
         var color = new SharpDX.Color(clearColor.ToIntABGR());
-        context.ClearRenderTargetView(View, color);
+        context.ClearRenderTargetView(RenderTarget, color);
     }
 }
 

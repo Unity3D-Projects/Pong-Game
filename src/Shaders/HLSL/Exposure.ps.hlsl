@@ -3,8 +3,13 @@
  *-----------------------------------*/
 
 struct PS_INPUT {
-    float4 Position: SV_POSITION;
-    float2 TexCoord: TEXCOORD0;
+    float4 pos      : POSITION0;
+    float4 screenPos: SV_POSITION;
+    float2 texCoord : TEXCOORD0;
+};
+
+struct PS_OUTPUT {
+    float4 color: SV_TARGET;
 };
 
 /*-------------------------------------
@@ -21,12 +26,16 @@ SamplerState TextureSampler {
  * GLOBALS
  *-----------------------------------*/
 
-Texture2D g_Texture;
+tbuffer tbTextures {
+    Texture2D Textures[1];
+}
 
 /*-------------------------------------
  * FUNCTIONS
  *-----------------------------------*/
 
-float4 main(PS_INPUT v): SV_TARGET {
-    return g_Texture.Sample(TextureSampler, v.TexCoord);
+void main(in PS_INPUT psIn, out PS_OUTPUT psOut) {
+    float4 c = Textures[0].Sample(TextureSampler, psIn.texCoord);
+
+    psOut.color = float4(sqrt(c.rgb), 1.0);
 }

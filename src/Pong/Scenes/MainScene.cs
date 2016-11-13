@@ -12,6 +12,7 @@ using Base.Components.Input;
 using Base.Components.Physical;
 using Base.Core;
 using Base.Graphics;
+using Base.Graphics.Shaders;
 using Base.Input;
 using Base.Math;
 using Base.Messages;
@@ -43,7 +44,7 @@ public class MainScene: Scene {
     private int m_RightScore;
     private Entity m_RightScoreText;
 
-    private GraphicsSubsystem m_RenderingSubsystem;
+    private GraphicsSubsystem m_GraphicsSubsystem;
 
     private Rectangle m_WorldBounds;
 
@@ -164,7 +165,7 @@ public class MainScene: Scene {
             var o = ((CollisionMessage)msg);
 
             if (o.Entity1 == m_Ball || o.Entity2 != null) {
-                new CameraShakeEffect(m_RenderingSubsystem).Create();
+                new CameraShakeEffect(m_GraphicsSubsystem).Create();
                 new BounceEffect(o.Entity1, 0.2f).Create();
 
                 if (o.Entity2 != null) {
@@ -203,9 +204,44 @@ public class MainScene: Scene {
             new PhysicsSubsystem(m_WorldBounds),
 
             new EffectsSubsystem(),
-            m_RenderingSubsystem = new GraphicsSubsystem() { ClearColor=clearColor },
+            m_GraphicsSubsystem = new GraphicsSubsystem() { ClearColor=clearColor },
             new PerformanceInfoSubsystem()
         );
+
+        var adsMaterial = new AdsMaterial() {
+            Ambient=new Color(0.1f, 0.1f, 0.1f, 1.0f)
+        };
+
+        var g = Game.Inst.Graphics;
+        var renderTargets = g.CreateRenderTargets(3);
+
+        var noiseShader = g.ShaderMgr.LoadPS<uint>("src/Shaders/HLSL/Noise.ps.hlsl");
+        var chromaticAberrationShader = g.ShaderMgr.LoadPS<float>("src/Shaders/HLSL/ChromaticAberration.ps.hlsl");
+        var exposureShader = g.ShaderMgr.LoadPS("src/Shaders/HLSL/Exposure.ps.hlsl");
+
+        chromaticAberrationShader.SetTextures(renderTargets[0]);
+        noiseShader              .SetTextures(renderTargets[1]);
+        exposureShader           .SetTextures(renderTargets[2]);
+
+        chromaticAberrationShader.SetConstants(1.0f);
+
+        var drawFunc = m_GraphicsSubsystem.DrawFunc;
+
+        var random = new Random();
+
+        m_GraphicsSubsystem.DrawFunc = () => {
+            g.PixelShader = adsMaterial.Shader;
+            g.RenderTarget = renderTargets[0];
+            drawFunc();
+
+            g.ApplyPostFX(renderTargets[1], chromaticAberrationShader);
+            g.ApplyPostFX(renderTargets[2], exposureShader);
+
+            uint seed = (uint)random.Next(1, 999);
+            noiseShader.SetConstants(seed);
+            g.ApplyPostFX(null, noiseShader);
+
+        };
     }
 
     private void Score(int player) {

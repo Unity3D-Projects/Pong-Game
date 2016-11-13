@@ -42,7 +42,7 @@ public sealed class CameraShakeEffect: Effect {
         var dx = 0.02f*(float)Math.Cos(x*27.0f)*(1.0f-x);
         var dy = 0.02f*(float)Math.Sin(x*31.0f)*(1.0f-x);
 
-        m_RenderingSubsystem.ViewTransform = Matrix4x4.Translate(dx, dy, 0.0f);
+        m_RenderingSubsystem.ViewMatrix = Matrix4x4.Translate(dx, dy, 0.0f);
     }
 }
 

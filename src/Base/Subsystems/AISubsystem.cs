@@ -25,9 +25,9 @@ public class AISubsystem: Subsystem {
 
             var t = brain.ThinkTimer + dt;
 
-            var invThinkRate = 1.0f / brain.ThinkRate;
+            var invThinkRate = brain.InvThinkRate;
             while (t >= invThinkRate) {
-                brain.ThinkFunc?.Invoke(dt);
+                brain.ThinkFunc?.Invoke();
                 t -= invThinkRate;
             }
 

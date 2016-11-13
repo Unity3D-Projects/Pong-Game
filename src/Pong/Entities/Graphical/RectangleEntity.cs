@@ -8,6 +8,7 @@ using Base.Components.Graphical;
 using Base.Components.Physical;
 using Base.Core;
 using Base.Graphics;
+using Base.Math;
 
 /*-------------------------------------
  * CLASSES
@@ -15,15 +16,20 @@ using Base.Graphics;
 
 public class RectangleEntity: Entity {
     /*-------------------------------------
+     * FIELDS
+     *-----------------------------------*/
+
+    private static readonly ITriMesh s_Quad = Game.Inst.Graphics.TriMeshMgr.CreateQuad(1.0f, 1.0f);
+
+    /*-------------------------------------
      * CONSTRUCTORS
      *-----------------------------------*/
 
     public RectangleEntity(float x, float y, float width, float height) {
         AddComponents(
-            new SpriteComponent   { ScaleX  = width,
-                                    ScaleY  = height,
-                                    Texture = Game.Inst.Graphics.TextureMgr.White },
-            new PositionComponent { X=x, Y=y }
+            new PositionComponent { X=x, Y=y },
+            new TriMeshComponent  { Transform = Matrix4x4.Scale(width, height, 1.0f),
+                                    TriMesh = s_Quad }
         );
     }
 }

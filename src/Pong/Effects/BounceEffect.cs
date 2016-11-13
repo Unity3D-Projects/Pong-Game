@@ -8,6 +8,7 @@ using System;
 
 using Base.Components.Graphical;
 using Base.Core;
+using Base.Math;
 
 /*-------------------------------------
  * CLASSES
@@ -20,9 +21,7 @@ public sealed class BounceEffect: Effect {
 
     private readonly Entity m_Entity;
 
-    private float m_ScaleX = 1.0f;
-
-    private float m_ScaleY = 1.0f;
+    private Matrix4x4 m_OriginalTransform = Matrix4x4.Identity();
 
     /*-------------------------------------
      * CONSTRUCTORS
@@ -39,35 +38,25 @@ public sealed class BounceEffect: Effect {
     public override void Begin() {
         base.Begin();
 
-        var sprite = m_Entity.GetComponent<SpriteComponent>();
-        if (sprite != null) {
-            m_ScaleX = sprite.ScaleX;
-            m_ScaleY = sprite.ScaleY;
+        var triMesh = m_Entity.GetComponent<TriMeshComponent>();
+        if (triMesh != null) {
+            m_OriginalTransform = triMesh.Transform;
         }
-    }
-
-    public override void End() {
-        base.End();
-
-        /*var sprite = m_Entity.GetComponent<SpriteComponent>();
-        if (sprite != null) {
-            sprite.ScaleX = m_ScaleX;
-            sprite.ScaleY = m_ScaleY;
-        }*/
     }
 
     public override void Update(float x) {
         base.Update(x);
 
-        var t = 2.0f * (float)Math.PI * x;
+        var t  = 2.0f * (float)Math.PI * x;
+        var sx = 0.1f*(float)Math.Sin(t*1.0f);
+        var sy = 0.1f*(float)Math.Sin(t*1.0f);
 
-        var scaleX = m_ScaleX * 0.1f*(float)Math.Sin(t*1.0f);
-        var scaleY = m_ScaleY * 0.1f*(float)Math.Sin(t*1.0f);
-
-        var sprite = m_Entity.GetComponent<SpriteComponent>();
-        if (sprite != null) {
-            sprite.ScaleX += scaleX;
-            sprite.ScaleY += scaleY;
+        var triMesh = m_Entity.GetComponent<TriMeshComponent>();
+        if (triMesh != null) {
+            var m = triMesh.Transform;
+            m.M11 += sx;
+            m.M22 += sy;
+            triMesh.Transform = m;
         }
     }
 }

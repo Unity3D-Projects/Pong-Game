@@ -1,6 +1,12 @@
 ﻿namespace PongBrain.Base.Graphics.Shaders {
 
 /*-------------------------------------
+ * USINGS
+ *-----------------------------------*/
+
+using Textures;
+
+/*-------------------------------------
  * INTERFACES
  *-----------------------------------*/
 
@@ -9,7 +15,9 @@ public interface IShader {
      * METHODS
      *-----------------------------------*/
 
-    void SetShaderParam(string name, ref object data);
+    void SetConstants<T>(T constants) where T: struct;
+
+    void SetTextures(params ITexture[] textures);
 }
 
 }

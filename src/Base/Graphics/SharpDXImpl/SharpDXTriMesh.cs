@@ -56,13 +56,12 @@ internal class SharpDXTriMesh: IDisposable, ITriMesh {
      *-----------------------------------*/
 
     public void Dispose() {
-        Binding = default (D3D11.VertexBufferBinding);
-
         if (VertexBuffer != null) {
             VertexBuffer.Dispose();
             VertexBuffer = null;
         }
 
+        Binding  = default (D3D11.VertexBufferBinding);
         Graphics = null;
     }
 }

@@ -6,6 +6,8 @@
 
 using System;
 
+using Math;
+
 /*-------------------------------------
  * STRUCTS
  *-----------------------------------*/
@@ -16,6 +18,8 @@ public struct Color {
      *-----------------------------------*/
 
     public static readonly Color Black = new Color(0.0f, 0.0f, 0.0f, 1.0f);
+
+    public static readonly Color White = new Color(1.0f, 1.0f, 1.0f, 1.0f);
 
     /*-------------------------------------
      * PUBLIC PROPERTIES
@@ -55,6 +59,10 @@ public struct Color {
      * PUBLIC METHODS
      *-----------------------------------*/
 
+    public static Color FromVector4(Vector4 v) {
+        return new Color(v.X, v.Y, v.Z, v.W);
+    }
+
     public int ToIntABGR() {
         byte r = (byte)(R*255.0f);
         byte g = (byte)(G*255.0f);
@@ -89,6 +97,10 @@ public struct Color {
         byte a = (byte)(A*255.0f);
 
         return (r<<24)|(g<<16)|(b<<8)|a;
+    }
+
+    public Vector4 ToVector4() {
+        return new Vector4(R, G, B, A);
     }
 
 }

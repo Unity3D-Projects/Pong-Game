@@ -8,7 +8,6 @@ using Base.Components.Graphical;
 using Base.Components.Input;
 using Base.Components.Physical;
 using Base.Core;
-using Base.Graphics;
 
 using Components;
 
@@ -22,15 +21,19 @@ public class PaddleEntity: Entity {
      *-----------------------------------*/
 
     public PaddleEntity() {
+        var g = Game.Inst.Graphics;
+
+        var width  = 0.06f;
+        var height = 0.38f;
+        var quad   = g.TriMeshMgr.CreateQuad(width, height);
+
         AddComponents(
             new BodyComponent           { },
-            new AxisAlignedBoxComponent { Width=0.06f, Height=0.28f },
+            new AxisAlignedBoxComponent { Width=width, Height=height },
             new ControlsComponent       { },
-            new SpriteComponent         { ScaleX  = 0.06f,
-                                          ScaleY  = 0.28f,
-                                          Texture = Game.Inst.Graphics.TextureMgr.White },
             new PaddleInfoComponent     { },
             new PositionComponent       { X=0.0f, Y=0.0f },
+            new TriMeshComponent        { TriMesh=quad },
             new VelocityComponent       { X=0.0f, Y=0.0f }
         );
     }

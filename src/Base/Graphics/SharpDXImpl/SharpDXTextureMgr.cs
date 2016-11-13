@@ -61,9 +61,8 @@ internal sealed class SharpDXTextureMgr: IDisposable, ITextureMgr {
         var textureDescription = new Texture2DDescription {
             ArraySize         = 1,
             BindFlags         = BindFlags.ShaderResource,
-            Format            = SharpDX.DXGI.Format.R8G8B8A8_UNorm,
+            Format            = SharpDX.DXGI.Format.R16G16B16A16_Float,
             MipLevels         = 1,
-            SampleDescription = new SharpDX.DXGI.SampleDescription(1, 0),
             Width             = width,
             Height            = height
         };

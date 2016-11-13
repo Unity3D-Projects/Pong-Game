@@ -133,7 +133,6 @@ public class Game {
             stopwatch.Restart();
 
             t1 += dt;
-            t2 += dt;
 
             var done = false;
             while (!done) {
@@ -142,7 +141,8 @@ public class Game {
                 if (t1 >= INV_UPDATES_PER_SEC) {
                     m_Scene.Update((float)INV_UPDATES_PER_SEC);
                     t1 -= INV_UPDATES_PER_SEC;
-                    
+                    t2 += INV_UPDATES_PER_SEC;
+
                     done = false;
                 }
 

@@ -10,6 +10,7 @@ using Base.Components;
 using Base.Components.Physical;
 using Base.Core;
 
+using Components;
 using Entities.Graphical;
 
 /*-------------------------------------
@@ -47,8 +48,10 @@ public sealed class TrailEffect: Effect {
         var v = m_Entity.GetComponent<VelocityComponent>();
 
         for (var i = 0; i < m_NumParticles; i++) {
+            var x        = 0.04f*(float)random.NextDouble();
+            var y        = 0.04f*(float)random.NextDouble();
             var size     = 0.01f + 0.01f*(float)random.NextDouble();
-            var particle = new RectangleEntity(p.X, p.Y, size, size);
+            var particle = new RectangleEntity(p.X + x, p.Y + y, size, size);
             var velocity = particle.AddComponent(new VelocityComponent());
             var theta    = 2.0f*(float)Math.PI * (float)random.NextDouble();
             var r        = 0.05f + 0.1f*(float)random.NextDouble();
@@ -59,8 +62,8 @@ public sealed class TrailEffect: Effect {
             velocity.Y = 0.3f*v.Y + (float)Math.Sin(theta)*r;
 
             particle.AddComponents(
-                new AngularVelocityComponent { W=w },
-                new LifetimeComponent        { Lifetime=a },
+                new AngularVelocityComponent { W=w         },
+                new LifetimeComponent        { Lifetime=a  },
                 new RotationComponent        { Angle=theta }
             );
 

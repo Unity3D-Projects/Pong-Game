@@ -47,7 +47,7 @@ public class SharpDXGraphics: IGraphicsMgr {
 
     private SharpDXRenderTarget m_RenderTarget;
 
-    private ShaderMgr m_ShaderMgr;
+    private SharpDXShaderMgr m_ShaderMgr;
 
     private SwapChain m_SwapChain;
 
@@ -58,6 +58,8 @@ public class SharpDXGraphics: IGraphicsMgr {
     private SharpDXShader m_VertexShader;
 
     private Form m_Window;
+
+    private ITriMesh m_Quad;
 
     /*-------------------------------------
      * PUBLIC PROPERTIES
@@ -80,7 +82,13 @@ public class SharpDXGraphics: IGraphicsMgr {
                 return;
             }
 
-            m_DeviceContext.PixelShader.Set((D3D11.PixelShader)shader.Shader);
+            var ps = m_DeviceContext.PixelShader;
+            ps.Set((D3D11.PixelShader)shader.Shader);
+
+            if (shader.ConstantBuffer != null) {
+                ps.SetConstantBuffer(1, shader.ConstantBuffer);
+            }
+
             m_PixelShader = shader;
         }
     }
@@ -98,7 +106,7 @@ public class SharpDXGraphics: IGraphicsMgr {
                 return;
             }
 
-            m_DeviceContext.OutputMerger.SetRenderTargets(renderTarget.View);
+            m_DeviceContext.OutputMerger.SetRenderTargets(renderTarget.RenderTarget);
             m_RenderTarget = renderTarget;
         }
     }
@@ -128,7 +136,13 @@ public class SharpDXGraphics: IGraphicsMgr {
                 return;
             }
 
-            m_DeviceContext.VertexShader.Set((D3D11.VertexShader)shader.Shader);
+            var vs = m_DeviceContext.VertexShader;
+            vs.Set((D3D11.VertexShader)shader.Shader);
+
+            if (shader.ConstantBuffer != null) {
+                vs.SetConstantBuffer(1, shader.ConstantBuffer);
+            }
+
             m_DeviceContext.InputAssembler.InputLayout = shader.InputLayout;
 
             m_VertexShader = shader;
@@ -139,15 +153,21 @@ public class SharpDXGraphics: IGraphicsMgr {
      * PUBLIC METHODS
      *-----------------------------------*/
 
+    public void ApplyPostFX(IRenderTarget renderTarget, IShader shader) {
+        RenderTarget = renderTarget;
+
+        PixelShader  = shader;
+        VertexShader = null;
+
+        DrawTriMesh(m_Quad, Matrix4x4.Identity());
+    }
+
     public void BeginFrame() {
     }
 
     public void Cleanup() {
         m_DeviceContext.PixelShader.Set(null);
         m_DeviceContext.VertexShader.Set(null);
-
-        m_ShaderMgr.Cleanup();
-        m_ShaderMgr = null;
         
         m_SwapChain.Dispose();
         m_SwapChain = null;
@@ -159,6 +179,9 @@ public class SharpDXGraphics: IGraphicsMgr {
         m_DeviceContext = null;
 
         //--------
+
+        m_ShaderMgr.Dispose();
+        m_ShaderMgr = null;
 
         m_TextureMgr.Dispose();
         m_TextureMgr = null;
@@ -174,7 +197,7 @@ public class SharpDXGraphics: IGraphicsMgr {
         var textureDescription = new D3D11.Texture2DDescription {
             ArraySize         = 1,
             BindFlags         = D3D11.BindFlags.RenderTarget | D3D11.BindFlags.ShaderResource,
-            Format            = Format.R8G8B8A8_UNorm,
+            Format            = Format.R16G16B16A16_Float,
             MipLevels         = 1,
             SampleDescription = new SampleDescription(1, 0),
             Width             = width,
@@ -187,6 +210,16 @@ public class SharpDXGraphics: IGraphicsMgr {
         return new SharpDXRenderTarget(this, texture, width, height, renderTarget);
     }
 
+    public IRenderTarget[] CreateRenderTargets(int n) {
+        var renderTargets = new IRenderTarget[n];
+
+        for (var i = 0; i < n; i++) {
+            renderTargets[i] = CreateRenderTarget();
+        }
+
+        return renderTargets;
+    }
+
     public void DrawTriMesh(ITriMesh triMesh, Matrix4x4 transform) {
         var context        = Device.ImmediateContext;
         var inputAssembler = context.InputAssembler;
@@ -197,8 +230,11 @@ public class SharpDXGraphics: IGraphicsMgr {
 
         context.UpdateSubresource(ref transform, m_ShaderParams);
 
-        context.Draw(triMesh.NumVerts, 0);
+        if (m_PixelShader.Textures != null) {
+            m_DeviceContext.PixelShader.SetShaderResources(0, m_PixelShader.Textures);
+        }
 
+        context.Draw(triMesh.NumVerts, 0);
     }
 
     public void EndFrame() {
@@ -219,6 +255,8 @@ public class SharpDXGraphics: IGraphicsMgr {
        
         m_ShaderParams = D3D11.Buffer.Create(Device, ref o, desc);
         m_DeviceContext.VertexShader.SetConstantBuffer(0, m_ShaderParams);
+
+        m_Quad = m_TriMeshMgr.CreateQuad(2.0f, 2.0f);
     }
 
     /*-------------------------------------
@@ -233,10 +271,10 @@ public class SharpDXGraphics: IGraphicsMgr {
         var modeDesc = new ModeDescription(width, height, refreshRate, Format.R8G8B8A8_UNorm);
 
         var swapChainDesc = new SwapChainDescription() {
-            BufferCount       = 1,
+            BufferCount       = 2,
             IsWindowed        = true,
             ModeDescription   = modeDesc,
-            SampleDescription = new SampleDescription(1, 0),
+            SampleDescription = new SampleDescription(4, 0),
             OutputHandle      = Game.Inst.Window.Handle,
             Usage             = Usage.RenderTargetOutput
         };
@@ -245,18 +283,17 @@ public class SharpDXGraphics: IGraphicsMgr {
         m_DeviceContext = Device.ImmediateContext;
 
         var backBuffer = m_SwapChain.GetBackBuffer<D3D11.Texture2D>(0);
-            m_DefaultRenderTarget = new SharpDXRenderTarget(this, backBuffer, width, height, new D3D11.RenderTargetView(Device, backBuffer));
-
+        m_DefaultRenderTarget = new SharpDXRenderTarget(this, backBuffer, width, height, new D3D11.RenderTargetView(Device, backBuffer));
         RenderTarget = m_DefaultRenderTarget;
 
-        m_DeviceContext.Rasterizer.SetViewport(new Viewport(0, 0, width, height));
+        m_DeviceContext.Rasterizer.SetViewport(0.0f, 0.0f, width, height);
     }
 
     private void InitShaders() {
-        m_ShaderMgr  = new ShaderMgr(Device);
+        m_ShaderMgr  = new SharpDXShaderMgr(this);
 
-        m_DefaultPixelShader  = (SharpDXShader)ShaderMgr.LoadPS("src/Shaders/DX/DefaultPS.hlsl");
-        m_DefaultVertexShader = (SharpDXShader)ShaderMgr.LoadVS("src/Shaders/DX/DefaultVS.hlsl");
+        m_DefaultPixelShader  = (SharpDXShader)ShaderMgr.LoadPS("src/Shaders/HLSL/Default.ps.hlsl");
+        m_DefaultVertexShader = (SharpDXShader)ShaderMgr.LoadVS("src/Shaders/HLSL/Default.vs.hlsl");
 
         PixelShader  = m_DefaultPixelShader;
         VertexShader = m_DefaultVertexShader;

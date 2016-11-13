@@ -37,11 +37,15 @@ public interface IGraphicsMgr {
      * METHODS
      *-----------------------------------*/
 
+    void ApplyPostFX(IRenderTarget renderTarget, IShader shader);
+
     void BeginFrame();
 
     void Cleanup();
 
     IRenderTarget CreateRenderTarget();
+
+    IRenderTarget[] CreateRenderTargets(int n);
 
     void DrawTriMesh(ITriMesh triMesh, Matrix4x4 transform);
 

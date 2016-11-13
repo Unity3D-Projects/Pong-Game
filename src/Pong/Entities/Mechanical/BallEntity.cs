@@ -22,16 +22,18 @@ public class BallEntity: Entity {
      *-----------------------------------*/
 
     public BallEntity() {
+        var g = Game.Inst.Graphics;
+
         var radius = 0.04f;
+        var quad   = g.TriMeshMgr.CreateQuad(2.0f*radius, 2.0f*radius);
 
         AddComponents(
-            new AngularVelocityComponent { W=2.0f*(float)Math.PI*2.0f },
+            new AngularVelocityComponent { W=2.0f*(float)Math.PI*1.0f },
             new BallInfoComponent        { Radius=radius },
-            new PositionComponent        { X=0.0f, Y=0.0f },
+            new PositionComponent        { },
             new RotationComponent        { },
-            new ShaderComponent          { PixelShader=Game.Inst.Graphics.ShaderMgr.LoadPS("src/Shaders/DX/Test.hlsl") },
-            new TriMeshComponent         { TriMesh=Game.Inst.Graphics.TriMeshMgr.CreateQuad(2.0f*radius, 2.0f*radius) },
-            new VelocityComponent        { X=0.0f, Y=0.0f }
+            new TriMeshComponent         { TriMesh=quad },
+            new VelocityComponent        { }
         );
     }
 }

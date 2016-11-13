@@ -1,10 +1,16 @@
 ﻿namespace PongBrain.Base.Graphics.Shaders {
 
 /*-------------------------------------
+ * USINGS
+ *-----------------------------------*/
+
+using Textures;
+
+/*-------------------------------------
  * INTERFACES
  *-----------------------------------*/
 
-public interface IRenderTarget {
+public interface IRenderTarget: ITexture {
     /*-------------------------------------
      * METHODS
      *-----------------------------------*/
