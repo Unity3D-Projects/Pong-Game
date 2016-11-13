@@ -10,7 +10,7 @@ using System;
  * INTERFACES
  *-----------------------------------*/
 
-public interface IOdeSolver {
+public interface IIntegrator {
     /*-------------------------------------
      * METHODS
      *-----------------------------------*/

@@ -35,7 +35,7 @@ public class PhysicsSubsystem: Subsystem {
      * PUBIC PROPERTIES
      *-----------------------------------*/
 
-    public IOdeSolver Solver = new EulerOdeSolver();
+    public IIntegrator Integrator = new RungeKutta4Integrator();
 
     /*-------------------------------------
      * CONSTRUCTORS
@@ -74,7 +74,7 @@ public class PhysicsSubsystem: Subsystem {
                 }
 
                 Array.Copy(body.PrevState, body.State, body.State.Length);
-                Solver.Solve(entity.GetComponent<BodyComponent>(), dt*x, body.DerivsFn);
+                Integrator.Solve(entity.GetComponent<BodyComponent>(), dt*x, body.DerivsFn);
             }
 
             if (FindCollisions(entities, collisions) > 0) {

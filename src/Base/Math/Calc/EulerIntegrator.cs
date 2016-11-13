@@ -10,14 +10,14 @@ using System;
  * CLASSES
  *-----------------------------------*/
 
-public class EulerOdeSolver: IOdeSolver {
+public class EulerIntegrator: IIntegrator {
     /*-------------------------------------
      * PUBLIC METHODS
      *-----------------------------------*/
 
     public void Solve(IOde eq, float dt, Action<float[], float[]> derivsFn) {
-        var derivs    = eq.Derivs;
-        var state     = eq.State;
+        var derivs = eq.Derivs;
+        var state  = eq.State;
 
         derivsFn(state, derivs);
         

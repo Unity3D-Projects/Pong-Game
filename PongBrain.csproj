@@ -91,9 +91,10 @@
     <Compile Include="src\Base\Graphics\SharpDXImpl\SharpDXTexture.cs" />
     <Compile Include="src\Base\Graphics\SharpDXImpl\SharpDXTextureMgr.cs" />
     <Compile Include="src\Base\Graphics\Vertex.cs" />
-    <Compile Include="src\Base\Math\Calc\EulerOdeSolver.cs" />
+    <Compile Include="src\Base\Math\Calc\EulerIntegrator.cs" />
     <Compile Include="src\Base\Math\Calc\IOde.cs" />
-    <Compile Include="src\Base\Math\Calc\IOdeSolver.cs" />
+    <Compile Include="src\Base\Math\Calc\IIntegrator.cs" />
+    <Compile Include="src\Base\Math\Calc\RungeKutta4Integrator.cs" />
     <Compile Include="src\Base\Math\Geom\IShape.cs" />
     <Compile Include="src\Base\Math\MathUtil.cs" />
     <Compile Include="src\Base\Math\Matrix2x2.cs" />
