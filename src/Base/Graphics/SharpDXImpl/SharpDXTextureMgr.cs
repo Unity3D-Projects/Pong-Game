@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using Textures;
 
 using SharpDX.Direct3D11;
+using SharpDX.DXGI;
 
 /*-------------------------------------
  * CLASSES
@@ -58,17 +59,18 @@ internal sealed class SharpDXTextureMgr: IDisposable, ITextureMgr {
      *-----------------------------------*/
 
     public SharpDXTexture CreateTexture(int width, int height) {
-        var textureDescription = new Texture2DDescription {
+        var texDesc = new Texture2DDescription {
             ArraySize         = 1,
             BindFlags         = BindFlags.ShaderResource,
             Format            = SharpDX.DXGI.Format.R16G16B16A16_Float,
             MipLevels         = 1,
+            SampleDescription = new SampleDescription(1, 0),
             Width             = width,
             Height            = height
         };
 
         var device     = m_Graphics.Device;
-        var gpuTexture = new Texture2D(device, textureDescription);
+        var gpuTexture = new Texture2D(device, texDesc);
         var texture    = new SharpDXTexture(m_Graphics, gpuTexture, width, height);
 
         m_Textures.Add(texture);

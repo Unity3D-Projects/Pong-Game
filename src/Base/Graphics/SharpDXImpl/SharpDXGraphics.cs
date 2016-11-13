@@ -194,17 +194,17 @@ public class SharpDXGraphics: IGraphicsMgr {
         var width  = m_Window.ClientRectangle.Width;
         var height = m_Window.ClientRectangle.Height;
 
-        var textureDescription = new D3D11.Texture2DDescription {
+        var texDesc = new D3D11.Texture2DDescription {
             ArraySize         = 1,
             BindFlags         = D3D11.BindFlags.RenderTarget | D3D11.BindFlags.ShaderResource,
             Format            = Format.R16G16B16A16_Float,
             MipLevels         = 1,
-            SampleDescription = new SampleDescription(1, 0),
+            SampleDescription = new SampleDescription(8, 0),
             Width             = width,
             Height            = height,
         };
 
-        var texture      = new D3D11.Texture2D(Device, textureDescription);
+        var texture      = new D3D11.Texture2D(Device, texDesc);
         var renderTarget = new D3D11.RenderTargetView(Device, texture);
 
         return new SharpDXRenderTarget(this, texture, width, height, renderTarget);
@@ -230,8 +230,8 @@ public class SharpDXGraphics: IGraphicsMgr {
 
         context.UpdateSubresource(ref transform, m_ShaderParams);
 
-        if (m_PixelShader.Textures != null) {
-            m_DeviceContext.PixelShader.SetShaderResources(0, m_PixelShader.Textures);
+        if (m_PixelShader.HasTextures) {
+            m_DeviceContext.PixelShader.SetShaderResources(0, m_PixelShader.GetShaderResources());
         }
 
         context.Draw(triMesh.NumVerts, 0);
@@ -263,6 +263,33 @@ public class SharpDXGraphics: IGraphicsMgr {
      * PRIVATE METHODS
      *-----------------------------------*/
 
+    private int GetBestQuality() {
+        var width  = m_Window.ClientRectangle.Width;
+        var height = m_Window.ClientRectangle.Height;
+
+        var refreshRate     = new Rational(60, 1);
+        var modeDescription = new ModeDescription(width, height, refreshRate, Format.R8G8B8A8_UNorm);
+
+        var swapChainDescription = new SwapChainDescription() {
+            BufferCount       = 1,
+            IsWindowed        = true,
+            ModeDescription   = modeDescription,
+            SampleDescription = new SampleDescription(1, 0),
+            OutputHandle      = Game.Inst.Window.Handle,
+            Usage             = Usage.RenderTargetOutput
+        };
+
+        D3D11.Device device;
+        SwapChain swapChain;
+        D3D11.Device.CreateWithSwapChain(DriverType.Hardware, D3D11.DeviceCreationFlags.SingleThreaded, swapChainDescription, out device, out swapChain);
+
+        var quality = device.CheckMultisampleQualityLevels(modeDescription.Format, 8);
+        swapChain.Dispose();
+        device.Dispose();
+
+        return quality-1;
+    }
+
     private void InitDevice() {
         var width  = m_Window.ClientRectangle.Width;
         var height = m_Window.ClientRectangle.Height;
@@ -270,19 +297,30 @@ public class SharpDXGraphics: IGraphicsMgr {
         var refreshRate = new Rational(60, 1);
         var modeDesc = new ModeDescription(width, height, refreshRate, Format.R8G8B8A8_UNorm);
 
+        var quality = GetBestQuality();
+
         var swapChainDesc = new SwapChainDescription() {
-            BufferCount       = 2,
+            BufferCount       = 1,
             IsWindowed        = true,
             ModeDescription   = modeDesc,
-            SampleDescription = new SampleDescription(4, 0),
+            SampleDescription = new SampleDescription(8, quality),
             OutputHandle      = Game.Inst.Window.Handle,
             Usage             = Usage.RenderTargetOutput
         };
 
-        D3D11.Device.CreateWithSwapChain(DriverType.Hardware, D3D11.DeviceCreationFlags.None, swapChainDesc, out Device, out m_SwapChain);
+        D3D11.Device.CreateWithSwapChain(DriverType.Hardware, D3D11.DeviceCreationFlags.SingleThreaded | D3D11.DeviceCreationFlags.Debug, swapChainDesc, out Device, out m_SwapChain);
         m_DeviceContext = Device.ImmediateContext;
 
+        var rsd = new D3D11.RasterizerStateDescription {
+            CullMode = D3D11.CullMode.Back,
+            FillMode = D3D11.FillMode.Solid,
+            IsMultisampleEnabled = true,
+        };
+        var rs = new D3D11.RasterizerState(Device, rsd);
+        Device.ImmediateContext.Rasterizer.State = rs;
+
         var backBuffer = m_SwapChain.GetBackBuffer<D3D11.Texture2D>(0);
+
         m_DefaultRenderTarget = new SharpDXRenderTarget(this, backBuffer, width, height, new D3D11.RenderTargetView(Device, backBuffer));
         RenderTarget = m_DefaultRenderTarget;
 

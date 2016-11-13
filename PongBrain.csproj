@@ -174,8 +174,10 @@
     <Folder Include="doc\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="img\Screenshot0.png" />
-    <Content Include="img\Screenshot1.png" />
+    <None Include="img\Screenshot0.png" />
+    <None Include="img\Screenshot1.png" />
+    <None Include="img\Screenshot2.png" />
+    <None Include="img\Screenshot3.png" />
     <None Include="lib\SharpDX\SharpDX.Mathematics.dll" />
     <None Include="lib\SharpDX\SharpDX.Mathematics.xml" />
     <None Include="lib\SharpDX\SharpDX.D3DCompiler.dll" />

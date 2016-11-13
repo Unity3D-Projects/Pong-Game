@@ -10,6 +10,7 @@ public interface ITexture {
      *-----------------------------------*/
 
     int Height { get; }
+
     int Width { get; }
 }
 

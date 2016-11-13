@@ -11,6 +11,10 @@ using System.Windows.Forms;
  *-----------------------------------*/
 
 public class GameForm: Form {
+    /*-------------------------------------
+     * CONSTRUCTORS
+     *-----------------------------------*/
+
     public GameForm() {
         FormClosed += (sender, e) => Game.Inst.Exit();
 

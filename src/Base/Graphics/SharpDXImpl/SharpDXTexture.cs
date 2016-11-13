@@ -9,8 +9,7 @@ using System;
 using Textures;
 
 using SharpDX.Direct3D;
-
-using D3D11 = SharpDX.Direct3D11;
+using SharpDX.Direct3D11;
 
 /*-------------------------------------
  * CLASSES
@@ -24,13 +23,13 @@ internal class SharpDXTexture: IDisposable, ITexture {
     public SharpDXGraphics Graphics;
 
 
-    public D3D11.Texture2D Texture;
+    public Texture2D Texture;
 
     /*-------------------------------------
      * PRIVATE FIELDS
      *-----------------------------------*/
 
-    private D3D11.ShaderResourceView m_ShaderResource;
+    private ShaderResourceView m_ShaderResource;
 
     /*-------------------------------------
      * PUBLIC PROPERTIES
@@ -38,7 +37,11 @@ internal class SharpDXTexture: IDisposable, ITexture {
 
     public int Height { get; private set; }
 
-    public D3D11.ShaderResourceView ShaderResource {
+    public bool IsMultisampled {
+        get { return Texture.Description.SampleDescription.Count > 1; }
+    }
+
+    public ShaderResourceView ShaderResource {
         get {
             if (m_ShaderResource == null) {
                 m_ShaderResource = CreateShaderResource();
@@ -55,7 +58,7 @@ internal class SharpDXTexture: IDisposable, ITexture {
      *-----------------------------------*/
 
     public SharpDXTexture(SharpDXGraphics graphics,
-                          D3D11.Texture2D texture,
+                          Texture2D       texture,
                           int             width,
                           int             height)
     {
@@ -91,17 +94,17 @@ internal class SharpDXTexture: IDisposable, ITexture {
      * PRIVATE
      *-----------------------------------*/
 
-    private D3D11.ShaderResourceView CreateShaderResource() {
-        var description = new D3D11.ShaderResourceViewDescription {
+    private ShaderResourceView CreateShaderResource() {
+        var description = new ShaderResourceViewDescription {
             Dimension = ShaderResourceViewDimension.Texture2D,
             Format    = Texture.Description.Format,
-            Texture2D = new D3D11.ShaderResourceViewDescription.Texture2DResource {
+            Texture2D = new ShaderResourceViewDescription.Texture2DResource {
                 MipLevels       = 1,
                 MostDetailedMip = 0
-            },
+            }
         };
 
-        return new D3D11.ShaderResourceView(Graphics.Device, Texture, description);
+        return new ShaderResourceView(Graphics.Device, Texture, description);
     }
 }
 

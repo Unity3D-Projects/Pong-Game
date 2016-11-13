@@ -58,6 +58,10 @@ float3 chromaticAberration(in float2 x) {
 
     for (int i = -K; i <= K; i++) {
         for (int j = -K; j <= K; j++) {
+            if (i == 0 && j == 0) {
+                continue;
+            }
+
             float2 p = float2(i, j);
             c = Textures[0].Sample(TextureSampler, x + p*r);
             float2 b = (c.r + c.g + c.b);

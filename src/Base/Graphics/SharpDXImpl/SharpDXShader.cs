@@ -31,7 +31,24 @@ internal class SharpDXShader: IDisposable, IShader {
 
     public D3D11.DeviceChild Shader;
 
-    public D3D11.ShaderResourceView[] Textures;
+
+    /*-------------------------------------
+     * PRIVATE FIELDS
+     *-----------------------------------*/
+
+    private D3D11.Texture2D[] m_NonMultisampledTextures;
+
+    private D3D11.ShaderResourceView[] m_ShaderResources;
+
+    private D3D11.Texture2D[] m_Textures;
+
+    /*-------------------------------------
+     * PUBLIC PROPERTIES
+     *-----------------------------------*/
+
+    public bool HasTextures {
+        get { return m_Textures != null; }
+    }
 
     /*-------------------------------------
      * CONSTRUCTORS
@@ -87,12 +104,40 @@ internal class SharpDXShader: IDisposable, IShader {
         context.UnmapSubresource(ConstantBuffer, 0);
     }
 
+    public D3D11.ShaderResourceView[] GetShaderResources() {
+        var n = m_ShaderResources.Length;
+
+        for (var i = 0; i < n; i++) {
+            Graphics.Device.ImmediateContext.ResolveSubresource(m_Textures[i], 0, m_NonMultisampledTextures[i], 0, SharpDX.DXGI.Format.R16G16B16A16_Float);
+        }
+
+        return m_ShaderResources;
+    }
+
     public void SetTextures(params ITexture[] textures) {
+        if (textures == null || textures.Length == 0) {
+            m_ShaderResources         = null;
+            m_NonMultisampledTextures = null;
+            m_Textures                = null;
+        }
+
         var numTextures = textures.Length;
 
-        Textures = new D3D11.ShaderResourceView[numTextures];
+        m_ShaderResources         = new D3D11.ShaderResourceView[numTextures];
+        m_NonMultisampledTextures = new D3D11.Texture2D[numTextures];
+        m_Textures                = new D3D11.Texture2D[numTextures];
+
         for (var i = 0; i < numTextures; i++) {
-            Textures[i] = ((SharpDXTexture)textures[i]).ShaderResource;
+            var tex = ((SharpDXTexture)textures[i]);
+
+            m_Textures[i] = tex.Texture;
+
+            if (tex.IsMultisampled) {
+                tex = ((SharpDXTextureMgr)Graphics.TextureMgr).CreateTexture(tex.Width, tex.Height);
+            }
+
+            m_NonMultisampledTextures[i] = tex.Texture;
+            m_ShaderResources        [i] = tex.ShaderResource;
         }
     }
 
