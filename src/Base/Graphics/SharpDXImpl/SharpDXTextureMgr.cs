@@ -18,7 +18,7 @@ using SharpDX.DXGI;
 
 internal sealed class SharpDXTextureMgr: IDisposable, ITextureMgr {
     /*-------------------------------------
-     * PRIVATE FIELDS
+     * NON-PUBLIC FIELDS
      *-----------------------------------*/
 
     private SharpDXGraphics m_Graphics;

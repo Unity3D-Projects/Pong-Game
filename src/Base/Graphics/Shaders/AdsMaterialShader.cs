@@ -27,7 +27,7 @@ public class AdsMaterial {
     }
 
     /*-------------------------------------
-     * PRIVATE FIELDS
+     * NON-PUBLIC FIELDS
      *-----------------------------------*/
 
 

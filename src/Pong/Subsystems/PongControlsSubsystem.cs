@@ -7,6 +7,7 @@
 using Base.Core;
 using Base.Components.Input;
 using Base.Components.Physical;
+using Base.Math;
 using Base.Subsystems;
 
 using Components;
@@ -24,11 +25,12 @@ public class PongControlsSubsystem: ControlsSubsystem {
                                            ControlsComponent controls,
                                            float             dt)
     {
+        var body       = entity.GetComponent<BodyComponent>();
         var paddleInfo = entity.GetComponent<PaddleInfoComponent>();
-        var velocity   = entity.GetComponent<VelocityComponent>();
 
         if (controls.Controls.ContainsKey("Y")) {
-            velocity.Y += paddleInfo.Speed * controls.Controls["Y"] * dt;
+            var newVelocity = new Vector2(body.Velocity.X, body.Velocity.Y + paddleInfo.Speed * controls.Controls["Y"] * dt);
+            body.Velocity = newVelocity;
         }
     }
 }

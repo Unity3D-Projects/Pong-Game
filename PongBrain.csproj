@@ -71,8 +71,6 @@
   <ItemGroup>
     <Compile Include="src\Base\Components\Graphical\TextureComponent.cs" />
     <Compile Include="src\Base\Components\Graphical\TriMeshComponent.cs" />
-    <Compile Include="src\Base\Components\Physical\AngularVelocityComponent.cs" />
-    <Compile Include="src\Base\Components\Physical\RotationComponent.cs" />
     <Compile Include="src\Base\Graphics\Color.cs" />
     <Compile Include="src\Base\Graphics\IRenderTarget.cs" />
     <Compile Include="src\Base\Graphics\ITriMesh.cs" />
@@ -93,6 +91,12 @@
     <Compile Include="src\Base\Graphics\SharpDXImpl\SharpDXTexture.cs" />
     <Compile Include="src\Base\Graphics\SharpDXImpl\SharpDXTextureMgr.cs" />
     <Compile Include="src\Base\Graphics\Vertex.cs" />
+    <Compile Include="src\Base\Math\Calc\EulerOdeSolver.cs" />
+    <Compile Include="src\Base\Math\Calc\IOde.cs" />
+    <Compile Include="src\Base\Math\Calc\IOdeSolver.cs" />
+    <Compile Include="src\Base\Math\Geom\IShape.cs" />
+    <Compile Include="src\Base\Math\MathUtil.cs" />
+    <Compile Include="src\Base\Math\Matrix2x2.cs" />
     <Compile Include="src\Base\Math\Matrix3x3.cs" />
     <Compile Include="src\Base\Math\Matrix4x4.cs" />
     <Compile Include="src\Base\Math\Rectangle.cs" />
@@ -112,8 +116,6 @@
     <Compile Include="src\Pong\Components\MotionBlurComponent.cs" />
     <Compile Include="src\Pong\Components\PaddleInfoComponent.cs" />
     <Compile Include="src\Base\Components\Physical\BodyComponent.cs" />
-    <Compile Include="src\Base\Components\Physical\AxisAlignedBoxComponent.cs" />
-    <Compile Include="src\Base\Components\Physical\VelocityComponent.cs" />
     <Compile Include="src\Base\Core\Entity.cs" />
     <Compile Include="src\Base\Core\Game.cs" />
     <Compile Include="src\Base\Core\GameForm.cs">
@@ -121,12 +123,10 @@
     </Compile>
     <Compile Include="src\Base\Core\Scene.cs" />
     <Compile Include="src\Base\Core\Subsystem.cs" />
-    <Compile Include="src\Base\Components\Physical\PositionComponent.cs" />
     <Compile Include="src\Pong\Effects\CameraShakeEffect.cs" />
     <Compile Include="src\Pong\Effects\ExplosionEffect.cs" />
     <Compile Include="src\Pong\Effects\TrailEffect.cs" />
     <Compile Include="src\Pong\Entities\Graphical\RectangleEntity.cs" />
-    <Compile Include="src\Pong\Entities\Graphical\ScoreEntity.cs" />
     <Compile Include="src\Pong\Entities\Mechanical\BallEntity.cs" />
     <Compile Include="src\Pong\Effects\BounceEffect.cs" />
     <Compile Include="src\Pong\Effects\Effect.cs" />
@@ -134,7 +134,7 @@
     <Compile Include="src\Base\Input\Keyboard.cs" />
     <Compile Include="src\Base\Input\Key.cs" />
     <Compile Include="src\Base\Core\IMessage.cs" />
-    <Compile Include="src\Base\Messages\CollisionMessage.cs" />
+    <Compile Include="src\Base\Messages\CollisionMsg.cs" />
     <Compile Include="src\Pong\Subsystems\PongControlsSubsystem.cs" />
     <Compile Include="src\Program.cs" />
     <Compile Include="src\Pong\Scenes\MainScene.cs" />

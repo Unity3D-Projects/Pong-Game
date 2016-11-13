@@ -16,7 +16,7 @@ using Components.Graphical;
 
 public abstract class Scene {
     /*-------------------------------------
-     * PRIVATE FIELDS
+     * NON-PUBLIC FIELDS
      *-----------------------------------*/
 
     private readonly Dictionary<Type, List<Entity>> m_ComponentTypeToEntityMap;
@@ -52,6 +52,8 @@ public abstract class Scene {
      *-----------------------------------*/
 
     public virtual void AddEntity(Entity entity) {
+        Contract.Assert(entity != null);
+
         m_EntitiesToAdd.Add(entity);
     }
 
@@ -93,7 +95,7 @@ public abstract class Scene {
         }
     }
 
-    public virtual IEnumerable<Entity> GetEntities<T>() {
+    public virtual ICollection<Entity> GetEntities<T>() {
         List<Entity> entities;
         if (!m_ComponentTypeToEntityMap.TryGetValue(typeof (T), out entities)) {
             return new Entity[0];
@@ -142,7 +144,7 @@ public abstract class Scene {
     }
 
     /*-------------------------------------
-     * PRIVATE METHODS
+     * NON-PUBLIC METHODS
      *-----------------------------------*/
 
     private void AddEntityInternal(Entity entity) {

@@ -21,7 +21,7 @@ public sealed class Keyboard {
     }
 
     /*-------------------------------------
-     * PRIVATE METHODS
+     * NON-PUBLIC METHODS
      *-----------------------------------*/
 
     public System.Windows.Input.Key? MapKeyCode(Key key) {

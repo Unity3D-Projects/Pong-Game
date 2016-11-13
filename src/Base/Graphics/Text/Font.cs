@@ -6,7 +6,7 @@
 
 public sealed class Font {
     /*-------------------------------------
-     * PRIVATE FIELDS
+     * NON-PUBLIC FIELDS
      *-----------------------------------*/
     
     internal readonly System.Drawing.Font m_Font;

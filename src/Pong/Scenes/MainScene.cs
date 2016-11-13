@@ -32,7 +32,7 @@ using Subsystems;
 
 public class MainScene: Scene {
     /*-------------------------------------
-     * PRIVATE FIELDS
+     * NON-PUBLIC FIELDS
      *-----------------------------------*/
 
     private bool m_AboutToScore;
@@ -84,7 +84,7 @@ public class MainScene: Scene {
     }
 
     /*-------------------------------------
-     * PRIVATE METHODS
+     * NON-PUBLIC METHODS
      *-----------------------------------*/
 
     private void CreateBall() {
@@ -114,15 +114,12 @@ public class MainScene: Scene {
             }
         });
 
-        m_LeftPaddle.GetComponent<PositionComponent>().X = -0.9f;
+        m_LeftPaddle.GetComponent<BodyComponent>().Position = new Vector2(-0.9f, 0.0f);
 
         AddEntity(m_LeftPaddle);
     }
 
     private void CreateLeftScoreText() {
-        m_LeftScoreText = new ScoreEntity(-0.96f, 0.68f, () => string.Format("P1 SCORE: {0}", m_LeftScore));
-
-        AddEntity(m_LeftScoreText);
     }
 
     private void CreateNet() {
@@ -153,15 +150,13 @@ public class MainScene: Scene {
             ThinkFunc = new TrivialAI(m_RightPaddle, ball).Think,
         });
 
-        m_RightPaddle.GetComponent<PositionComponent>().X = 0.9f;
+            m_RightPaddle.GetComponent<BodyComponent>().Position = new Vector2(0.9f, 0.0f);
 
         AddEntity(m_RightPaddle);
     }
 
     private void CreateRightScoreText() {
-        m_RightScoreText = new ScoreEntity(0.24f, 0.68f, () => string.Format("P2 SCORE: {0}", m_RightScore));
-
-        AddEntity(m_RightScoreText);
+        //AddEntity(m_RightScoreText);
     }
 
     private void SetupDrawing() {
@@ -250,20 +245,17 @@ public class MainScene: Scene {
     }
 
     private void SetupEffects() {
-        Game.Inst.OnMessage<CollisionMessage>(msg => {
-            var o = ((CollisionMessage)msg);
+        Game.Inst.OnMessage<CollisionMsg>(msg => {
+            var o = ((CollisionMsg)msg);
 
-            if (o.Entity1 == m_Ball || o.Entity2 != null) {
+            if (o.EntityA == m_Ball || o.EntityB != null) {
                 new CameraShakeEffect(m_GraphicsSubsystem).Create();
-                new BounceEffect(o.Entity1, 0.2f).Create();
+                new BounceEffect(o.EntityA, 0.2f).Create();
 
-                if (o.Entity2 != null) {
-                    new BounceEffect(o.Entity2, 0.2f).Create();
+                if (o.EntityB != null) {
+                    new BounceEffect(o.EntityB, 0.2f).Create();
 
-                    var x = o.Entity1.GetComponent<PositionComponent>().X;
-                    var y = o.Entity1.GetComponent<PositionComponent>().Y;
-
-                    new ExplosionEffect(x, y).Create();
+                    new ExplosionEffect(o.Contact).Create();
                 }
             }
         });
@@ -299,14 +291,12 @@ public class MainScene: Scene {
     }
 
     private void Score(int player) {
-        var ballPosition = m_Ball.GetComponent<PositionComponent>();
-        var ballVelocity = m_Ball.GetComponent<VelocityComponent>();
+        var ode = m_Ball.GetComponent<BodyComponent>();
+        var ballPosition = m_Ball.GetComponent<BodyComponent>().Position;
+        var ballVelocity = m_Ball.GetComponent<BodyComponent>().Velocity;
 
-        ballPosition.X = 0.0f;
-        ballPosition.Y = 0.0f;
-
-        ballVelocity.X = 0.0f;
-        ballVelocity.Y = 0.0f;
+        ode.Position = new Vector2(0.0f, 0.0f);
+        ode.Velocity = new Vector2(0.0f, 0.0f);
 
         m_AboutToScore = false;
 
@@ -324,14 +314,13 @@ public class MainScene: Scene {
             var r = 0.9f+0.6f*(float)random.NextDouble();
             var d = Math.Sign(random.Next(0, 2)-0.5f);
         
-            ballVelocity.X = (float)Math.Cos(theta)*r*d;
-            ballVelocity.Y = (float)Math.Sin(theta)*r;
+            ode.Velocity = new Vector2((float)Math.Cos(theta)*r*d, (float)Math.Sin(theta)*r);
         }, 0.65f);
     }
 
     private void SolveCollisions() {
         // Clean up this method. Oh my lord.
-        var lpb = m_LeftPaddle.GetComponent<PositionComponent>().Y - 0.5f*m_LeftPaddle.GetComponent<AxisAlignedBoxComponent>().Height;
+        /*var lpb = m_LeftPaddle.GetComponent<PositionComponent>().Y - 0.5f*m_LeftPaddle.GetComponent<AxisAlignedBoxComponent>().Height;
         var lpt = m_LeftPaddle.GetComponent<PositionComponent>().Y + 0.5f*m_LeftPaddle.GetComponent<AxisAlignedBoxComponent>().Height;
         var lpl  = m_LeftPaddle.GetComponent<PositionComponent>().X - 0.5f*m_LeftPaddle.GetComponent<AxisAlignedBoxComponent>().Width;
         var lpr  = m_LeftPaddle.GetComponent<PositionComponent>().X + 0.5f*m_LeftPaddle.GetComponent<AxisAlignedBoxComponent>().Width;
@@ -390,7 +379,7 @@ public class MainScene: Scene {
                     Score(1);
                 }
             }
-        }
+        }*/
     }
 }
 

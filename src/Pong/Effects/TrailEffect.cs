@@ -44,27 +44,28 @@ public sealed class TrailEffect: Effect {
 
         var random = new Random();
 
-        var p = m_Entity.GetComponent<PositionComponent>();
-        var v = m_Entity.GetComponent<VelocityComponent>();
+        var p = m_Entity.GetComponent<BodyComponent>().Position;
+        var v = m_Entity.GetComponent<BodyComponent>().Velocity;
 
         for (var i = 0; i < m_NumParticles; i++) {
             var x        = 0.04f*(float)random.NextDouble();
             var y        = 0.04f*(float)random.NextDouble();
             var size     = 0.01f + 0.01f*(float)random.NextDouble();
             var particle = new RectangleEntity(p.X + x, p.Y + y, size, size);
-            var velocity = particle.AddComponent(new VelocityComponent());
             var theta    = 2.0f*(float)Math.PI * (float)random.NextDouble();
             var r        = 0.05f + 0.1f*(float)random.NextDouble();
             var a        = 0.5f + 0.6f*(float)random.NextDouble();
             var w        = ((float)random.NextDouble()-0.5f)*2.0f*(float)Math.PI*4.0f;
+            var vx       = 0.3f*v.X + (float)Math.Cos(theta)*r;
+            var vy       = 0.3f*v.Y + (float)Math.Sin(theta)*r;
+            var body     = particle.GetComponent<BodyComponent>();
 
-            velocity.X = 0.3f*v.X + (float)Math.Cos(theta)*r;
-            velocity.Y = 0.3f*v.Y + (float)Math.Sin(theta)*r;
+            body.Angle = theta;
+            body.AngularVelocity = w;
+            body.Velocity = new Base.Math.Vector2(vx, vy);
 
             particle.AddComponents(
-                new AngularVelocityComponent { W=w         },
-                new LifetimeComponent        { Lifetime=a  },
-                new RotationComponent        { Angle=theta }
+                new LifetimeComponent { Lifetime = a }
             );
 
             Game.Inst.Scene.AddEntity(particle);

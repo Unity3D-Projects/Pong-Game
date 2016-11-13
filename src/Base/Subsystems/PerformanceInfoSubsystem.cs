@@ -14,7 +14,7 @@ using Core;
 
 public class PerformanceInfoSubsystem: Subsystem {
     /*-------------------------------------
-     * PRIVATE FIELDS
+     * NON-PUBLIC FIELDS
      *-----------------------------------*/
 
     private int m_NumDraws;

@@ -19,7 +19,7 @@ using Math;
 
 public class GraphicsSubsystem: Subsystem {
     /*-------------------------------------
-     * PRIVATE FIELDS
+     * NON-PUBLIC FIELDS
      *-----------------------------------*/
 
     private ITriMesh m_Quad;
@@ -54,9 +54,8 @@ public class GraphicsSubsystem: Subsystem {
      *-----------------------------------*/
 
     public Matrix4x4 CalcTransform(Entity entity) {
-        var position = entity.GetComponent<PositionComponent>();
-        var rotation = entity.GetComponent<RotationComponent>();
-        var triMesh  = entity.GetComponent<TriMeshComponent>();
+        var ode     = entity.GetComponent<BodyComponent>(); 
+        var triMesh = entity.GetComponent<TriMeshComponent>();
 
         var a  = 0.0f;
         var m  = Matrix4x4.Identity();
@@ -64,13 +63,10 @@ public class GraphicsSubsystem: Subsystem {
         var ty = 0.0f;
         var tz = 0.0f;
 
-        if (position != null) {
-            tx = position.X;
-            ty = position.Y;
-        }
-
-        if (rotation != null) {
-            a = rotation.Angle;
+        if (ode != null) {
+            a  = ode.Angle;
+            tx = ode.Position.X;
+            ty = ode.Position.Y;
         }
 
         if (triMesh != null) {

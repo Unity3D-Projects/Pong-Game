@@ -17,7 +17,7 @@ using D3D11 = SharpDX.Direct3D11;
 
 internal class SharpDXTriMeshMgr: IDisposable, ITriMeshMgr {
     /*-------------------------------------
-     * PRIVATE FIELDS
+     * NON-PUBLIC FIELDS
      *-----------------------------------*/
 
     private SharpDXGraphics m_Graphics;

@@ -62,7 +62,7 @@ public struct Matrix3x3 {
 
         var m = new Matrix3x3(1.0f, 0.0f, 0.0f,
                               0.0f, cosa, -sina,
-                              0.0f, sina, cosa);
+                              0.0f, sina,  cosa);
 
         return m;
     }
@@ -73,7 +73,7 @@ public struct Matrix3x3 {
 
         var m = new Matrix3x3(cosa , 0.0f, sina,
                               0.0f , 1.0f, 0.0f,
-                              -sina, 0.0f, cosa);
+                             -sina, 0.0f, cosa);
 
         return m;
     }
@@ -83,8 +83,8 @@ public struct Matrix3x3 {
         var sina = (float)Math.Sin(a);
 
         var m = new Matrix3x3(cosa, -sina, 0.0f,
-                              sina, cosa , 0.0f,
-                              0.0f, 0.0f , 1.0f);
+                              sina,  cosa, 0.0f,
+                              0.0f,  0.0f, 1.0f);
 
         return m;
     }

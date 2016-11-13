@@ -16,14 +16,22 @@ public class GameForm: Form {
      *-----------------------------------*/
 
     public GameForm() {
-        FormClosed += (sender, e) => Game.Inst.Exit();
-
         DoubleBuffered  = true;
         FormBorderStyle = FormBorderStyle.FixedSingle;
         MaximizeBox     = false;
 
         SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint,
                  true);
+    }
+
+    /*-------------------------------------
+     * NON-PUBLIC METHODS
+     *-----------------------------------*/
+
+    protected override void OnFormClosing(FormClosingEventArgs e) {
+        base.OnFormClosing(e);
+
+        Game.Inst.Exit();
     }
 }
 

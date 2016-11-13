@@ -18,14 +18,14 @@ public sealed class CameraShakeEffect: Effect {
      * PUBLIC PROPERTIES
      *-----------------------------------*/
 
-    private readonly GraphicsSubsystem m_RenderingSubsystem;
+    private readonly GraphicsSubsystem m_GraphicsSubsystem;
 
     /*-------------------------------------
      * CONSTRUCTORS
      *-----------------------------------*/
 
-    public CameraShakeEffect(GraphicsSubsystem renderingSubsystem, float duration=0.3f): base(duration) {
-        m_RenderingSubsystem = renderingSubsystem;
+    public CameraShakeEffect(GraphicsSubsystem graphicsSubsystem, float duration=0.3f): base(duration) {
+        m_GraphicsSubsystem = graphicsSubsystem;
     }
 
     /*-------------------------------------
@@ -42,7 +42,7 @@ public sealed class CameraShakeEffect: Effect {
         var dx = 0.02f*(float)Math.Cos(x*27.0f)*(1.0f-x);
         var dy = 0.02f*(float)Math.Sin(x*31.0f)*(1.0f-x);
 
-        m_RenderingSubsystem.ViewMatrix = Matrix4x4.Translate(dx, dy, 0.0f);
+        m_GraphicsSubsystem.ViewMatrix = Matrix4x4.Translate(dx, dy, 0.0f);
     }
 }
 

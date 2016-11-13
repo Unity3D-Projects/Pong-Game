@@ -28,7 +28,7 @@ using Vector4 = Math.Vector4;
 public class SharpDXGraphics: IGraphicsMgr {
     private D3D11.Buffer m_ShaderParams;
     /*-------------------------------------
-     * PRIVATE FIELDS
+     * NON-PUBLIC FIELDS
      *-----------------------------------*/
 
     private ITexture m_CurTexture;
@@ -64,6 +64,8 @@ public class SharpDXGraphics: IGraphicsMgr {
     /*-------------------------------------
      * PUBLIC PROPERTIES
      *-----------------------------------*/
+
+    public bool IsEnabled { get; set; }
 
     public string Name {
         get { return "SharpDX"; }
@@ -238,7 +240,9 @@ public class SharpDXGraphics: IGraphicsMgr {
     }
 
     public void EndFrame() {
-        m_SwapChain.Present(1, PresentFlags.None);
+        if (IsEnabled) {
+            m_SwapChain.Present(1, PresentFlags.DoNotWait);
+        }
     }
 
     public void Init(Form window) {
@@ -260,7 +264,7 @@ public class SharpDXGraphics: IGraphicsMgr {
     }
 
     /*-------------------------------------
-     * PRIVATE METHODS
+     * NON-PUBLIC METHODS
      *-----------------------------------*/
 
     private int GetBestQuality() {

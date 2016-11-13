@@ -19,14 +19,14 @@ using Graphics;
 
 public class Game {
     /*-------------------------------------
-     * PRIVATE CONSTANTS
+     * NON-PUBLIC CONSTANTS
      *-----------------------------------*/
 
     private const double INV_DRAWS_PER_SEC = 1.0 / 60.0;
     private const double INV_UPDATES_PER_SEC = 1.0 / 120.0;
 
     /*-------------------------------------
-     * PRIVATE FIELDS
+     * NON-PUBLIC FIELDS
      *-----------------------------------*/
 
     private bool m_Done;
@@ -129,6 +129,8 @@ public class Game {
         var t2 = 0.0;
         var stopwatch = Stopwatch.StartNew();
         while (!m_Done) {
+            Application.DoEvents();
+
             var dt = stopwatch.Elapsed.TotalSeconds;
             stopwatch.Restart();
 
@@ -147,6 +149,8 @@ public class Game {
                 }
 
                 if (t2 >= INV_DRAWS_PER_SEC) {
+                    Graphics.IsEnabled = t1 < INV_DRAWS_PER_SEC;
+
                     m_Scene.Draw((float)INV_DRAWS_PER_SEC);
                     t2 -= INV_DRAWS_PER_SEC;
 
@@ -155,8 +159,6 @@ public class Game {
 
                 DispatchMessages();
             }
-
-            Application.DoEvents();
         }
 
         while (m_Scene != null) {
@@ -177,7 +179,7 @@ public class Game {
     }
 
     /*-------------------------------------
-     * PRIVATE METHODS
+     * NON-PUBLIC METHODS
      *-----------------------------------*/
 
     private void Init(IGraphicsMgr graphics,

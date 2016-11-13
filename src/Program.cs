@@ -17,7 +17,7 @@ using Pong.Scenes;
 
 internal static class Program {
     /*-------------------------------------
-     * PRIVATE METHODS
+     * NON-PUBLIC METHODS
      *-----------------------------------*/
 
     [STAThread]

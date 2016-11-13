@@ -19,6 +19,8 @@ public interface IGraphicsMgr {
      * PROPERTIES
      *-----------------------------------*/
 
+    bool IsEnabled { get; set; }
+
     string Name { get; }
 
     IShader PixelShader { get; set; }

@@ -12,7 +12,7 @@ using Base.Core;
 
 public class NeuralAI {
     /*-------------------------------------
-     * PRIVATE FIELDS
+     * NON-PUBLIC FIELDS
      *-----------------------------------*/
 
     private Entity m_Ball;

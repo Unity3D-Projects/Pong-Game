@@ -26,7 +26,7 @@ internal class SharpDXTexture: IDisposable, ITexture {
     public Texture2D Texture;
 
     /*-------------------------------------
-     * PRIVATE FIELDS
+     * NON-PUBLIC FIELDS
      *-----------------------------------*/
 
     private ShaderResourceView m_ShaderResource;
@@ -91,7 +91,7 @@ internal class SharpDXTexture: IDisposable, ITexture {
     }
 
     /*-------------------------------------
-     * PRIVATE
+     * NON-PUBLIC
      *-----------------------------------*/
 
     private ShaderResourceView CreateShaderResource() {

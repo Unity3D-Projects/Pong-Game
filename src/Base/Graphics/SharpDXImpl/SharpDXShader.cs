@@ -33,7 +33,7 @@ internal class SharpDXShader: IDisposable, IShader {
 
 
     /*-------------------------------------
-     * PRIVATE FIELDS
+     * NON-PUBLIC FIELDS
      *-----------------------------------*/
 
     private D3D11.Texture2D[] m_NonMultisampledTextures;
@@ -142,7 +142,7 @@ internal class SharpDXShader: IDisposable, IShader {
     }
 
     /*-------------------------------------
-     * PRIVATE METHODS
+     * NON-PUBLIC METHODS
      *-----------------------------------*/
 
     private D3D11.Buffer CreateConstantBuffer(Type type) {

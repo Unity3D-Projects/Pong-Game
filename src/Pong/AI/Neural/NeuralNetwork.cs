@@ -73,7 +73,7 @@ public class Neuron {
 
 public class NeuralNetwork {
     /*-------------------------------------
-     * PRIVATE FIELDS
+     * NON-PUBLIC FIELDS
      *-----------------------------------*/
 
     private readonly Neuron[] m_InputLayer;

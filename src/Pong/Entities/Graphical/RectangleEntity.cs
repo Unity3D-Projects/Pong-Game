@@ -29,7 +29,7 @@ public class RectangleEntity: Entity {
 
     public RectangleEntity(float x, float y, float width, float height) {
         AddComponents(
-            new PositionComponent   { X=x, Y=y },
+            new BodyComponent       { Position = new Vector2(x, y) },
             new MotionBlurComponent { },
             new TriMeshComponent    { Transform = Matrix4x4.Scale(width, height, 1.0f),
                                       TriMesh = s_Quad }

@@ -65,7 +65,7 @@ void main(in PS_INPUT psIn, out PS_OUTPUT psOut) {
     Textures[0].GetDimensions(texWidth, texHeight);
 
     float2 texelSize = 1.0 / float2(texWidth, texHeight);
-    float2 velocity = 1.4 * sampledVelocity(psIn.texCoord);
+    float2 velocity = 1.8 * sampledVelocity(psIn.texCoord);
     float speed = length(velocity / texelSize);
     int numSamples = clamp(int(speed), 1, 32);
 

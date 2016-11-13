@@ -37,6 +37,22 @@ public struct Vector3 {
     public float Dot(Vector3 v) {
         return X*v.X + Y*v.Y + Z*v.Z;
     }
+
+    /*-------------------------------------
+     * OPERATORS
+     *-----------------------------------*/
+
+    public static Vector3 operator +(Vector3 a, Vector3 b) {
+        return new Vector3(a.X + b.X, a.Y + b.Y, a.Z + b.Z);
+    }
+
+    public static Vector3 operator *(float a, Vector3 b) {
+        return new Vector3(a*b.X, a*b.Y, a*b.Z);
+    }
+
+    public static Vector3 operator *(Vector3 a, float b) {
+        return new Vector3(a.X*b, a.Y*b, a.Z*b);
+    }
 }
 
 }

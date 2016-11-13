@@ -4,28 +4,37 @@
  * USINGS
  *-----------------------------------*/
 
-using Base.Core;
+using Core;
+using Math;
 
 /*-------------------------------------
  * CLASSES
  *-----------------------------------*/
 
-public class CollisionMessage: IMessage {
+public class CollisionMsg: IMessage {
     /*-------------------------------------
      * PUBLIC PROPERTIES
      *-----------------------------------*/
 
-    public Entity Entity1 { get; }
+    public Vector2 Contact { get; }
 
-    public Entity Entity2 { get; }
+    public Entity EntityA { get; }
+
+    public Entity EntityB { get; }
+
+    public Vector2 Normal { get; }
 
     /*-------------------------------------
      * CONSTRUCTORS
      *-----------------------------------*/
 
-    public CollisionMessage(Entity entity1=null, Entity entity2=null) {
-        Entity1 = entity1;
-        Entity2 = entity2;
+    public CollisionMsg(Entity entityA, Entity entityB, Vector2 contact,
+                        Vector2 normal)
+    {
+        EntityA = entityA;
+        EntityB = entityB;
+        Contact = contact;
+        Normal  = normal;
     }
 
 }

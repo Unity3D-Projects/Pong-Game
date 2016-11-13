@@ -32,7 +32,7 @@ internal class SharpDXShaderMgr: IDisposable, IShaderMgr {
         public SharpDXGraphics Graphics;
 
     /*-------------------------------------
-     * PRIVATE FIELDS
+     * NON-PUBLIC FIELDS
      *-----------------------------------*/
 
     private List<SharpDXShader> m_Shaders = new List<SharpDXShader>();

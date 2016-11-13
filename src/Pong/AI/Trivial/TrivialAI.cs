@@ -16,7 +16,7 @@ using Base.Core;
 
 public class TrivialAI {
     /*-------------------------------------
-     * PRIVATE FIELDS
+     * NON-PUBLIC FIELDS
      *-----------------------------------*/
 
     private Entity m_Ball;
@@ -37,8 +37,8 @@ public class TrivialAI {
      *-----------------------------------*/
 
     public void Think() {
-        var ballPos   = m_Ball.GetComponent<PositionComponent>();
-        var paddlePos = m_Paddle.GetComponent<PositionComponent>();
+        var ballPos   = m_Ball.GetComponent<BodyComponent>().Position;
+        var paddlePos = m_Paddle.GetComponent<BodyComponent>().Position;
         var controls  = m_Paddle.GetComponent<ControlsComponent>().Controls;
 
         var d = ballPos.Y - paddlePos.Y;

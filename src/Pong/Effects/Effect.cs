@@ -15,7 +15,7 @@ using Components;
 
 public abstract class Effect {
     /*-------------------------------------
-     * PRIVATE FIELDS
+     * NON-PUBLIC FIELDS
      *-----------------------------------*/
 
     private float m_Time;

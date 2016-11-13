@@ -14,7 +14,7 @@ using System.Threading;
 
 public class Entity {
     /*-------------------------------------
-     * PRIVATE FIELDS
+     * NON-PUBLIC FIELDS
      *-----------------------------------*/
 
     private readonly Dictionary<Type, object> m_Components;
