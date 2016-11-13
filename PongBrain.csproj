@@ -109,6 +109,7 @@
     <Compile Include="src\Base\Components\LifetimeComponent.cs" />
     <Compile Include="src\Pong\Components\BallInfoComponent.cs" />
     <Compile Include="src\Pong\Components\EffectComponent.cs" />
+    <Compile Include="src\Pong\Components\MotionBlurComponent.cs" />
     <Compile Include="src\Pong\Components\PaddleInfoComponent.cs" />
     <Compile Include="src\Base\Components\Physical\BodyComponent.cs" />
     <Compile Include="src\Base\Components\Physical\AxisAlignedBoxComponent.cs" />
@@ -151,10 +152,22 @@
     <None Include=".projectile" />
     <None Include="LICENSE.md" />
     <None Include="README.md" />
+    <None Include="src\Shaders\HLSL\Bloom.ps.hlsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="src\Shaders\HLSL\Exposure.ps.hlsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="src\Shaders\HLSL\ChromaticAberration.ps.hlsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="src\Shaders\HLSL\MotionBlur1.ps.hlsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="src\Shaders\HLSL\MotionBlur0.ps.hlsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="src\Shaders\HLSL\MotionBlur.vs.hlsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="src\Shaders\HLSL\Noise.ps.hlsl">

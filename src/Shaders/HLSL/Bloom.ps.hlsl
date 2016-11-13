@@ -38,6 +38,33 @@ float4 tex2D(in Texture2D tex, in float2 texCoord) {
     return tex.Sample(TextureSampler, texCoord);
 }
 
+float3 bloom(in float2 texCoord) {
+    const int K = 2;
+
+    float texWidth;
+    float texHeight;
+
+    Textures[0].GetDimensions(texWidth, texHeight);
+
+    float3 y = 0.0;
+    float2 r = 3.0 / float2(texWidth, texHeight);
+
+    for (int i = -K; i <= K; i++) {
+        for (int j = -K; j <= K; j++) {
+            float2 d = float2(i, j);
+
+            y += tex2D(Textures[0], texCoord + r*d);
+        }
+    }
+
+    y /= (2*K + 1)*(2*K + 1);
+
+    return y;
+}
+
 void main(in PS_INPUT psIn, out PS_OUTPUT psOut) {
-    psOut.color = tex2D(Textures[0], psIn.texCoord);
+    float4 c = Textures[0].Sample(TextureSampler, psIn.texCoord);
+    float3 x = bloom(psIn.texCoord);
+
+    psOut.color = 0.85*c + 0.15*float4(x.rgb, 0.0);
 }

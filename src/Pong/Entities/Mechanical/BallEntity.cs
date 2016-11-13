@@ -31,6 +31,7 @@ public class BallEntity: Entity {
             new AngularVelocityComponent { W=2.0f*(float)Math.PI*1.0f },
             new BallInfoComponent        { Radius=radius },
             new PositionComponent        { },
+            new MotionBlurComponent      { },
             new RotationComponent        { },
             new TriMeshComponent         { TriMesh=quad },
             new VelocityComponent        { }

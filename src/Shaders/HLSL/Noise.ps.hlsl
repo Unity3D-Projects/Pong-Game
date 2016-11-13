@@ -43,10 +43,36 @@ float noise(in float2 x) {
     return cos(fmod(123456789.0 + Seed, 256.0 * dot(x, k)));
 }
 
+float avg(in float2 x) {
+    const int K = 1;
+
+    float texWidth;
+    float texHeight;
+
+    Textures[0].GetDimensions(texWidth, texHeight);
+
+    float y = 0.0;
+    float2 r = 1.0 / float2(texWidth, texHeight);
+
+    for (int i = -K; i <= K; i++) {
+        for (int j = -K; j <= K; j++) {
+            y += noise(x+r*float2(i, j));
+        }
+    }
+
+    y /= (2*K + 1)*(2*K + 1);
+
+    return y;
+}
+
+float4 tex2D(in Texture2D tex, in float2 texCoord) {
+    return tex.Sample(TextureSampler, texCoord);
+}
+
 void main(in PS_INPUT psIn, out PS_OUTPUT psOut) {
-    float4 a = noise(psIn.texCoord);
-    float4 c = Textures[0].Sample(TextureSampler, psIn.texCoord);
-    float  x = 0.20 - (0.18/3.0)*(c.r + c.g + c.b);
+    float4 a = 0.3*noise(psIn.texCoord) + 0.7*avg(psIn.texCoord);
+    float4 c = tex2D(Textures[0], psIn.texCoord);
+    float  x = 0.18 - (0.16/3.0)*(c.r + c.g + c.b);
 
     psOut.color = x*a + (1.0 - x)*c;
 }

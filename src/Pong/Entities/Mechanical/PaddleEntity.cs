@@ -31,6 +31,7 @@ public class PaddleEntity: Entity {
             new BodyComponent           { },
             new AxisAlignedBoxComponent { Width=width, Height=height },
             new ControlsComponent       { },
+            new MotionBlurComponent     { },
             new PaddleInfoComponent     { },
             new PositionComponent       { X=0.0f, Y=0.0f },
             new TriMeshComponent        { TriMesh=quad },
