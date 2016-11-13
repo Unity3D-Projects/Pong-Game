@@ -12,9 +12,11 @@ An attempt at implementing an artificial neural network that plays pong. The gam
 * So far just a trivial AI
 
 ### Graphics
-* Particle Effects
-* Camera Effects (shaking)
+* Camera effects (shaking)
+* Chromatic aberration
 * Noise (ISO) shader
-* Chromatic Aberration
+* Object animations
+* Particle effects
+
 
 ![PongBrain in action!](img/Screenshot4.png "PongBrain in action!")
