@@ -5,13 +5,14 @@ An attempt at implementing an artificial neural network that plays pong. The gam
 ## Features (so far)
 
 ### Architecture
-* Carefully designed ECS (Entity-Component-System) engine
+* Carefully designed ECS (Entity–Component–System) engine
 * Separated into base engine and game implementation (for future use!)
 
 ### Artificial Intelligence
 * So far just a trivial AI
 
 ### Graphics
+* Hardware-accelerated graphics (DirectX 11.0)
 * Camera effects (shaking)
 * Chromatic aberration
 * Motion blur
@@ -20,7 +21,7 @@ An attempt at implementing an artificial neural network that plays pong. The gam
 * Particle effects
 
 ### Physics
-* Rigid body dynamics with convex shapes
+* Rigid body dynamics with convex polytopes
 * Realistic physics with fourth-order Runge–Kutta integration
 * Collision detection (Separating Axis Theorem)
 
