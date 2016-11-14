@@ -12,9 +12,9 @@ using System.Runtime.InteropServices;
  *-----------------------------------*/
 
 [StructLayout(LayoutKind.Sequential)]
-public struct Vector2 {
+public struct Vector2: IEquatable<Vector2> {
     /*-------------------------------------
-     * PUBLIC PROPERTIES
+     * PUBLIC FIELDS
      *-----------------------------------*/
 
     public float X;
@@ -37,6 +37,20 @@ public struct Vector2 {
         return X*v.X + Y*v.Y;
     }
 
+    public override bool Equals(object obj) {
+        if (!(obj is Vector2)) {
+            return false;
+        }
+
+        var vector2 = (Vector2)obj;
+
+        return vector2.X == X && vector2.Y == Y;
+    }
+
+    public bool Equals(Vector2 obj) {
+        return obj.X == X && obj.Y == Y;
+    }
+
     public void Normalize() {
         var r = (float)Math.Sqrt(X*X + Y*Y);
         if (r > 0.0f) {
@@ -57,8 +71,24 @@ public struct Vector2 {
      * OPERATORS
      *-----------------------------------*/
 
+    public static bool operator ==(Vector2 a, Vector2 b) {
+        return a.X == b.X && a.Y == b.Y;
+    }
+
+    public static bool operator !=(Vector2 a, Vector2 b) {
+        return !(a == b);
+    }
+
+    public static Vector2 operator -(Vector2 a, Vector2 b) {
+        return new Vector2(a.X - b.X, a.Y - b.Y);
+    }
+
     public static Vector2 operator +(Vector2 a, Vector2 b) {
         return new Vector2(a.X + b.X, a.Y + b.Y);
+    }
+
+    public static Vector2 operator *(Vector2 a, Vector2 b) {
+        return new Vector2(a.X*b.X, a.Y*b.Y);
     }
 
     public static Vector2 operator *(float a, Vector2 b) {

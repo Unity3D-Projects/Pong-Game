@@ -90,16 +90,16 @@ public struct Matrix3x3 {
     }
 
     public static Matrix3x3 Scale(float x, float y) {
-        var m = new Matrix3x3(x   , 0.0f, 0.0f,
-                              0.0f, y   , 0.0f,
+        var m = new Matrix3x3(   x, 0.0f, 0.0f,
+                              0.0f,    y, 0.0f,
                               0.0f, 0.0f, 1.0f);
 
         return m;
     }
 
     public static Matrix3x3 Translate(float x, float y) {
-        var m = new Matrix3x3(1.0f, 0.0f, x,
-                              0.0f, 1.0f, y,
+        var m = new Matrix3x3(1.0f, 0.0f,    x,
+                              0.0f, 1.0f,    y,
                               0.0f, 0.0f, 1.0f);
 
         return m;

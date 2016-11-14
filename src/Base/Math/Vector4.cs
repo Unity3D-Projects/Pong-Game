@@ -12,11 +12,11 @@ using System.Runtime.InteropServices;
 
 [StructLayout(LayoutKind.Sequential)]
 public struct Vector4 {
-    /*-------------------------------------
-     * PUBLIC PROPERTIES
-     *-----------------------------------*/
+        /*-------------------------------------
+         * PUBLIC FIELDS
+         *-----------------------------------*/
 
-    public float X;
+        public float X;
     public float Y;
     public float Z;
     public float W;

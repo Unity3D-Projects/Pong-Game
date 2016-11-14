@@ -95,7 +95,7 @@ public abstract class Scene {
         }
     }
 
-    public virtual ICollection<Entity> GetEntities<T>() {
+    public virtual IReadOnlyList<Entity> GetEntities<T>() {
         List<Entity> entities;
         if (!m_ComponentTypeToEntityMap.TryGetValue(typeof (T), out entities)) {
             return new Entity[0];

@@ -20,9 +20,9 @@ public class Shape {
         var hw = 0.5f*width;
 
         var points = new [] {
-            new Vector2(-hw, -hh),
-            new Vector2(-hw,  hh),
             new Vector2( hw,  hh),
+            new Vector2(-hw,  hh),
+            new Vector2(-hw, -hh),
             new Vector2( hw, -hh)
         };
         

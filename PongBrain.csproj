@@ -95,7 +95,7 @@
     <Compile Include="src\Base\Math\Calc\IOde.cs" />
     <Compile Include="src\Base\Math\Calc\IIntegrator.cs" />
     <Compile Include="src\Base\Math\Calc\RungeKutta4Integrator.cs" />
-    <Compile Include="src\Base\Math\Geom\IShape.cs" />
+    <Compile Include="src\Base\Math\Geom\Shape.cs" />
     <Compile Include="src\Base\Math\MathUtil.cs" />
     <Compile Include="src\Base\Math\Matrix2x2.cs" />
     <Compile Include="src\Base\Math\Matrix3x3.cs" />

@@ -48,8 +48,8 @@ public sealed class TrailEffect: Effect {
         var v = m_Entity.GetComponent<BodyComponent>().Velocity;
 
         for (var i = 0; i < m_NumParticles; i++) {
-            var x        = 0.04f*(float)random.NextDouble();
-            var y        = 0.04f*(float)random.NextDouble();
+            var x        = 0.08f*((float)random.NextDouble()-0.5f);
+            var y        = 0.08f*((float)random.NextDouble()-0.5f);
             var size     = 0.01f + 0.01f*(float)random.NextDouble();
             var particle = new RectangleEntity(p.X + x, p.Y + y, size, size);
             var theta    = 2.0f*(float)Math.PI * (float)random.NextDouble();

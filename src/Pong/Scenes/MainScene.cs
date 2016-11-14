@@ -96,7 +96,7 @@ public class MainScene: Scene {
     }
 
     private void CreateLeftPaddle() {
-        m_LeftPaddle = new PaddleEntity();
+        m_LeftPaddle = new PaddleEntity(-0.9f, 0.0f);
 
         var controls = m_LeftPaddle.GetComponent<ControlsComponent>().Controls;
 
@@ -144,13 +144,11 @@ public class MainScene: Scene {
     }
 
     private void CreateRightPaddle(Entity ball) {
-        m_RightPaddle = new PaddleEntity();
+        m_RightPaddle = new PaddleEntity(0.9f, 0.0f);
 
         m_RightPaddle.AddComponent(new BrainComponent {
             ThinkFunc = new TrivialAI(m_RightPaddle, ball).Think,
         });
-
-            m_RightPaddle.GetComponent<BodyComponent>().Position = new Vector2(0.9f, 0.0f);
 
         AddEntity(m_RightPaddle);
     }
@@ -248,6 +246,15 @@ public class MainScene: Scene {
         Game.Inst.OnMessage<CollisionMsg>(msg => {
             var o = ((CollisionMsg)msg);
 
+            if (o.EntityA is BallEntity && o.EntityB == null) {
+                if (o.Normal == new Vector2(1.0f, 0.0f)) {
+                    Score(2);
+                }
+                else if (o.Normal == new Vector2(-1.0f, 0.0f)) {
+                    Score(1);
+                }
+            }
+
             if (o.EntityA == m_Ball || o.EntityB != null) {
                 new CameraShakeEffect(m_GraphicsSubsystem).Create();
                 new BounceEffect(o.EntityA, 0.2f).Create();
@@ -291,12 +298,10 @@ public class MainScene: Scene {
     }
 
     private void Score(int player) {
-        var ode = m_Ball.GetComponent<BodyComponent>();
-        var ballPosition = m_Ball.GetComponent<BodyComponent>().Position;
-        var ballVelocity = m_Ball.GetComponent<BodyComponent>().Velocity;
+        var body = m_Ball.GetComponent<BodyComponent>();
 
-        ode.Position = new Vector2(0.0f, 0.0f);
-        ode.Velocity = new Vector2(0.0f, 0.0f);
+        body.Position = new Vector2(0.0f, 0.0f);
+        body.Velocity = new Vector2(0.0f, 0.0f);
 
         m_AboutToScore = false;
 
@@ -307,14 +312,24 @@ public class MainScene: Scene {
             m_RightScore += 100;
         }
 
+
         Game.Inst.SetTimeout(() => {
             var random = new Random();
 
             var theta = 0.6f*(float)Math.PI*(float)random.NextDouble()-0.3f*(float)Math.PI;
             var r = 0.9f+0.6f*(float)random.NextDouble();
             var d = Math.Sign(random.Next(0, 2)-0.5f);
-        
-            ode.Velocity = new Vector2((float)Math.Cos(theta)*r*d, (float)Math.Sin(theta)*r);
+
+            var n = 40;
+            var v = (1.0f/n)*new Vector2((float)Math.Cos(theta)*r*d, (float)Math.Sin(theta)*r);
+            var w = (1.0f/n)*4.0f*((float)random.NextDouble() - 0.5f)*2.0f*(float)Math.PI;
+            //body.Angle = (float)Math.PI * 0.2f;
+            for (var i = 0; i < n; i++) {
+                Game.Inst.SetTimeout(() => {
+                    body.AngularVelocity += w;
+                    body.Velocity += v;
+                }, i/(float)n);
+            }
         }, 0.65f);
     }
 

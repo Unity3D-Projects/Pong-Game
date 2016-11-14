@@ -32,8 +32,7 @@ public class BallEntity: Entity {
 
         AddComponents(
             new BallInfoComponent        { Radius = radius },
-            new BodyComponent            { AngularVelocity = 2.0f*(float)Math.PI*1.0f,
-                                           InvMoI          = MathUtil.RectInvMoI(mass, 2.0f*radius, 2.0f*radius),
+            new BodyComponent            { InvMoI          = MathUtil.RectInvMoI(mass, 2.0f*radius, 2.0f*radius),
                                            InvMass         = 1.0f/mass,
                                            LinearDrag      = 0.0f,
                                            Restitution     = 1.0f,

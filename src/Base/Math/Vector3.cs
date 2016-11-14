@@ -13,12 +13,24 @@ using System.Runtime.InteropServices;
 [StructLayout(LayoutKind.Sequential)]
 public struct Vector3 {
     /*-------------------------------------
-     * PUBLIC PROPERTIES
+     * PUBLIC FIELDS
      *-----------------------------------*/
 
     public float X;
     public float Y;
     public float Z;
+
+    /*-------------------------------------
+     * PUBLIC PROPERTIES
+     *-----------------------------------*/
+
+    public Vector2 XY {
+        get { return new Vector2(X, Y); }
+    }
+
+    public Vector2 YZ {
+        get { return new Vector2(Y, Z); }
+    }
 
     /*-------------------------------------
      * CONSTRUCTORS
@@ -27,6 +39,12 @@ public struct Vector3 {
     public Vector3(float x=0.0f, float y=0.0f, float z=0.0f) {
         X = x;
         Y = y;
+        Z = z;
+    }
+
+    public Vector3(Vector2 a, float z=1.0f) {
+        X = a.X;
+        Y = a.Y;
         Z = z;
     }
 
