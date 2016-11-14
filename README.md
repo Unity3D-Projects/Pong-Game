@@ -20,7 +20,7 @@ An attempt at implementing an artificial neural network that plays pong. The gam
 * Particle effects
 
 ### Physics
-* Rigid body dynamics with convex shapes
+* Rigid body dynamics with convex polytopes
 * Realistic physics with fourth-order Runge–Kutta integration
 * Collision detection (Separating Axis Theorem)
 
