@@ -12,6 +12,7 @@ An attempt at implementing an artificial neural network that plays pong. The gam
 * So far just a trivial AI
 
 ### Graphics
+* Hardware-accelerated graphics (DirectX 11.0)
 * Camera effects (shaking)
 * Chromatic aberration
 * Motion blur
