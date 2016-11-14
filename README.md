@@ -19,5 +19,10 @@ An attempt at implementing an artificial neural network that plays pong. The gam
 * Object animations
 * Particle effects
 
+## Physics
+* Rigid body dynamics with convex shapes
+* Realistic physics with Runge—Kutta fourth order integration
+* Collision detection (Separating Axis Theorem)
+
 
 ![PongBrain in action!](img/Screenshot4.png "PongBrain in action!")
