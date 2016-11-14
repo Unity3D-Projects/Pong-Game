@@ -14,6 +14,7 @@ An attempt at implementing an artificial neural network that plays pong. The gam
 ### Graphics
 * Camera effects (shaking)
 * Chromatic aberration
+* Motion blur
 * Noise (ISO) shader
 * Object animations
 * Particle effects
