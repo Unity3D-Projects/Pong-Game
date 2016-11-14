@@ -5,7 +5,7 @@ An attempt at implementing an artificial neural network that plays pong. The gam
 ## Features (so far)
 
 ### Architecture
-* Carefully designed ECS (Entity-Component-System) engine
+* Carefully designed ECS (Entity–Component–System) engine
 * Separated into base engine and game implementation (for future use!)
 
 ### Artificial Intelligence
