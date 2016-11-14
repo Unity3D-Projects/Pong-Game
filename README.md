@@ -21,7 +21,7 @@ An attempt at implementing an artificial neural network that plays pong. The gam
 
 ### Physics
 * Rigid body dynamics with convex shapes
-* Realistic physics with Runge–Kutta fourth order integration
+* Realistic physics with fourth-order Runge–Kutta integration
 * Collision detection (Separating Axis Theorem)
 
 
