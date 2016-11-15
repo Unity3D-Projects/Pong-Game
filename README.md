@@ -26,4 +26,4 @@ An attempt at implementing an artificial neural network that plays pong. The gam
 * Collision detection (Separating Axis Theorem)
 
 
-![PongBrain in action!](img/Screenshot4.png "PongBrain in action!")
+![PongBrain in action!](images/Screenshot4.png "PongBrain in action!")
