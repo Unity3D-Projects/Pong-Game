@@ -164,7 +164,7 @@ public class MainScene: Scene {
         body.Position        = new Vector2(0.0f, 0.0f);
         body.Velocity        = new Vector2(0.0f, 0.0f);
 
-        var r = Pong.Random;
+        var r = Pong.Rnd;
 
         Game.Inst.SetTimeout(() => {
             var theta         = 0.9f*(float)Math.PI*((float)r.NextDouble() - 0.45f);
@@ -189,19 +189,19 @@ public class MainScene: Scene {
     private void SetupDrawing() {
         var g = Game.Inst.Graphics;
 
-        Pong.ChromaticAberrationPS.SetTextures(Pong.RenderTargets[0]);
-        Pong.BloomPS              .SetTextures(Pong.RenderTargets[0]);
-        Pong.FadePS               .SetTextures(g.TextureMgr.White, Pong.RenderTargets[0]);
-        Pong.MotionBlur1PS        .SetTextures(Pong.RenderTargets[0], Pong.RenderTargets[1]);
-        Pong.NoisePS              .SetTextures(Pong.RenderTargets[0]);
+        Pong.PsChromaticAberration.SetTextures(Pong.RenderTargets[0]);
+        Pong.PsBloom              .SetTextures(Pong.RenderTargets[0]);
+        Pong.PsFade               .SetTextures(g.TextureMgr.White, Pong.RenderTargets[0]);
+        Pong.PsMotionBlur1        .SetTextures(Pong.RenderTargets[0], Pong.RenderTargets[1]);
+        Pong.PsNoise              .SetTextures(Pong.RenderTargets[0]);
 
         var adsMaterial = new AdsMaterial();
         var defDrawFunc = m_GraphicsSubsystem.DrawFunc;
 
         Action drawMotionBlur = () => {
             g.RenderTarget = Pong.RenderTargets[1];
-            g.PixelShader  = Pong.MotionBlur0PS;
-            g.VertexShader = Pong.MotionBlurVS;
+            g.PixelShader  = Pong.PsMotionBlur0;
+            g.VertexShader = Pong.VsMotionBlur;
 
             g.RenderTarget.Clear(Color.Black);
 
@@ -217,12 +217,12 @@ public class MainScene: Scene {
                     motionBlur.PrevTransform = transform;
                 }
 
-                Pong.MotionBlurVS.SetConstants(motionBlur.PrevTransform);
+                Pong.VsMotionBlur.SetConstants(motionBlur.PrevTransform);
                 g.DrawTriMesh(triMesh.TriMesh, transform);
                 motionBlur.PrevTransform = transform;
             }
 
-            g.ApplyPostFX(Pong.RenderTargets[0], Pong.MotionBlur1PS);
+            g.ApplyPostFX(Pong.RenderTargets[0], Pong.PsMotionBlur1);
         };
 
         m_GraphicsSubsystem.DrawFunc = () => {
@@ -234,21 +234,21 @@ public class MainScene: Scene {
 
             defDrawFunc();
 
-            Pong.ChromaticAberrationPS.SetConstants(0.85f                         );
-            Pong.NoisePS              .SetConstants((uint)Pong.Random.Next(1, 999));
+            Pong.PsChromaticAberration.SetConstants(0.85f                         );
+            Pong.PsNoise              .SetConstants((uint)Pong.Rnd.Next(1, 999));
 
-            g.ApplyPostFX(Pong.RenderTargets[0], Pong.ChromaticAberrationPS);
-            g.ApplyPostFX(Pong.RenderTargets[0], Pong.BloomPS              );
+            g.ApplyPostFX(Pong.RenderTargets[0], Pong.PsChromaticAberration);
+            g.ApplyPostFX(Pong.RenderTargets[0], Pong.PsBloom              );
 
             drawMotionBlur();
 
             if (m_Time < 1.0f) {
                 var fade = (float)Math.Pow(m_Time, 3.0);
-                Pong.FadePS.SetConstants(fade);
-                g.ApplyPostFX(Pong.RenderTargets[0], Pong.FadePS);
+                Pong.PsFade.SetConstants(fade);
+                g.ApplyPostFX(Pong.RenderTargets[0], Pong.PsFade);
             }
 
-            g.ApplyPostFX(g.ScreenRenderTarget, Pong.NoisePS);
+            g.ApplyPostFX(g.ScreenRenderTarget, Pong.PsNoise);
         };
 
     }
@@ -277,8 +277,9 @@ public class MainScene: Scene {
 
                 if (o.EntityB != null) {
                     new BounceEffect(o.EntityB, 0.2f).Create();
-
                     new ExplosionEffect(o.Contact).Create();
+
+                    Pong.SndPaddleHit.Play();
                 }
             }
         });

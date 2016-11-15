@@ -13,6 +13,7 @@ using System.Windows.Forms;
 
 using Components;
 using Graphics;
+using Sound;
 
 /*-------------------------------------
  * CLASSES
@@ -40,11 +41,17 @@ public class Game {
 
     private Scene m_Scene;
 
+    private ISoundMgr m_Sound;
+
     private Form m_Window;
 
     /*-------------------------------------
      * PUBLIC PROPERTIES
      *-----------------------------------*/
+
+    public ISoundMgr Sound {
+        get { return m_Sound; }
+    }
 
     public IGraphicsMgr Graphics {
         get { return m_Graphics; }
@@ -112,16 +119,17 @@ public class Game {
     }
 
     public void Run(IGraphicsMgr graphics,
-                    string title,
-                    int width,
-                    int height,
-                    Scene scene)
+                    ISoundMgr    sound,
+                    string       title,
+                    int          width,
+                    int          height,
+                    Scene        scene)
     {
         Thread.CurrentThread.Priority = ThreadPriority.AboveNormal;
 
         m_Done = false;
 
-        Init(graphics, title, width, height);
+        Init(graphics, sound, title, width, height);
         EnterScene(scene);
 
         var t1 = 0.0;
@@ -186,14 +194,17 @@ public class Game {
      *-----------------------------------*/
 
     private void Init(IGraphicsMgr graphics,
-                      string title,
-                      int width,
-                      int height)
+                      ISoundMgr    sound,
+                      string       title,
+                      int          width,
+                      int          height)
     {        
         m_Window = CreateWindow(title, width, height);
 
         graphics.Init(m_Window);
+        sound.Init();
         m_Graphics = graphics;
+        m_Sound    = sound;
     }
 
     private void Cleanup() {

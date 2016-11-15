@@ -34,12 +34,14 @@ public class SplashScene: Scene {
 
         Pong.Preload();
 
+        Pong.SndMusic.Play();
+
         var g = Game.Inst.Graphics;
 
-        Pong.ChromaticAberrationPS.SetTextures(Pong.RenderTargets[0]);
-        Pong.BloomPS              .SetTextures(Pong.RenderTargets[0]);
-        Pong.FadePS               .SetTextures(g.TextureMgr.White, Pong.RenderTargets[0]);
-        Pong.NoisePS              .SetTextures(Pong.RenderTargets[0]);
+        Pong.PsChromaticAberration.SetTextures(Pong.RenderTargets[0]);
+        Pong.PsBloom              .SetTextures(Pong.RenderTargets[0]);
+        Pong.PsFade               .SetTextures(g.TextureMgr.White, Pong.RenderTargets[0]);
+        Pong.PsNoise              .SetTextures(Pong.RenderTargets[0]);
     }
 
     public override void Draw(float dt) {
@@ -49,27 +51,27 @@ public class SplashScene: Scene {
 
         var fadeVal = Math.Min(0.5f*m_Time*m_Time, 1.0f);
 
-        Pong.ChromaticAberrationPS.SetConstants(0.85f*fadeVal                 );
-        Pong.FadePS               .SetConstants(fadeVal*fadeVal               );
-        Pong.NoisePS              .SetConstants((uint)Pong.Random.Next(1, 999));
+        Pong.PsChromaticAberration.SetConstants(0.85f*fadeVal                 );
+        Pong.PsFade               .SetConstants(fadeVal*fadeVal               );
+        Pong.PsNoise              .SetConstants((uint)Pong.Rnd.Next(1, 999));
 
         g.BeginFrame();
 
         if (m_Time < 3.0f) {
             g.RenderTarget = Pong.RenderTargets[0];
             g.PixelShader  = g.DefaultPixelShader;
-            g.PixelShader.SetTextures(Pong.SplashTex);
+            g.PixelShader.SetTextures(Pong.TexSplash);
 
-            g.DrawTriMesh(Pong.UnitQuad, Matrix4x4.Identity());
-            g.ApplyPostFX(Pong.RenderTargets[0], Pong.ChromaticAberrationPS);
+            g.DrawTriMesh(Pong.TmQuad, Matrix4x4.Identity());
+            g.ApplyPostFX(Pong.RenderTargets[0], Pong.PsChromaticAberration);
         }
         else {
-            Pong.FadePS.SetConstants(0.86f);
+            Pong.PsFade.SetConstants(0.86f);
         }
 
-        g.ApplyPostFX(Pong.RenderTargets[0], Pong.FadePS );
-        g.ApplyPostFX(Pong.RenderTargets[0], Pong.BloomPS);
-        g.ApplyPostFX(g.ScreenRenderTarget , Pong.NoisePS);
+        g.ApplyPostFX(Pong.RenderTargets[0], Pong.PsFade );
+        g.ApplyPostFX(Pong.RenderTargets[0], Pong.PsBloom);
+        g.ApplyPostFX(g.ScreenRenderTarget , Pong.PsNoise);
 
         g.EndFrame();
 

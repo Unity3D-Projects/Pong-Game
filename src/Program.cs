@@ -9,6 +9,7 @@ using System.Windows.Forms;
 
 using Base.Core;
 using Base.Graphics.SharpDXImpl;
+using Base.Sound.SharpDXImpl;
 using Pong.Scenes;
 
 /*-------------------------------------
@@ -27,6 +28,7 @@ internal static class Program {
         var game = Game.Inst;
 
         game.Run(new SharpDXGraphicsMgr(),
+                 new SharpDXSoundMgr(),
                  "PongBrain",
                  480, 480,
                  new SplashScene());

@@ -27,8 +27,6 @@ public class SharpDXGraphicsMgr: IGraphicsMgr {
      * NON-PUBLIC FIELDS
      *-----------------------------------*/
 
-    private ITexture m_CurTexture;
-
     private SharpDXShader m_DefaultPixelShader;
 
     private SharpDXRenderTarget m_DefaultRenderTarget;

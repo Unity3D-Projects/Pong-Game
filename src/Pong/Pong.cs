@@ -12,6 +12,7 @@ using Base.Graphics;
 using Base.Graphics.Shaders;
 using Base.Graphics.Textures;
 using Base.Math;
+using Base.Sound;
 
 /*-------------------------------------
  * CLASSES
@@ -22,21 +23,25 @@ public static class Pong {
      * PUBLIC PROPERTIES
      *-----------------------------------*/
 
-    public static Random Random { get; } = new Random();
+    public static Random Rnd { get; } = new Random();
 
     public static IRenderTarget[] RenderTargets { get; private set; }
 
-    public static IShader BloomPS               { get; private set; }
-    public static IShader FadePS                { get; private set; }
-    public static IShader ChromaticAberrationPS { get; private set; }
-    public static IShader MotionBlur0PS         { get; private set; }
-    public static IShader MotionBlur1PS         { get; private set; }
-    public static IShader MotionBlurVS          { get; private set; }
-    public static IShader NoisePS               { get; private set; }
+    public static IShader PsBloom               { get; private set; }
+    public static IShader PsFade                { get; private set; }
+    public static IShader PsChromaticAberration { get; private set; }
+    public static IShader PsMotionBlur0         { get; private set; }
+    public static IShader PsMotionBlur1         { get; private set; }
+    public static IShader PsNoise               { get; private set; }
 
-    public static ITexture SplashTex { get; private set; }
+    public static IShader VsMotionBlur          { get; private set; }
 
-    public static ITriMesh UnitQuad { get; private set; }
+    public static ITexture TexSplash { get; private set; }
+
+    public static ITriMesh TmQuad { get; private set; }
+
+    public static ISound SndMusic     { get; private set; }
+    public static ISound SndPaddleHit { get; private set; }
 
     /*-------------------------------------
      * PUBLIC METHODS
@@ -44,20 +49,25 @@ public static class Pong {
 
     public static void Preload() {
         var g = Game.Inst.Graphics;
+        var s = Game.Inst.Sound;
 
         RenderTargets = g.CreateRenderTargets(2);
 
-        BloomPS               = LoadPS           ("Bloom.ps.hlsl"              );
-        FadePS                = LoadPS<float    >("Fade.ps.hlsl"               );
-        ChromaticAberrationPS = LoadPS<float    >("ChromaticAberration.ps.hlsl");
-        MotionBlur0PS         = LoadPS           ("MotionBlur0.ps.hlsl"        );
-        MotionBlur1PS         = LoadPS           ("MotionBlur1.ps.hlsl"        );
-        MotionBlurVS          = LoadVS<Matrix4x4>("MotionBlur.vs.hlsl"         );
-        NoisePS               = LoadPS<uint     >("Noise.ps.hlsl"              );
+        PsBloom               = LoadPS           ("Bloom.ps.hlsl"              );
+        PsFade                = LoadPS<float    >("Fade.ps.hlsl"               );
+        PsChromaticAberration = LoadPS<float    >("ChromaticAberration.ps.hlsl");
+        PsMotionBlur0         = LoadPS           ("MotionBlur0.ps.hlsl"        );
+        PsMotionBlur1         = LoadPS           ("MotionBlur1.ps.hlsl"        );
+        PsNoise               = LoadPS<uint     >("Noise.ps.hlsl"              );
 
-        SplashTex = g.TextureMgr.Load("Content/Images/Splash.png");
+        VsMotionBlur          = LoadVS<Matrix4x4>("MotionBlur.vs.hlsl"         );
 
-        UnitQuad = g.TriMeshMgr.CreateQuad(2.0f, 2.0f);
+        TexSplash = g.TextureMgr.Load("Content/Images/Splash.png");
+
+        TmQuad = g.TriMeshMgr.CreateQuad(2.0f, 2.0f);
+
+        SndMusic     = s.Load("Content/Sounds/Music.wav");
+        SndPaddleHit = s.Load("Content/Sounds/PaddleHit.wav");
 
         Game.Inst.Window.Show();
 
