@@ -29,7 +29,7 @@ internal class SharpDXShaderMgr: IDisposable, IShaderMgr {
          * PUBLIC FIELDS
          *-----------------------------------*/
 
-        public SharpDXGraphics Graphics;
+        public SharpDXGraphicsMgr Graphics;
 
     /*-------------------------------------
      * NON-PUBLIC FIELDS
@@ -41,7 +41,7 @@ internal class SharpDXShaderMgr: IDisposable, IShaderMgr {
      * CONSTRUCTORS
      *-----------------------------------*/
 
-    public SharpDXShaderMgr(SharpDXGraphics graphics) {
+    public SharpDXShaderMgr(SharpDXGraphicsMgr graphics) {
         Graphics = graphics;
     }
 
@@ -50,25 +50,19 @@ internal class SharpDXShaderMgr: IDisposable, IShaderMgr {
      *-----------------------------------*/
 
     public void Dispose() {
-        foreach (var shader in m_Shaders) {
-            shader.Dispose();
-        }
-
-        m_Shaders.Clear();
-        m_Shaders = null;
-
-        Graphics = null;
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 
     public IShader LoadPS<T>(string path) where T: struct {
         return LoadPS(path, typeof (T));
     }
 
-    public IShader LoadPS(string path, Type inputType=null) {
+    public IShader LoadPS(string path, Type constantsType=null) {
         using (var byteCode = ShaderBytecode.CompileFromFile(path, "main", "ps_5_0", DEBUG_FLAG)) {
             var gpuShader = new D3D11.PixelShader(Graphics.Device, byteCode);
 
-            var shader = new SharpDXShader(Graphics, gpuShader, null, inputType);
+            var shader = new SharpDXShader(Graphics, gpuShader, null, constantsType);
 
             m_Shaders.Add(shader);
 
@@ -80,7 +74,7 @@ internal class SharpDXShaderMgr: IDisposable, IShaderMgr {
         return LoadVS(path, typeof (T));
     }
 
-    public IShader LoadVS(string path, Type inputType=null) {
+    public IShader LoadVS(string path, Type constantsType=null) {
         using (var byteCode = ShaderBytecode.CompileFromFile(path, "main", "vs_5_0", DEBUG_FLAG)) {
             var gpuShader = new D3D11.VertexShader(Graphics.Device, byteCode);
 
@@ -92,11 +86,28 @@ internal class SharpDXShaderMgr: IDisposable, IShaderMgr {
             var inputSignature = ShaderSignature.GetInputSignature(byteCode);
             var inputLayout = new D3D11.InputLayout(Graphics.Device, inputSignature, inputElements);
 
-            var shader = new SharpDXShader(Graphics, gpuShader, inputLayout, inputType);
+            var shader = new SharpDXShader(Graphics, gpuShader, inputLayout, constantsType);
 
             m_Shaders.Add(shader);
 
             return shader;
+        }
+    }
+
+    /*-------------------------------------
+     * NON-PUBLIC METHODS
+     *-----------------------------------*/
+
+    protected virtual void Dispose(bool disposing) {
+        if (disposing) {
+            foreach (var shader in m_Shaders) {
+                shader.Dispose();
+            }
+
+            m_Shaders.Clear();
+            m_Shaders = null;
+
+            Graphics = null;
         }
     }
 }

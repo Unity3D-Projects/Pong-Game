@@ -4,7 +4,6 @@
  * USINGS
  *-----------------------------------*/
 
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using Core;
@@ -17,15 +16,12 @@ using SharpDX.Direct3D;
 using SharpDX.DXGI;
 
 using D3D11   = SharpDX.Direct3D11;
-using Vector2 = Math.Vector2;
-using Vector3 = Math.Vector2;
-using Vector4 = Math.Vector4;
 
 /*-------------------------------------
  * CLASSES
  *-----------------------------------*/
 
-public class SharpDXGraphics: IGraphicsMgr {
+public class SharpDXGraphicsMgr: IGraphicsMgr {
     private D3D11.Buffer m_ShaderParams;
     /*-------------------------------------
      * NON-PUBLIC FIELDS
@@ -65,6 +61,14 @@ public class SharpDXGraphics: IGraphicsMgr {
      * PUBLIC PROPERTIES
      *-----------------------------------*/
 
+    public IShader DefaultPixelShader {
+        get { return m_DefaultPixelShader; }
+    }
+
+    public IShader DefaultVertexShader {
+        get { return m_DefaultVertexShader; }
+    }
+
     public bool IsEnabled { get; set; }
 
     public string Name {
@@ -77,7 +81,7 @@ public class SharpDXGraphics: IGraphicsMgr {
             var shader = (SharpDXShader)value;
 
             if (shader == null) {
-                shader = m_DefaultPixelShader;
+                throw new System.Exception("lol");
             }
 
             if (shader == m_PixelShader) {
@@ -100,8 +104,8 @@ public class SharpDXGraphics: IGraphicsMgr {
         set {
             var renderTarget = (SharpDXRenderTarget)value;
 
-            if (renderTarget == null) {
-                renderTarget = m_DefaultRenderTarget;
+            if (value == null) {
+                throw new System.Exception("lol");
             }
 
             if (renderTarget == m_RenderTarget) {
@@ -111,6 +115,10 @@ public class SharpDXGraphics: IGraphicsMgr {
             m_DeviceContext.OutputMerger.SetRenderTargets(renderTarget.RenderTarget);
             m_RenderTarget = renderTarget;
         }
+    }
+
+    public IRenderTarget ScreenRenderTarget {
+        get { return m_DefaultRenderTarget; }
     }
 
     public IShaderMgr ShaderMgr {
@@ -131,7 +139,7 @@ public class SharpDXGraphics: IGraphicsMgr {
             var shader = (SharpDXShader)value;
 
             if (shader == null) {
-                shader = m_DefaultVertexShader;
+                throw new System.Exception("lol");
             }
 
             if (shader == m_VertexShader) {
@@ -159,7 +167,7 @@ public class SharpDXGraphics: IGraphicsMgr {
         RenderTarget = renderTarget;
 
         PixelShader  = shader;
-        VertexShader = null;
+        VertexShader = m_DefaultVertexShader;
 
         DrawTriMesh(m_Quad, Matrix4x4.Identity());
     }
@@ -340,8 +348,8 @@ public class SharpDXGraphics: IGraphicsMgr {
     private void InitShaders() {
         m_ShaderMgr  = new SharpDXShaderMgr(this);
 
-        m_DefaultPixelShader  = (SharpDXShader)ShaderMgr.LoadPS("src/Shaders/HLSL/Default.ps.hlsl");
-        m_DefaultVertexShader = (SharpDXShader)ShaderMgr.LoadVS("src/Shaders/HLSL/Default.vs.hlsl");
+        m_DefaultPixelShader  = (SharpDXShader)ShaderMgr.LoadPS("Content/Shaders/Default.ps.hlsl");
+        m_DefaultVertexShader = (SharpDXShader)ShaderMgr.LoadVS("Content/Shaders/Default.vs.hlsl");
 
         PixelShader  = m_DefaultPixelShader;
         VertexShader = m_DefaultVertexShader;

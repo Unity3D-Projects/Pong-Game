@@ -182,7 +182,7 @@ public class PhysicsSubsystem: Subsystem {
         var numB = shapeB.Points.Length;
 
         var pointsA = new Vector2[numA];
-        var pointsB = new Vector2[numA];
+        var pointsB = new Vector2[numB];
 
         var axes = new Vector2[numA + numB];
         var posA = bodyA.Position;

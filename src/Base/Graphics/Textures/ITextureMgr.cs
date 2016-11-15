@@ -10,6 +10,12 @@ public interface ITextureMgr {
      *-----------------------------------*/
 
     ITexture White { get; }
+
+    /*-------------------------------------
+     * METHODS
+     *-----------------------------------*/
+
+    ITexture Load(string path);
 }
 
 }

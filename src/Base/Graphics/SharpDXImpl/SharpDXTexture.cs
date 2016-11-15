@@ -20,7 +20,7 @@ internal class SharpDXTexture: IDisposable, ITexture {
      * PUBLIC FIELDS
      *-----------------------------------*/
 
-    public SharpDXGraphics Graphics;
+    public SharpDXGraphicsMgr Graphics;
 
 
     public Texture2D Texture;
@@ -57,7 +57,7 @@ internal class SharpDXTexture: IDisposable, ITexture {
      * CONSTRUCTORS
      *-----------------------------------*/
 
-    public SharpDXTexture(SharpDXGraphics graphics,
+    public SharpDXTexture(SharpDXGraphicsMgr graphics,
                           Texture2D       texture,
                           int             width,
                           int             height)
@@ -74,20 +74,8 @@ internal class SharpDXTexture: IDisposable, ITexture {
      *-----------------------------------*/
 
     public void Dispose() {
-        if (m_ShaderResource != null) {
-            m_ShaderResource.Dispose();
-            m_ShaderResource = null;
-        }
-
-        if (Texture != null) {
-            Texture.Dispose();
-            Texture = null;
-        }
-
-        Graphics = null;
-
-        Width  = 0;
-        Height = 0;
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 
     /*-------------------------------------
@@ -105,6 +93,25 @@ internal class SharpDXTexture: IDisposable, ITexture {
         };
 
         return new ShaderResourceView(Graphics.Device, Texture, description);
+    }
+
+    protected virtual void Dispose(bool disposing) {
+        if (disposing) {
+            if (m_ShaderResource != null) {
+                m_ShaderResource.Dispose();
+                m_ShaderResource = null;
+            }
+
+            if (Texture != null) {
+                Texture.Dispose();
+                Texture = null;
+            }
+
+            Graphics = null;
+
+            Width  = 0;
+            Height = 0;
+        }
     }
 }
 

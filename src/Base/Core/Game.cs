@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Threading;
 using System.Windows.Forms;
 
 using Components;
@@ -90,10 +91,6 @@ public class Game {
 
         m_Scene.Cleanup();
         m_Scene = m_Scene.Parent;
-
-        if (m_Scene == null) {
-            Exit();
-        }
     }
 
     public void OnMessage<T>(Action<IMessage> cb) where T: IMessage {
@@ -120,6 +117,8 @@ public class Game {
                     int height,
                     Scene scene)
     {
+        Thread.CurrentThread.Priority = ThreadPriority.AboveNormal;
+
         m_Done = false;
 
         Init(graphics, title, width, height);
@@ -158,6 +157,10 @@ public class Game {
                 }
 
                 DispatchMessages();
+            }
+
+            if (m_Scene == null) {
+                Exit();
             }
         }
 
@@ -205,12 +208,12 @@ public class Game {
     private Form CreateWindow(string title, int width, int height) {
         var form = new GameForm();
 
+        form.Hide();
+
         form.FormClosed += (sender, e) => Exit();
 
         form.ClientSize = new Size(width, height);
         form.Text = title;
-
-        form.Show();
 
         return form;
     }

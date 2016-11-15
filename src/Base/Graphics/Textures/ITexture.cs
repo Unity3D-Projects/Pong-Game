@@ -1,10 +1,16 @@
 ﻿namespace PongBrain.Base.Graphics.Textures {
 
 /*-------------------------------------
- * interfaces
+ * USINGS
  *-----------------------------------*/
 
-public interface ITexture {
+using System;
+
+/*-------------------------------------
+ * INTERFACES
+ *-----------------------------------*/
+
+public interface ITexture: IDisposable {
     /*-------------------------------------
      * PROPERTIES
      *-----------------------------------*/

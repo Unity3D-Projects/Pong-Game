@@ -49,6 +49,8 @@ public class MainScene: Scene {
 
     private Rectangle m_WorldBounds;
 
+    private float m_Time;
+
 
     /*-------------------------------------
      * PUBLIC METHODS
@@ -66,21 +68,20 @@ public class MainScene: Scene {
         CreateBall();
         CreateLeftPaddle();
         CreateRightPaddle(m_Ball);
-
-        CreateLeftScoreText();
-        CreateRightScoreText();
         
         CreateNet();
 
-        Score(0);
-
-
+        RespawnBall(1.4f);
     }
 
-    public override void Update(float dt) {
-        base.Update(dt);
+    public override void Draw(float dt) {
+        base.Draw(dt);
 
-        SolveCollisions();
+        m_Time += dt;
+
+        if (m_Time > 1.0f) {
+            m_Time = 1.0f;
+        }
     }
 
     /*-------------------------------------
@@ -107,19 +108,21 @@ public class MainScene: Scene {
                 } },
                 { Key.Up, () => {
                     controls["Y"] = 1.0f;
+                } },
+                { Key.Q, () => {
+                    controls["Tilt"] = 1.0f;
+                } },
+                { Key.E, () => {
+                    controls["Tilt"] = -1.0f;
                 } }
             },
             ResetControls = () => {
-                controls["Y"] = 0.0f;
+                controls["Tilt"] = 0.0f;
+                controls["Y"   ] = 0.0f;
             }
         });
 
-        m_LeftPaddle.GetComponent<BodyComponent>().Position = new Vector2(-0.9f, 0.0f);
-
         AddEntity(m_LeftPaddle);
-    }
-
-    private void CreateLeftScoreText() {
     }
 
     private void CreateNet() {
@@ -127,17 +130,17 @@ public class MainScene: Scene {
 
         var numRectangles = 18;
 
-        var w      = (float)Game.Inst.Window.ClientRectangle.Width;
-        var h      = (float)Game.Inst.Window.ClientRectangle.Height;
-        var aspect = h / w;
-        var dY = 2.0f*aspect / numRectangles;
+        var width   = (float)Game.Inst.Window.ClientRectangle.Width;
+        var height  = (float)Game.Inst.Window.ClientRectangle.Height;
+        var aspect  = height / width;
+        var spacing = 2.0f*aspect / numRectangles;
 
-        var y = -aspect + 0.5f*dY;
+        var y = -aspect + 0.5f*spacing;
         for (var i = 0; i < numRectangles; i++) {
             var rectangle = new RectangleEntity(0.0f, y, 0.01f, 0.03f);
             entities.Add(rectangle);
 
-            y += dY;
+            y += spacing;
         }
 
         AddEntities(entities.ToArray());
@@ -153,39 +156,52 @@ public class MainScene: Scene {
         AddEntity(m_RightPaddle);
     }
 
-    private void CreateRightScoreText() {
-        //AddEntity(m_RightScoreText);
+    private void RespawnBall(float delay=0.85f) {
+        var body = m_Ball.GetComponent<BodyComponent>();
+
+        body.Angle           = 0.0f;
+        body.AngularVelocity = 0.0f;
+        body.Position        = new Vector2(0.0f, 0.0f);
+        body.Velocity        = new Vector2(0.0f, 0.0f);
+
+        var r = Pong.Random;
+
+        Game.Inst.SetTimeout(() => {
+            var theta         = 0.9f*(float)Math.PI*((float)r.NextDouble() - 0.45f);
+            var speed         = 0.2f + 0.3f*(float)r.NextDouble();
+            var direction     = Math.Sign((float)r.NextDouble() - 0.5f);
+            var spinDirection = Math.Sign((float)r.NextDouble() - 0.5f);
+
+            var n = 40;
+            var v = (1.0f/n)*new Vector2((float)Math.Cos(theta)*speed*direction,
+                                         (float)Math.Sin(theta)*speed*2.0f);
+            var w = (1.0f/n)*3.0f*(0.15f*(float)r.NextDouble() + 0.7f)*2.0f*(float)Math.PI*spinDirection;
+
+            for (var i = 0; i < n; i++) {
+                Game.Inst.SetTimeout(() => {
+                    body.AngularVelocity += w;
+                    body.Velocity        += v;
+                }, 0.5f*i/n);
+            }
+        }, delay);
     }
 
     private void SetupDrawing() {
-
-
         var g = Game.Inst.Graphics;
 
-
-        var random = new Random();
-        var renderTargets = g.CreateRenderTargets(3);
+        Pong.ChromaticAberrationPS.SetTextures(Pong.RenderTargets[0]);
+        Pong.BloomPS              .SetTextures(Pong.RenderTargets[0]);
+        Pong.FadePS               .SetTextures(g.TextureMgr.White, Pong.RenderTargets[0]);
+        Pong.MotionBlur1PS        .SetTextures(Pong.RenderTargets[0], Pong.RenderTargets[1]);
+        Pong.NoisePS              .SetTextures(Pong.RenderTargets[0]);
 
         var adsMaterial = new AdsMaterial();
         var defDrawFunc = m_GraphicsSubsystem.DrawFunc;
-        Action draw = () => {
-            g.RenderTarget = renderTargets[0];
-            g.PixelShader  = adsMaterial.Shader;
-            g.VertexShader = null;
 
-            adsMaterial.Ambient = new Color(0.1f, 0.1f, 0.1f, 1.0f);
-
-            defDrawFunc();
-        };
-
-        var motionBlurPS0 = g.ShaderMgr.LoadPS("src/Shaders/HLSL/MotionBlur0.ps.hlsl");
-        var motionBlurPS1 = g.ShaderMgr.LoadPS("src/Shaders/HLSL/MotionBlur1.ps.hlsl");
-        var motionBlurVS  = g.ShaderMgr.LoadVS<Matrix4x4>("src/Shaders/HLSL/MotionBlur.vs.hlsl");
-        motionBlurPS1.SetTextures(renderTargets[0], renderTargets[1]);
         Action drawMotionBlur = () => {
-            g.RenderTarget = renderTargets[1];
-            g.PixelShader  = motionBlurPS0;
-            g.VertexShader = motionBlurVS;
+            g.RenderTarget = Pong.RenderTargets[1];
+            g.PixelShader  = Pong.MotionBlur0PS;
+            g.VertexShader = Pong.MotionBlurVS;
 
             g.RenderTarget.Clear(Color.Black);
 
@@ -201,43 +217,38 @@ public class MainScene: Scene {
                     motionBlur.PrevTransform = transform;
                 }
 
-                motionBlurVS.SetConstants(motionBlur.PrevTransform);
-
+                Pong.MotionBlurVS.SetConstants(motionBlur.PrevTransform);
                 g.DrawTriMesh(triMesh.TriMesh, transform);
-
                 motionBlur.PrevTransform = transform;
             }
 
-            g.ApplyPostFX(renderTargets[2], motionBlurPS1);
-        };
-
-        var chromaticAberration = g.ShaderMgr.LoadPS<float>("src/Shaders/HLSL/ChromaticAberration.ps.hlsl");
-        chromaticAberration.SetTextures(renderTargets[2]);
-        chromaticAberration.SetConstants(0.85f);
-        Action drawChromaticAberration = () => {
-            g.ApplyPostFX(renderTargets[0], chromaticAberration);
-        };
-
-        var bloom = g.ShaderMgr.LoadPS("src/Shaders/HLSL/Bloom.ps.hlsl");
-        bloom.SetTextures(renderTargets[0]);
-        Action drawBloom = () => {
-            g.ApplyPostFX(renderTargets[1], chromaticAberration);
-        };
-
-        var noise = g.ShaderMgr.LoadPS<uint>("src/Shaders/HLSL/Noise.ps.hlsl");
-        noise.SetTextures(renderTargets[1]);
-        Action drawNoise = () => {
-            g.RenderTarget = null;
-            g.ApplyPostFX(null, noise);
+            g.ApplyPostFX(Pong.RenderTargets[0], Pong.MotionBlur1PS);
         };
 
         m_GraphicsSubsystem.DrawFunc = () => {
-            noise.SetConstants((uint)random.Next(1, 999));
+            g.RenderTarget = Pong.RenderTargets[0];
+            g.PixelShader  = adsMaterial.Shader;
+            g.VertexShader = g.DefaultVertexShader;
 
-            draw();
+            adsMaterial.Ambient = new Color(0.1f, 0.1f, 0.1f, 1.0f);
+
+            defDrawFunc();
+
+            Pong.ChromaticAberrationPS.SetConstants(0.85f                         );
+            Pong.NoisePS              .SetConstants((uint)Pong.Random.Next(1, 999));
+
+            g.ApplyPostFX(Pong.RenderTargets[0], Pong.ChromaticAberrationPS);
+            g.ApplyPostFX(Pong.RenderTargets[0], Pong.BloomPS              );
+
             drawMotionBlur();
-            drawBloom();
-            drawNoise();
+
+            if (m_Time < 1.0f) {
+                var fade = (float)Math.Pow(m_Time, 3.0);
+                Pong.FadePS.SetConstants(fade);
+                g.ApplyPostFX(Pong.RenderTargets[0], Pong.FadePS);
+            }
+
+            g.ApplyPostFX(g.ScreenRenderTarget, Pong.NoisePS);
         };
 
     }
@@ -253,6 +264,11 @@ public class MainScene: Scene {
                 else if (o.Normal == new Vector2(-1.0f, 0.0f)) {
                     Score(1);
                 }
+                else {
+                    new CameraShakeEffect(m_GraphicsSubsystem).Create();
+                }
+
+                return;
             }
 
             if (o.EntityA == m_Ball || o.EntityB != null) {
@@ -272,8 +288,8 @@ public class MainScene: Scene {
         var w      = (float)Game.Inst.Window.ClientRectangle.Width;
         var h      = (float)Game.Inst.Window.ClientRectangle.Height;
         var aspect = h / w;
-        var wl     = -1.0f;
-        var wr     = 1.0f;
+        var wl     = -1.2f;
+        var wr     = 1.2f;
         var wb     = -aspect;
         var wt     = aspect;
 
@@ -292,17 +308,15 @@ public class MainScene: Scene {
             new PhysicsSubsystem(m_WorldBounds),
 
             new EffectsSubsystem(),
-            m_GraphicsSubsystem = new GraphicsSubsystem() { ClearColor=clearColor },
-            new PerformanceInfoSubsystem()
+            m_GraphicsSubsystem = new GraphicsSubsystem() { ClearColor=clearColor }
+
+#if DEBUG
+            ,new PerformanceInfoSubsystem()
+#endif
         );
     }
 
     private void Score(int player) {
-        var body = m_Ball.GetComponent<BodyComponent>();
-
-        body.Position = new Vector2(0.0f, 0.0f);
-        body.Velocity = new Vector2(0.0f, 0.0f);
-
         m_AboutToScore = false;
 
         if (player == 1) {
@@ -312,89 +326,7 @@ public class MainScene: Scene {
             m_RightScore += 100;
         }
 
-
-        Game.Inst.SetTimeout(() => {
-            var random = new Random();
-
-            var theta = 0.6f*(float)Math.PI*(float)random.NextDouble()-0.3f*(float)Math.PI;
-            var r = 0.9f+0.6f*(float)random.NextDouble();
-            var d = Math.Sign(random.Next(0, 2)-0.5f);
-
-            var n = 40;
-            var v = (1.0f/n)*new Vector2((float)Math.Cos(theta)*r*d, (float)Math.Sin(theta)*r);
-            var w = (1.0f/n)*4.0f*((float)random.NextDouble() - 0.5f)*2.0f*(float)Math.PI;
-            //body.Angle = (float)Math.PI * 0.2f;
-            for (var i = 0; i < n; i++) {
-                Game.Inst.SetTimeout(() => {
-                    body.AngularVelocity += w;
-                    body.Velocity += v;
-                }, i/(float)n);
-            }
-        }, 0.65f);
-    }
-
-    private void SolveCollisions() {
-        // Clean up this method. Oh my lord.
-        /*var lpb = m_LeftPaddle.GetComponent<PositionComponent>().Y - 0.5f*m_LeftPaddle.GetComponent<AxisAlignedBoxComponent>().Height;
-        var lpt = m_LeftPaddle.GetComponent<PositionComponent>().Y + 0.5f*m_LeftPaddle.GetComponent<AxisAlignedBoxComponent>().Height;
-        var lpl  = m_LeftPaddle.GetComponent<PositionComponent>().X - 0.5f*m_LeftPaddle.GetComponent<AxisAlignedBoxComponent>().Width;
-        var lpr  = m_LeftPaddle.GetComponent<PositionComponent>().X + 0.5f*m_LeftPaddle.GetComponent<AxisAlignedBoxComponent>().Width;
-
-        var bb = m_Ball.GetComponent<PositionComponent>().Y -  m_Ball.GetComponent<BallInfoComponent>().Radius;
-        var bt = m_Ball.GetComponent<PositionComponent>().Y +  m_Ball.GetComponent<BallInfoComponent>().Radius;
-        var bl  = m_Ball.GetComponent<PositionComponent>().X - m_Ball.GetComponent<BallInfoComponent>().Radius;
-        var br  = m_Ball.GetComponent<PositionComponent>().X + m_Ball.GetComponent<BallInfoComponent>().Radius;
-
-        var rpb = m_RightPaddle.GetComponent<PositionComponent>().Y - 0.5f*m_RightPaddle.GetComponent<AxisAlignedBoxComponent>().Height;
-        var rpt = m_RightPaddle.GetComponent<PositionComponent>().Y + 0.5f*m_RightPaddle.GetComponent<AxisAlignedBoxComponent>().Height;
-        var rpl  = m_RightPaddle.GetComponent<PositionComponent>().X - 0.5f*m_RightPaddle.GetComponent<AxisAlignedBoxComponent>().Width;
-        var rpr  = m_RightPaddle.GetComponent<PositionComponent>().X + 0.5f*m_RightPaddle.GetComponent<AxisAlignedBoxComponent>().Width;
-
-        if (bt > m_WorldBounds.Top) {
-            m_Ball.GetComponent<PositionComponent>().Y = m_WorldBounds.Top - m_Ball.GetComponent<BallInfoComponent>().Radius;
-            m_Ball.GetComponent<VelocityComponent>().Y *= -1.0f;
-                Game.Inst.PostMessage(new CollisionMessage(m_Ball));
-        }
-        else if (bb < m_WorldBounds.Bottom) {
-            m_Ball.GetComponent<PositionComponent>().Y = m_WorldBounds.Bottom + m_Ball.GetComponent<BallInfoComponent>().Radius;
-            m_Ball.GetComponent<VelocityComponent>().Y *= -1.0f;
-            Game.Inst.PostMessage(new CollisionMessage(m_Ball));
-        }
-
-        if (bl < lpr) {
-            if (bb < lpt && bt > lpb && !m_AboutToScore) {
-                var v = m_Ball.GetComponent<VelocityComponent>();
-                var s = 4.0f * (float)Math.Sqrt(v.X*v.X+v.Y*v.Y);
-                m_Ball.GetComponent<PositionComponent>().X = lpr + m_Ball.GetComponent<BallInfoComponent>().Radius;
-                m_Ball.GetComponent<VelocityComponent>().X *= -1.05f;
-                m_Ball.GetComponent<VelocityComponent>().Y += s * (m_Ball.GetComponent<PositionComponent>().Y - m_LeftPaddle.GetComponent<PositionComponent>().Y);
-                Game.Inst.PostMessage(new CollisionMessage(m_Ball, m_LeftPaddle));
-            }
-            else {
-                m_AboutToScore = true;
-
-                if (br < m_WorldBounds.Left-0.1f) {
-                    Score(2);
-                }
-            }
-        }
-        else if (br > rpl) {
-            if (bb < rpt && bt > rpb && !m_AboutToScore) {
-                var v = m_Ball.GetComponent<VelocityComponent>();
-                var s = 4.0f * (float)Math.Sqrt(v.X*v.X+v.Y*v.Y);
-                m_Ball.GetComponent<PositionComponent>().X = rpl - m_Ball.GetComponent<BallInfoComponent>().Radius;
-                m_Ball.GetComponent<VelocityComponent>().X *= -1.05f;
-                m_Ball.GetComponent<VelocityComponent>().Y += s * (m_Ball.GetComponent<PositionComponent>().Y - m_RightPaddle.GetComponent<PositionComponent>().Y);
-                Game.Inst.PostMessage(new CollisionMessage(m_Ball, m_RightPaddle));
-            }
-            else {
-                m_AboutToScore = true;
-
-                if (bl > m_WorldBounds.Right+0.1f) {
-                    Score(1);
-                }
-            }
-        }*/
+        RespawnBall();
     }
 }
 

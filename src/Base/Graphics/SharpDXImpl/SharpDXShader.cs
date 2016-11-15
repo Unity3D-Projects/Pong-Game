@@ -25,7 +25,7 @@ internal class SharpDXShader: IDisposable, IShader {
 
     public D3D11.Buffer ConstantBuffer;
 
-    public SharpDXGraphics Graphics;
+    public SharpDXGraphicsMgr Graphics;
 
     public D3D11.InputLayout InputLayout;
 
@@ -54,17 +54,17 @@ internal class SharpDXShader: IDisposable, IShader {
      * CONSTRUCTORS
      *-----------------------------------*/
 
-    public SharpDXShader(SharpDXGraphics   graphics,
+    public SharpDXShader(SharpDXGraphicsMgr   graphics,
                          D3D11.DeviceChild shader,
                          D3D11.InputLayout inputLayout,
-                         Type              inputType)
+                         Type              constantsType)
     {
         Graphics    = graphics;
         InputLayout = inputLayout;
         Shader      = shader;
 
-        if (inputType != null) {
-            ConstantBuffer = CreateConstantBuffer(inputType);
+        if (constantsType != null) {
+            ConstantBuffer = CreateConstantBuffer(constantsType);
         }
     }
 
@@ -73,22 +73,8 @@ internal class SharpDXShader: IDisposable, IShader {
      *-----------------------------------*/
 
     public void Dispose() {
-        Graphics = null;
-
-        if (ConstantBuffer != null) {
-            ConstantBuffer.Dispose();
-            ConstantBuffer = null;
-        }
-
-        if (InputLayout != null) {
-            InputLayout.Dispose();
-            InputLayout = null;
-        }
-
-        if (Shader != null) {
-            Shader.Dispose();
-            Shader = null;
-        }
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 
     public void SetConstants<T>(T constants) where T: struct {
@@ -165,6 +151,27 @@ internal class SharpDXShader: IDisposable, IShader {
                                          bufferDescription);
 
         return buffer;
+    }
+
+    protected virtual void Dispose(bool disposing) {
+        if (disposing) {
+            Graphics = null;
+
+            if (ConstantBuffer != null) {
+                ConstantBuffer.Dispose();
+                ConstantBuffer = null;
+            }
+
+            if (InputLayout != null) {
+                InputLayout.Dispose();
+                InputLayout = null;
+            }
+
+            if (Shader != null) {
+                Shader.Dispose();
+                Shader = null;
+            }
+        }
     }
 }
 

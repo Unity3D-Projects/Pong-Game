@@ -45,6 +45,8 @@ public abstract class Scene {
         m_Entities                 = new Dictionary<int, Entity>();
         m_EntitiesToAdd            = new List<Entity>();
         m_EntitiesToRemove         = new HashSet<int>();
+        
+        Subsystems = new List<Subsystem>();
     }
 
     /*-------------------------------------
@@ -120,8 +122,6 @@ public abstract class Scene {
     }
 
     public void SetSubsystems(params Subsystem[] subsystems) {
-        Contract.Assert(Subsystems == null);
-
         Subsystems = new List<Subsystem>(subsystems).AsReadOnly();
     }
 

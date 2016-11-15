@@ -19,6 +19,10 @@ public interface IGraphicsMgr {
      * PROPERTIES
      *-----------------------------------*/
 
+    IShader DefaultPixelShader { get; }
+
+    IShader DefaultVertexShader { get; }
+
     bool IsEnabled { get; set; }
 
     string Name { get; }
@@ -26,6 +30,8 @@ public interface IGraphicsMgr {
     IShader PixelShader { get; set; }
 
     IRenderTarget RenderTarget { get; set; }
+
+    IRenderTarget ScreenRenderTarget { get; }
 
     IShaderMgr ShaderMgr { get; }
 

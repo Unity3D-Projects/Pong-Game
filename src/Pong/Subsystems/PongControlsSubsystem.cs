@@ -11,6 +11,7 @@ using Base.Math;
 using Base.Subsystems;
 
 using Components;
+using Entities.Mechanical;
 
 /*-------------------------------------
  * CLASSES
@@ -29,8 +30,14 @@ public class PongControlsSubsystem: ControlsSubsystem {
         var paddleInfo = entity.GetComponent<PaddleInfoComponent>();
 
         if (controls.Controls.ContainsKey("Y")) {
-            var newVelocity = new Vector2(body.Velocity.X, body.Velocity.Y + paddleInfo.Speed * controls.Controls["Y"] * dt);
-            body.Velocity = newVelocity;
+            var acc    = paddleInfo.Speed*controls.Controls["Y"]*dt;
+            var newVel = new Vector2(body.Velocity.X, body.Velocity.Y + acc);
+            body.Velocity = newVel;
+        }
+
+        if (controls.Controls.ContainsKey("Tilt")) {
+            var paddle = (PaddleEntity)entity;
+            paddle.Tilt = controls.Controls["Tilt"] * paddleInfo.TiltAngle;
         }
     }
 }

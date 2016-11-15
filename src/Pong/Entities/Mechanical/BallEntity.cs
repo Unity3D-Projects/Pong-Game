@@ -30,9 +30,11 @@ public class BallEntity: Entity {
         var radius = 0.04f;
         var quad   = g.TriMeshMgr.CreateQuad(2.0f*radius, 2.0f*radius);
 
+        BodyComponent body;
+
         AddComponents(
             new BallInfoComponent        { Radius = radius },
-            new BodyComponent            { InvMoI          = MathUtil.RectInvMoI(mass, 2.0f*radius, 2.0f*radius),
+     body = new BodyComponent            { InvMoI          = MathUtil.RectInvMoI(mass, 2.0f*radius, 2.0f*radius),
                                            InvMass         = 1.0f/mass,
                                            LinearDrag      = 0.0f,
                                            Restitution     = 1.0f,
@@ -40,6 +42,16 @@ public class BallEntity: Entity {
             new MotionBlurComponent      { },
             new TriMeshComponent         { TriMesh = quad }
         );
+
+        body.DerivsFn = (state, derivs) => {
+            derivs[0] = state[3];
+            derivs[1] = state[4];
+            derivs[2] = state[5];
+
+            derivs[3] = Math.Sign(derivs[0]);
+            derivs[4] = derivs[1] * 0.2f;
+            derivs[5] = -derivs[2];
+        };
     }
 }
 

@@ -26,10 +26,10 @@ internal static class Program {
 
         var game = Game.Inst;
 
-        game.Run(new SharpDXGraphics(),
+        game.Run(new SharpDXGraphicsMgr(),
                  "PongBrain",
                  480, 480,
-                 new MainScene());
+                 new SplashScene());
     }
 }
 

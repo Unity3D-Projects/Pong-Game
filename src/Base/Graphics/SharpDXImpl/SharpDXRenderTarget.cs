@@ -4,9 +4,11 @@
  * USINGS
  *-----------------------------------*/
 
+using System;
+
 using Shaders;
 
-using D3D11 = SharpDX.Direct3D11;
+using SharpDX.Direct3D11;
 
 /*-------------------------------------
  * CLASSES
@@ -17,17 +19,17 @@ internal class SharpDXRenderTarget: SharpDXTexture, IRenderTarget {
      * PUBLIC FIELDS
      *-----------------------------------*/
 
-    public readonly D3D11.RenderTargetView RenderTarget;
+    public RenderTargetView RenderTarget;
 
     /*-------------------------------------
      * CONSTRUCTORS
      *-----------------------------------*/
 
-    public SharpDXRenderTarget(SharpDXGraphics        graphics,
-                               D3D11.Texture2D        texture,
-                               int                    width,
-                               int                    height,
-                               D3D11.RenderTargetView renderTarget)
+    public SharpDXRenderTarget(SharpDXGraphicsMgr  graphics,
+                               Texture2D        texture,
+                               int              width,
+                               int              height,
+                               RenderTargetView renderTarget)
         : base(graphics, texture, width, height)
     {
         RenderTarget = renderTarget;
@@ -39,8 +41,24 @@ internal class SharpDXRenderTarget: SharpDXTexture, IRenderTarget {
 
     public void Clear(Color clearColor) {
         var context = Graphics.Device.ImmediateContext;
-        var color = new SharpDX.Color(clearColor.ToIntABGR());
+        var color   = new SharpDX.Color(clearColor.ToIntABGR());
+
         context.ClearRenderTargetView(RenderTarget, color);
+    }
+
+    /*-------------------------------------
+     * NON-PUBLIC METHODS
+     *-----------------------------------*/
+
+    protected override void Dispose(bool disposing) {
+        base.Dispose(true);
+
+        if (disposing) {
+            if (RenderTarget != null) {
+                RenderTarget.Dispose();
+                RenderTarget = null;
+            }
+        }
     }
 }
 

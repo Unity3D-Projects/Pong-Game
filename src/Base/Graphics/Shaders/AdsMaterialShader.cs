@@ -91,7 +91,7 @@ public class AdsMaterial {
             shaderMgr = Game.Inst.Graphics.ShaderMgr;
         }
 
-        Shader = shaderMgr.LoadPS<AdsData>("src/Shaders/HLSL/AdsMaterial.ps.hlsl");
+        Shader = shaderMgr.LoadPS<AdsData>("Content/Shaders/AdsMaterial.ps.hlsl");
     }
 
     /*-------------------------------------

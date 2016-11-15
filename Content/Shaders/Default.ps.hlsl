@@ -17,8 +17,8 @@ struct PS_OUTPUT {
  *-----------------------------------*/
 
 SamplerState TextureSampler {
-    AddressU = Clamp;
-    AddressV = Clamp;
+    AddressU = Wrap;
+    AddressV = Wrap;
     Filter   = MIN_MAG_MIP_LINEAR;
 };
 

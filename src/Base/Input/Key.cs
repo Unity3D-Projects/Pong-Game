@@ -1,11 +1,11 @@
 ﻿namespace PongBrain.Base.Input {
 
 /*-------------------------------------
- * CLASSES
+ * ENUMS
  *-----------------------------------*/
 
 public enum Key {
-    Down, Up
+    Down, Up, Q, E
 }
 
 }

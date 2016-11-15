@@ -69,6 +69,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\Base\Audio\IAudioMgr.cs" />
+    <Compile Include="src\Base\Audio\ISound.cs" />
+    <Compile Include="src\Base\Audio\SharpDXImpl\SharpDXAudioMgr.cs" />
     <Compile Include="src\Base\Components\Graphical\TextureComponent.cs" />
     <Compile Include="src\Base\Components\Graphical\TriMeshComponent.cs" />
     <Compile Include="src\Base\Graphics\Color.cs" />
@@ -86,7 +89,7 @@
     <Compile Include="src\Base\Graphics\Shaders\IShaderMgr.cs" />
     <Compile Include="src\Base\Graphics\Textures\ITexture.cs" />
     <Compile Include="src\Base\Graphics\Textures\ITextureMgr.cs" />
-    <Compile Include="src\Base\Graphics\SharpDXImpl\SharpDXGraphics.cs" />
+    <Compile Include="src\Base\Graphics\SharpDXImpl\SharpDXGraphicsMgr.cs" />
     <Compile Include="src\Base\Graphics\SharpDXImpl\SharpDXShaderMgr.cs" />
     <Compile Include="src\Base\Graphics\SharpDXImpl\SharpDXTexture.cs" />
     <Compile Include="src\Base\Graphics\SharpDXImpl\SharpDXTextureMgr.cs" />
@@ -136,6 +139,8 @@
     <Compile Include="src\Base\Input\Key.cs" />
     <Compile Include="src\Base\Core\IMessage.cs" />
     <Compile Include="src\Base\Messages\CollisionMsg.cs" />
+    <Compile Include="src\Pong\Pong.cs" />
+    <Compile Include="src\Pong\Scenes\SplashScene.cs" />
     <Compile Include="src\Pong\Subsystems\PongControlsSubsystem.cs" />
     <Compile Include="src\Program.cs" />
     <Compile Include="src\Pong\Scenes\MainScene.cs" />
@@ -151,47 +156,54 @@
   <ItemGroup>
     <None Include=".gitignore" />
     <None Include=".projectile" />
+    <None Include="Content\Images\Splash.psd" />
     <None Include="LICENSE.md" />
     <None Include="README.md" />
-    <None Include="src\Shaders\HLSL\Bloom.ps.hlsl">
+    <None Include="Content\Fonts\earthorbiter.ttf" />
+    <None Include="Content\Shaders\Bloom.ps.hlsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="src\Shaders\HLSL\Exposure.ps.hlsl">
+    <None Include="Content\Shaders\Fade.ps.hlsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="src\Shaders\HLSL\ChromaticAberration.ps.hlsl">
+    <None Include="Content\Shaders\Exposure.ps.hlsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="src\Shaders\HLSL\MotionBlur1.ps.hlsl">
+    <None Include="Content\Shaders\ChromaticAberration.ps.hlsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="src\Shaders\HLSL\MotionBlur0.ps.hlsl">
+    <None Include="Content\Shaders\MotionBlur1.ps.hlsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="src\Shaders\HLSL\MotionBlur.vs.hlsl">
+    <None Include="Content\Shaders\MotionBlur0.ps.hlsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="src\Shaders\HLSL\Noise.ps.hlsl">
+    <None Include="Content\Shaders\MotionBlur.vs.hlsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="src\Shaders\HLSL\AdsMaterial.ps.hlsl">
+    <None Include="Content\Shaders\Noise.ps.hlsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="src\Shaders\HLSL\Default.vs.hlsl">
+    <None Include="Content\Shaders\AdsMaterial.ps.hlsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="src\Shaders\HLSL\Default.ps.hlsl">
+    <None Include="Content\Shaders\Default.vs.hlsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Shaders\Default.ps.hlsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="doc\" />
+    <None Include="Content\Images\Splash.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="img\Screenshot0.png" />
-    <None Include="img\Screenshot1.png" />
-    <None Include="img\Screenshot2.png" />
-    <None Include="img\Screenshot3.png" />
+    <None Include="images\Screenshot0.png" />
+    <None Include="images\Screenshot1.png" />
+    <None Include="images\Screenshot2.png" />
+    <None Include="images\Screenshot3.png" />
     <None Include="lib\SharpDX\SharpDX.Mathematics.dll" />
     <None Include="lib\SharpDX\SharpDX.Mathematics.xml" />
     <None Include="lib\SharpDX\SharpDX.D3DCompiler.dll" />
@@ -206,6 +218,18 @@
     <None Include="lib\SharpDX\SharpDX.DXGI.dll" />
     <None Include="lib\SharpDX\SharpDX.DXGI.xml" />
     <None Include="lib\SharpDX\SharpDX.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="docs\earthorbiter.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Screenshot4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="tools\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Sounds\159376__greenhourglass__boing1.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

@@ -19,16 +19,23 @@ using Components;
 
 public class PaddleEntity: Entity {
     /*-------------------------------------
+     * PUBLIC PROPERTIES
+     *-----------------------------------*/
+
+    public float Tilt { get; set; }
+
+    /*-------------------------------------
      * CONSTRUCTORS
      *-----------------------------------*/
 
     public PaddleEntity(float x, float y) {
         var g = Game.Inst.Graphics;
 
-        var mass = 10.0f;
+        var mass = 9.0f;
         var width  = 0.06f;
         var height = 0.38f;
         var quad   = g.TriMeshMgr.CreateQuad(width, height);
+
         BodyComponent body;
 
         AddComponents(
@@ -48,9 +55,9 @@ public class PaddleEntity: Entity {
             derivs[1] = state[4];
             derivs[2] = state[5];
 
-            derivs[3] = -derivs[0] * body.LinearDrag + (x - state[0]) * 10.0f;
+            derivs[3] = -derivs[0] * body.LinearDrag + (x - state[0]) * 40.0f;
             derivs[4] = -derivs[1] * body.LinearDrag;
-            derivs[5] = -derivs[2] * 4.0f + (0.0f - state[2] * 20.0f);
+            derivs[5] = -derivs[2] * 5.0f + (Tilt - state[2]) * 40.0f;
         };
     }
 }

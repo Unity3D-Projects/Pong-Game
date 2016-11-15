@@ -20,7 +20,7 @@ internal class SharpDXTriMeshMgr: IDisposable, ITriMeshMgr {
      * NON-PUBLIC FIELDS
      *-----------------------------------*/
 
-    private SharpDXGraphics m_Graphics;
+    private SharpDXGraphicsMgr m_Graphics;
 
     private List<SharpDXTriMesh> m_TriMeshes = new List<SharpDXTriMesh>();
 
@@ -28,7 +28,7 @@ internal class SharpDXTriMeshMgr: IDisposable, ITriMeshMgr {
      * CONSTRUCTORS
      *-----------------------------------*/
 
-    public SharpDXTriMeshMgr(SharpDXGraphics graphics) {
+    public SharpDXTriMeshMgr(SharpDXGraphicsMgr graphics) {
         m_Graphics = graphics;
     }
 
@@ -64,14 +64,25 @@ internal class SharpDXTriMeshMgr: IDisposable, ITriMeshMgr {
     }
 
     public void Dispose() {
-        foreach (var triMesh in m_TriMeshes) {
-            triMesh.Dispose();
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    /*-------------------------------------
+     * NON-PUBLIC METHODS
+     *-----------------------------------*/
+
+    protected virtual void Dispose(bool disposing) {
+        if (disposing) {
+            foreach (var triMesh in m_TriMeshes) {
+                triMesh.Dispose();
+            }
+
+            m_TriMeshes.Clear();
+            m_TriMeshes = null;
+
+            m_Graphics = null;
         }
-
-        m_TriMeshes.Clear();
-        m_TriMeshes = null;
-
-        m_Graphics = null;
     }
 }
 

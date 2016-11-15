@@ -51,6 +51,10 @@ public struct Vector2: IEquatable<Vector2> {
         return obj.X == X && obj.Y == Y;
     }
 
+    public float Length() {
+        return (float)Math.Sqrt(X*X + Y*Y);
+    }
+
     public void Normalize() {
         var r = (float)Math.Sqrt(X*X + Y*Y);
         if (r > 0.0f) {
