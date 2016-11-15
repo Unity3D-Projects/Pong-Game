@@ -12,18 +12,18 @@ An attempt at implementing an artificial neural network that plays pong. The gam
 * So far just a trivial AI
 
 ### Graphics
-* Hardware-accelerated graphics (DirectX 11.0)
 * Camera effects (shaking)
 * Chromatic aberration
+* Hardware-accelerated graphics (DirectX 11.0)
 * Motion blur
 * Noise (ISO) shader
 * Object animations
 * Particle effects
 
 ### Physics
-* Rigid body dynamics with convex polytopes
-* Realistic physics with fourth-order Runge–Kutta integration
 * Collision detection (Separating Axis Theorem)
+* Realistic physics with fourth-order Runge–Kutta integration
+* Rigid body dynamics with convex polytopes
 
 
-![PongBrain in action!](img/Screenshot4.png "PongBrain in action!")
+![PongBrain in action!](images/Screenshot4.png "PongBrain in action!")
