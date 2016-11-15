@@ -25,5 +25,9 @@ An attempt at implementing an artificial neural network that plays pong. The gam
 * Realistic physics with fourth-order Runge–Kutta integration
 * Rigid body dynamics with convex polytopes
 
+## Sound
+* Background music
+* Multi-channel playback of sounds
+
 
 ![PongBrain in action!](images/Screenshot4.png "PongBrain in action!")
