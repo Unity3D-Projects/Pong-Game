@@ -27,7 +27,7 @@ An attempt at implementing an artificial neural network that plays pong. The gam
 
 ## Sound
 * Background music
-* Multi-channel playback of sounds
+* Multi-channel sound effects
 
 
 ![PongBrain in action!](images/Screenshot4.png "PongBrain in action!")
