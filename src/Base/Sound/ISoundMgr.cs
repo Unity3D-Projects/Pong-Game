@@ -1,4 +1,4 @@
-﻿namespace PongBrain.Base.Sound {
+﻿namespace Pong.Base.Sound {
 
 /*-------------------------------------
  * USINGS

@@ -1,4 +1,4 @@
-﻿namespace PongBrain {
+﻿namespace Pong {
 
 /*-------------------------------------
  * USINGS
@@ -10,7 +10,8 @@ using System.Windows.Forms;
 using Base.Core;
 using Base.Graphics.SharpDXImpl;
 using Base.Sound.SharpDXImpl;
-using Pong.Scenes;
+
+using Scenes;
 
 /*-------------------------------------
  * CLASSES

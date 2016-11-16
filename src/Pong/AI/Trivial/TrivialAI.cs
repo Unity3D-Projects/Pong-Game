@@ -1,4 +1,4 @@
-﻿namespace PongBrain.Pong.AI.Trivial {
+﻿namespace Pong.AI.Trivial {
     
 /*-------------------------------------
  * USINGS

@@ -1,4 +1,4 @@
-﻿namespace PongBrain.Pong.Entities.Graphical {
+﻿namespace Pong.Entities.Graphical {
 
 /*-------------------------------------
  * USINGS

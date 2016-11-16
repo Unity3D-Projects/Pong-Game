@@ -1,4 +1,4 @@
-﻿namespace PongBrain.Base.Graphics.Animation {
+﻿namespace Pong.Base.Graphics.Animation {
 
 /*-------------------------------------
  * USINGS

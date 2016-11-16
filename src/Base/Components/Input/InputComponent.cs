@@ -1,4 +1,4 @@
-﻿namespace PongBrain.Base.Components.Input {
+﻿namespace Pong.Base.Components.Input {
     
 /*-------------------------------------
  * USINGS
@@ -7,7 +7,7 @@
 using System;
 using System.Collections.Generic;
 
-using PongBrain.Base.Input;
+using Base.Input;
 
 /*-------------------------------------
  * CLASSES

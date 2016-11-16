@@ -1,4 +1,4 @@
-﻿namespace PongBrain.Base.Graphics.SharpDXImpl {
+﻿namespace Pong.Base.Graphics.SharpDXImpl {
 
 /*-------------------------------------
  * USINGS

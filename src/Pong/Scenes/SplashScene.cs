@@ -1,4 +1,4 @@
-﻿namespace PongBrain.Pong.Scenes {
+﻿namespace Pong.Scenes {
 
 /*-------------------------------------
  * USINGS

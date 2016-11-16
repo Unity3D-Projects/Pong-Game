@@ -1,4 +1,4 @@
-﻿namespace PongBrain.Pong.Effects {
+﻿namespace Pong.Effects {
     
 /*-------------------------------------
  * USINGS

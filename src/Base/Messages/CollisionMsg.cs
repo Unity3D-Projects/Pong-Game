@@ -1,4 +1,4 @@
-﻿namespace PongBrain.Base.Messages {
+﻿namespace Pong.Base.Messages {
 
 /*-------------------------------------
  * USINGS

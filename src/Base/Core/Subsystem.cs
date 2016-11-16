@@ -1,4 +1,4 @@
-namespace PongBrain.Base.Core {
+namespace Pong.Base.Core {
 
 /*-------------------------------------
  * CLASSES

@@ -1,4 +1,4 @@
-﻿namespace PongBrain.Base.Math {
+﻿namespace Pong.Base.Math {
 
 /*-------------------------------------
  * CLASSES

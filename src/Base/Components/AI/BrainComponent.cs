@@ -1,4 +1,4 @@
-﻿namespace PongBrain.Base.Components.AI {
+﻿namespace Pong.Base.Components.AI {
     
 /*-------------------------------------
  * USINGS

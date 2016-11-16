@@ -1,4 +1,4 @@
-﻿namespace PongBrain.Base.Math.Geom {
+﻿namespace Pong.Base.Math.Geom {
 
 /*-------------------------------------
  * USINGS

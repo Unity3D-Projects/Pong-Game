@@ -1,4 +1,4 @@
-﻿namespace PongBrain.Pong.AI.Neural {
+﻿namespace Pong.AI.Neural {
     
 /*-------------------------------------
  * USINGS

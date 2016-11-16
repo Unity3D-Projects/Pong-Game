@@ -1,4 +1,4 @@
-﻿namespace PongBrain.Base.Components.Physical {
+﻿namespace Pong.Base.Components.Physical {
 
 /*-------------------------------------
  * USINGS

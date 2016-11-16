@@ -1,4 +1,4 @@
-﻿namespace PongBrain.Base.Graphics {
+﻿namespace Pong.Base.Graphics {
 
 /*-------------------------------------
  * CLASSES

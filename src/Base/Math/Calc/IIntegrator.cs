@@ -1,4 +1,4 @@
-﻿namespace PongBrain.Base.Math.Calc {
+﻿namespace Pong.Base.Math.Calc {
 
 /*-------------------------------------
  * USINGS

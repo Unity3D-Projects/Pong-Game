@@ -1,4 +1,4 @@
-﻿namespace PongBrain.Base.Graphics.Shaders {
+﻿namespace Pong.Base.Graphics.Shaders {
 
 /*-------------------------------------
  * USINGS

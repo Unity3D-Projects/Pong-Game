@@ -1,4 +1,4 @@
-﻿namespace PongBrain.Base.Sound.SharpDXImpl {
+﻿namespace Pong.Base.Sound.SharpDXImpl {
 
 /*-------------------------------------
  * USINGS

@@ -1,4 +1,4 @@
-﻿namespace PongBrain.Pong.Entities.Mechanical {
+﻿namespace Pong.Entities.Mechanical {
 
 /*-------------------------------------
  * USINGS

@@ -1,4 +1,4 @@
-﻿namespace PongBrain.Base.Components.Input {
+﻿namespace Pong.Base.Components.Input {
     
 /*-------------------------------------
  * USINGS

@@ -1,4 +1,4 @@
-namespace PongBrain.Base.Subsystems {
+namespace Pong.Base.Subsystems {
 
 /*-------------------------------------
  * USINGS
