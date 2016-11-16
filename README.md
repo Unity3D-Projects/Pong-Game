@@ -30,5 +30,4 @@
 * Background music
 * Multi-channel sound effects
 
-![PongBrain splash screen!](images/Screenshot5.png "PongBrain splash screen!")
-![PongBrain in action!](images/Screenshot6.png "PongBrain in action!")
+![Pong.](images/Pong-888x480.png "Pong.")
