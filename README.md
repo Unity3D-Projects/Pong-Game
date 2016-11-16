@@ -4,7 +4,7 @@
 
 ![Pong.](images/Pong-888x376.png "Pong.")
 
-<strong>Features</strong>  
+### Features
 
 <strong>Architecture<strong>  
 . <sub>Carefully designed ECS (Entity–Component–System) engine</sub>  
