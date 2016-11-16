@@ -4,16 +4,16 @@
 
 ![Pong.](images/Pong-888x376.png "Pong.")
 
-### Features
+<strong>Features</strong>  
 
-#### Architecture
+<strong>Architecture<strong>  
 . <sub>Carefully designed ECS (Entity–Component–System) engine</sub>  
 . <sub>Separated into base engine and game implementation (for future use!)</sub>
 
-#### Artificial Intelligence
+<strong>Artificial Intelligence</strong>  
 . <sub>So far just a trivial AI, although challenging enough.</sub>
 
-#### Graphics
+<strong>Graphics</strong>  
 . <sub>Camera effects (shaking)</sub>  
 . <sub>Chromatic aberration</sub>  
 . <sub>Hardware-accelerated graphics (DirectX 11.0)</sub>  
@@ -22,12 +22,12 @@
 . <sub>Object animations</sub>  
 . <sub>Particle effects</sub>
 
-#### Physics
+<strong>Physics</strong>  
 . <sub>Binary search for precise time-of-collision resolution</sub>  
 . <sub>Collision detection (Separating Axis Theorem)</sub>  
 . <sub>Realistic physics with fourth-order Runge–Kutta integration</sub>  
 . <sub>Rigid body dynamics with convex polytopes</sub>
 
-### Sound
+<strong>Sound</strong>  
 . <sub>Background music</sub>  
 . <sub>Multi-channel sound effects</sub>
