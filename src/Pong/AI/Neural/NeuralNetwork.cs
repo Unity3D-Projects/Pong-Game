@@ -121,8 +121,6 @@ public class NeuralNetwork {
     }
 
     public void Train(float[] inputs, float[] targets) {
-        var rate = 0.5f;
-
         Calc(inputs);
 
         var eT = 0.0f;

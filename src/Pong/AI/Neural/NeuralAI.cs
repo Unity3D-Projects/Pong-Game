@@ -19,8 +19,6 @@ public class NeuralAI {
 
     private Entity m_Paddle;
 
-    private NeuralNetwork m_Brain;
-
     /*-------------------------------------
      * CONSTRUCTORS
      *-----------------------------------*/

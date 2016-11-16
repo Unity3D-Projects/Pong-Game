@@ -19,12 +19,6 @@ using Math;
 
 public class GraphicsSubsystem: Subsystem {
     /*-------------------------------------
-     * NON-PUBLIC FIELDS
-     *-----------------------------------*/
-
-    private ITriMesh m_Quad;
-
-    /*-------------------------------------
      * PUBLIC PROPERTIES
      *-----------------------------------*/
 

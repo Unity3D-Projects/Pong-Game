@@ -29,7 +29,7 @@ internal static class Program {
 
         game.Run(new SharpDXGraphicsMgr(),
                  new SharpDXSoundMgr(),
-                 "PongBrain",
+                 "Pong 0.7a",
                  480, 480,
                  new SplashScene());
     }
