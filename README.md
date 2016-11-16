@@ -1,6 +1,6 @@
 # Pong.
 
-**Pong** was a weekend project that started with the idea of creating a machine learning algorithm for the game Pong. Although an AI was implemented, **focus was shifted to the artistical aspects of the game.** All of the code—including engine, physics, HLSL shaders, etc—is written by me. No external libraries are used, except for [SharpDX](http://sharpdx.org/) which is merely used as a wrapper for DirectX and XAudio2.
+**Pong.** was a weekend project that started with the idea of creating a machine learning algorithm for the game Pong. Although an AI was implemented, **focus was shifted to the artistical aspects of the game.** All of the code—including engine, physics, HLSL shaders, etc—is written by me. No external libraries are used, except for [SharpDX](http://sharpdx.org/) which is merely used as a wrapper for DirectX and XAudio2.
 
 ## Features
 
