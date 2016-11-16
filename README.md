@@ -30,4 +30,4 @@
 * Background music
 * Multi-channel sound effects
 
-![Pong.](images/Pong-888x480.png "Pong.")
+![Pong.](images/Pong-888x376.png "Pong.")
