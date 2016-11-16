@@ -25,6 +25,7 @@ public class Game {
      *-----------------------------------*/
 
     private const double INV_DRAWS_PER_SEC = 1.0 / 60.0;
+
     private const double INV_UPDATES_PER_SEC = 1.0 / 120.0;
 
     /*-------------------------------------

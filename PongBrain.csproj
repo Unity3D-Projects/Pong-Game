@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{A5525CC2-BF0C-4377-8831-DE9121D8C721}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PongBrain</RootNamespace>
     <AssemblyName>PongBrain</AssemblyName>
@@ -31,6 +31,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
@@ -65,6 +68,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\Base\Graphics\Animation\Tweening.cs" />
     <Compile Include="src\Base\Sound\ISoundMgr.cs" />
     <Compile Include="src\Base\Sound\ISound.cs" />
     <Compile Include="src\Base\Sound\SharpDXImpl\SharpDXSoundMgr.cs" />
@@ -74,7 +78,7 @@
     <Compile Include="src\Base\Graphics\IRenderTarget.cs" />
     <Compile Include="src\Base\Graphics\ITriMesh.cs" />
     <Compile Include="src\Base\Graphics\ITriMeshMgr.cs" />
-    <Compile Include="src\Base\Graphics\Shaders\AdsMaterialShader.cs" />
+    <Compile Include="src\Base\Graphics\Shaders\AdsMaterial.cs" />
     <Compile Include="src\Base\Graphics\SharpDXImpl\SharpDXRenderTarget.cs" />
     <Compile Include="src\Base\Graphics\SharpDXImpl\SharpDXShader.cs" />
     <Compile Include="src\Base\Graphics\SharpDXImpl\SharpDXTriMesh.cs" />
@@ -114,6 +118,7 @@
     <Compile Include="src\Base\Components\LifetimeComponent.cs" />
     <Compile Include="src\Pong\Components\BallInfoComponent.cs" />
     <Compile Include="src\Pong\Components\EffectComponent.cs" />
+    <Compile Include="src\Pong\Components\GlowComponent.cs" />
     <Compile Include="src\Pong\Components\MotionBlurComponent.cs" />
     <Compile Include="src\Pong\Components\PaddleInfoComponent.cs" />
     <Compile Include="src\Base\Components\Physical\BodyComponent.cs" />
@@ -126,7 +131,7 @@
     <Compile Include="src\Base\Core\Subsystem.cs" />
     <Compile Include="src\Pong\Effects\CameraShakeEffect.cs" />
     <Compile Include="src\Pong\Effects\ExplosionEffect.cs" />
-    <Compile Include="src\Pong\Effects\TrailEffect.cs" />
+    <Compile Include="src\Pong\Effects\BallTrailEffect.cs" />
     <Compile Include="src\Pong\Entities\Graphical\RectangleEntity.cs" />
     <Compile Include="src\Pong\Entities\Mechanical\BallEntity.cs" />
     <Compile Include="src\Pong\Effects\BounceEffect.cs" />
@@ -140,7 +145,7 @@
     <Compile Include="src\Pong\Scenes\SplashScene.cs" />
     <Compile Include="src\Pong\Subsystems\PongControlsSubsystem.cs" />
     <Compile Include="src\Program.cs" />
-    <Compile Include="src\Pong\Scenes\MainScene.cs" />
+    <Compile Include="src\Pong\Scenes\PlayingScene.cs" />
     <Compile Include="src\Base\Subsystems\AISubsystem.cs" />
     <Compile Include="src\Base\Subsystems\ControlsSubsystem.cs" />
     <Compile Include="src\Pong\Subsystems\EffectsSubsystem.cs" />
@@ -154,13 +159,16 @@
     <None Include=".gitignore" />
     <None Include=".projectile" />
     <None Include="Content\Images\Splash.psd" />
+    <None Include="Content\Shaders\Afterimage.ps.hlsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="LICENSE.md" />
     <None Include="README.md" />
     <None Include="Content\Fonts\earthorbiter.ttf" />
-    <None Include="Content\Shaders\Bloom.ps.hlsl">
+    <None Include="Content\Shaders\Soft.ps.hlsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\Shaders\Fade.ps.hlsl">
+    <None Include="Content\Shaders\Blend.ps.hlsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Content\Shaders\ChromaticAberration.ps.hlsl">
@@ -220,13 +228,18 @@
     <None Include="Content\Sounds\Music.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\Sounds\235689__gpenn76__two-thumps.aiff" />
-    <None Include="Content\Sounds\PaddleHit.wav">
+    <None Include="Content\Sounds\Original\235689__gpenn76__two-thumps.aiff" />
+    <None Include="Content\Sounds\HitPaddle.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Content\Sounds\HitWall.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="images\Screenshot5.png" />
+    <None Include="images\Screenshot6.png" />
     <Content Include="lib\SharpDX\SharpDX.XAudio2.dll" />
     <Content Include="lib\SharpDX\SharpDX.XAudio2.xml" />
-    <None Include="Content\Sounds\The_Atlas_Room_-_03_-_Projection_I.mp3" />
+    <None Include="Content\Sounds\Original\The_Atlas_Room_-_03_-_Projection_I.mp3" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

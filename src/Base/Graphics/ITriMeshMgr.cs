@@ -1,6 +1,12 @@
 ﻿namespace PongBrain.Base.Graphics {
 
 /*-------------------------------------
+ * USINGS
+ *-----------------------------------*/
+
+using Math.Geom;
+
+/*-------------------------------------
  * INTERFACES
  *-----------------------------------*/
 
@@ -10,6 +16,8 @@ public interface ITriMeshMgr {
      *-----------------------------------*/
 
     ITriMesh CreateQuad(float width, float height);
+
+    ITriMesh FromShape(Shape shape);
 }
 
 }

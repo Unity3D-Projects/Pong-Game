@@ -32,6 +32,20 @@ public struct Vector4 {
         W = w;
     }
 
+    public Vector4(Vector2 xy, float z=0.0f, float w=1.0f) {
+        X = xy.X;
+        Y = xy.Y;
+        Z = z;
+        W = w;
+    }
+
+    public Vector4(Vector3 xyz, float w=1.0f) {
+        X = xyz.X;
+        Y = xyz.Y;
+        Z = xyz.Z;
+        W = w;
+    }
+
     /*-------------------------------------
      * PUBLIC METHODS
      *-----------------------------------*/

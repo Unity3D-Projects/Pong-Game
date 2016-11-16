@@ -17,10 +17,9 @@ internal class SharpDXTriMesh: IDisposable, ITriMesh {
     /*-------------------------------------
      * PUBLIC FIELDS
      *-----------------------------------*/
-
-    public D3D11.VertexBufferBinding Binding;
-
     public SharpDXGraphicsMgr Graphics;
+
+    public D3D11.Buffer IndexBuffer;
 
     public D3D11.Buffer VertexBuffer;
 
@@ -37,14 +36,13 @@ internal class SharpDXTriMesh: IDisposable, ITriMesh {
      *-----------------------------------*/
 
     public SharpDXTriMesh(SharpDXGraphicsMgr graphics,
-                         D3D11.Buffer     vertexBuffer,
-                         int              numVerts,
-                         int              numTris)
+                          D3D11.Buffer       indexBuffer,
+                          D3D11.Buffer       vertexBuffer,
+                          int                numTris,
+                          int                numVerts)
     {
-        var size = Marshal.SizeOf<Vertex>();
-
-        Binding      = new D3D11.VertexBufferBinding(vertexBuffer, size, 0);
         Graphics     = graphics;
+        IndexBuffer  = indexBuffer;
         VertexBuffer = vertexBuffer;
 
         NumTris  = numTris;
@@ -66,12 +64,16 @@ internal class SharpDXTriMesh: IDisposable, ITriMesh {
 
     protected virtual void Dispose(bool disposing) {
         if (disposing) {
+            if (IndexBuffer != null) {
+                IndexBuffer.Dispose();
+                IndexBuffer = null;
+            }
+
             if (VertexBuffer != null) {
                 VertexBuffer.Dispose();
                 VertexBuffer = null;
             }
 
-            Binding  = default (D3D11.VertexBufferBinding);
             Graphics = null;
         }
     }

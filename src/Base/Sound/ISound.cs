@@ -15,9 +15,7 @@ public interface ISound {
      * METHODS
      *-----------------------------------*/
 
-    void Play(float pitch=1.0f);
-
-    void Stop();
+    void Play(float pitch=0.0f);
 }
 
 }

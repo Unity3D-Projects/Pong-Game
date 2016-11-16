@@ -39,8 +39,8 @@ public class SplashScene: Scene {
         var g = Game.Inst.Graphics;
 
         Pong.PsChromaticAberration.SetTextures(Pong.RenderTargets[0]);
-        Pong.PsBloom              .SetTextures(Pong.RenderTargets[0]);
-        Pong.PsFade               .SetTextures(g.TextureMgr.White, Pong.RenderTargets[0]);
+        Pong.PsSoft              .SetTextures(Pong.RenderTargets[0]);
+        Pong.PsBlend               .SetTextures(g.TextureMgr.White, Pong.RenderTargets[0]);
         Pong.PsNoise              .SetTextures(Pong.RenderTargets[0]);
     }
 
@@ -51,9 +51,9 @@ public class SplashScene: Scene {
 
         var fadeVal = Math.Min(0.5f*m_Time*m_Time, 1.0f);
 
-        Pong.PsChromaticAberration.SetConstants(0.85f*fadeVal                 );
-        Pong.PsFade               .SetConstants(fadeVal*fadeVal               );
-        Pong.PsNoise              .SetConstants((uint)Pong.Rnd.Next(1, 999));
+        Pong.PsChromaticAberration.SetConstants(0.85f*fadeVal   );
+        Pong.PsBlend               .SetConstants(fadeVal*fadeVal );
+        Pong.PsNoise              .SetConstants(Pong.Rnd(1, 999));
 
         g.BeginFrame();
 
@@ -62,15 +62,15 @@ public class SplashScene: Scene {
             g.PixelShader  = g.DefaultPixelShader;
             g.PixelShader.SetTextures(Pong.TexSplash);
 
-            g.DrawTriMesh(Pong.TmQuad, Matrix4x4.Identity());
+            g.DrawTriMesh(Pong.TmUnitQuad, Matrix4x4.Identity());
             g.ApplyPostFX(Pong.RenderTargets[0], Pong.PsChromaticAberration);
         }
         else {
-            Pong.PsFade.SetConstants(0.86f);
+            Pong.PsBlend.SetConstants(0.86f);
         }
 
-        g.ApplyPostFX(Pong.RenderTargets[0], Pong.PsFade );
-        g.ApplyPostFX(Pong.RenderTargets[0], Pong.PsBloom);
+        g.ApplyPostFX(Pong.RenderTargets[0], Pong.PsBlend );
+        g.ApplyPostFX(Pong.RenderTargets[0], Pong.PsSoft);
         g.ApplyPostFX(g.ScreenRenderTarget , Pong.PsNoise);
 
         g.EndFrame();
@@ -79,7 +79,7 @@ public class SplashScene: Scene {
 
         if (m_Time > 3.5f) {
             Game.Inst.LeaveScene();
-            Game.Inst.EnterScene(new MainScene());
+            Game.Inst.EnterScene(new PlayingScene());
         }
     }
 

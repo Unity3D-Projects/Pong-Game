@@ -42,9 +42,9 @@ public struct Vector3 {
         Z = z;
     }
 
-    public Vector3(Vector2 a, float z=1.0f) {
-        X = a.X;
-        Y = a.Y;
+    public Vector3(Vector2 xy, float z=1.0f) {
+        X = xy.X;
+        Y = xy.Y;
         Z = z;
     }
 

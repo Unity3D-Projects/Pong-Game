@@ -4,6 +4,7 @@
  * USINGS
  *-----------------------------------*/
 
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using Core;
@@ -231,10 +232,12 @@ public class SharpDXGraphicsMgr: IGraphicsMgr {
     public void DrawTriMesh(ITriMesh triMesh, Matrix4x4 transform) {
         var context        = Device.ImmediateContext;
         var inputAssembler = context.InputAssembler;
-        var vbBinding      = ((SharpDXTriMesh)triMesh).Binding;
+        var indexBuffer    = ((SharpDXTriMesh)triMesh).IndexBuffer;
+        var vertexBuffer   = ((SharpDXTriMesh)triMesh).VertexBuffer;
 
-        inputAssembler.SetVertexBuffers(0, vbBinding);
-        inputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleStrip;
+        inputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
+        inputAssembler.SetIndexBuffer(indexBuffer, Format.R32_UInt, 0);
+        inputAssembler.SetVertexBuffers(0, new D3D11.VertexBufferBinding(vertexBuffer, Marshal.SizeOf<Vertex>(), 0));
 
         context.UpdateSubresource(ref transform, m_ShaderParams);
 
@@ -242,7 +245,7 @@ public class SharpDXGraphicsMgr: IGraphicsMgr {
             m_DeviceContext.PixelShader.SetShaderResources(0, m_PixelShader.GetShaderResources());
         }
 
-        context.Draw(triMesh.NumVerts, 0);
+        context.DrawIndexed(triMesh.NumTris, 0, 0);
     }
 
     public void EndFrame() {

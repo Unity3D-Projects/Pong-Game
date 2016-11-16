@@ -24,9 +24,7 @@ internal class SharpDXSoundMgr: ISoundMgr {
 
     private List<SharpDXSound> m_Sounds = new List<SharpDXSound>();
 
-    private int m_SourceVoiceIndex;
-
-    private Queue<SourceVoice> m_SourceVoices = new Queue<SourceVoice>();
+    private Queue<SourceVoice> m_VoicePool = new Queue<SourceVoice>();
 
     private XAudio2 m_XAudio2;
 
@@ -48,29 +46,33 @@ internal class SharpDXSoundMgr: ISoundMgr {
     }
 
     public SourceVoice GetVoice() {
-        return m_SourceVoices.Dequeue();
+        lock (m_VoicePool) {
+            return m_VoicePool.Dequeue();
+        }
     }
 
     public void Init() {
-        m_XAudio2         = new XAudio2();
+        m_XAudio2        = new XAudio2();
         m_MasteringVoice = new MasteringVoice(m_XAudio2);
 
-        var defWaveFormat = new WaveFormat();
-
+        var defWaveFormat = new WaveFormat(96000, 24, 2);
         for (var i = 0; i < 10; i++) {
             var voice = new SourceVoice(m_XAudio2, defWaveFormat);
+
             voice.BufferEnd += (ptr) => {
-                m_SourceVoices.Enqueue(voice);
+                lock (m_VoicePool) {
+                    m_VoicePool.Enqueue(voice);
+                }
             };
-            m_SourceVoices.Enqueue(voice);
+
+            m_VoicePool.Enqueue(voice);
         }
     }
 
     public ISound Load(string path) {
         using (var stream = new SoundStream(File.OpenRead(path))) {
-            var buf = new AudioBuffer(stream);
-
-            var sound = new SharpDXSound(this, buf, stream.Format, stream.DecodedPacketsInfo);
+            var buf   = new AudioBuffer(stream);
+            var sound = new SharpDXSound(this, buf, stream.DecodedPacketsInfo);
 
             m_Sounds.Add(sound);
 

@@ -28,19 +28,19 @@ public class BallEntity: Entity {
 
         var mass   = 1.0f;
         var radius = 0.04f;
-        var quad   = g.TriMeshMgr.CreateQuad(2.0f*radius, 2.0f*radius);
+        var shape  = Shape.Rectangle(2.0f*radius, 2.0f*radius);
 
         BodyComponent body;
 
         AddComponents(
-            new BallInfoComponent        { Radius = radius },
-     body = new BodyComponent            { InvMoI          = MathUtil.RectInvMoI(mass, 2.0f*radius, 2.0f*radius),
-                                           InvMass         = 1.0f/mass,
-                                           LinearDrag      = 0.0f,
-                                           Restitution     = 1.0f,
-                                           Shape           = Shape.Rectangle(2.0f*radius, 2.0f*radius) },
-            new MotionBlurComponent      { },
-            new TriMeshComponent         { TriMesh = quad }
+            new BallInfoComponent   { Radius      = radius },
+     body = new BodyComponent       { InvMoI      = MathUtil.RectInvMoI(mass, 2.0f*radius, 2.0f*radius),
+                                      InvMass     = 1.0f/mass,
+                                      LinearDrag  = 0.0f,
+                                      Restitution = 1.0f,
+                                      Shape       = shape },
+            new MotionBlurComponent { },
+            new TriMeshComponent    { TriMesh = g.TriMeshMgr.FromShape(shape) }
         );
 
         body.DerivsFn = (state, derivs) => {
