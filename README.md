@@ -1,6 +1,6 @@
 # Pong.
 
-**Pong** was a weekend project that started with the idea of creating a machine learning algoritm for the game Pong. Although an AI was implemented, **focus was shifted to the artistical aspects of the game.**
+**Pong** was a weekend project that started with the idea of creating a machine learning algorithm for the game Pong. Although an AI was implemented, **focus was shifted to the artistical aspects of the game.**
 
 ## Features
 
