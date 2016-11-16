@@ -1,15 +1,15 @@
-# PongBrain
+# Pong.
 
-An attempt at implementing an artificial neural network that plays pong. The game engine uses the entity-component architecture, so if all goes well, I might expand the scenario to include more complex game mechanics at a later time.
+**Pong** was a weekend project that started with the idea of creating a machine learning algoritm for the game Pong. Although an AI was implemented, **focus was shifted to the artistical aspects of the game.**
 
-## Features (so far)
+## Features
 
 ### Architecture
 * Carefully designed ECS (Entity–Component–System) engine
 * Separated into base engine and game implementation (for future use!)
 
 ### Artificial Intelligence
-* So far just a trivial AI
+* So far just a trivial AI, although challenging enough.
 
 ### Graphics
 * Camera effects (shaking)
