@@ -21,6 +21,7 @@
 * Particle effects
 
 ### Physics
+* Binary search for precise time-of-collision resolution
 * Collision detection (Separating Axis Theorem)
 * Realistic physics with fourth-order Runge–Kutta integration
 * Rigid body dynamics with convex polytopes
