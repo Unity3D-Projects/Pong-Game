@@ -14,20 +14,20 @@
 . <sub>So far just a trivial AI, although challenging enough.</sub>
 
 #### Graphics
-. <sub>Camera effects (shaking)</sub>
-. <sub>Chromatic aberration</sub>
-. <sub>Hardware-accelerated graphics (DirectX 11.0)</sub>
-. <sub>Motion blur</sub>
-. <sub>Noise (ISO) shader</sub>
-. <sub>Object animations</sub>
+. <sub>Camera effects (shaking)</sub>  
+. <sub>Chromatic aberration</sub>  
+. <sub>Hardware-accelerated graphics (DirectX 11.0)</sub>  
+. <sub>Motion blur</sub>  
+. <sub>Noise (ISO) shader</sub>  
+. <sub>Object animations</sub>  
 . <sub>Particle effects</sub>
 
 #### Physics
-. <sub>Binary search for precise time-of-collision resolution</sub>
-. <sub>Collision detection (Separating Axis Theorem)</sub>
-. <sub>Realistic physics with fourth-order Runge–Kutta integration</sub>
+. <sub>Binary search for precise time-of-collision resolution</sub>  
+. <sub>Collision detection (Separating Axis Theorem)</sub>  
+. <sub>Realistic physics with fourth-order Runge–Kutta integration</sub>  
 . <sub>Rigid body dynamics with convex polytopes</sub>
 
 ### Sound
-. <sub>Background music</sub>
+. <sub>Background music</sub>  
 . <sub>Multi-channel sound effects</sub>
