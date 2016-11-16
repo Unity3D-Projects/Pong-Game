@@ -4,30 +4,30 @@
 
 ![Pong.](images/Pong-888x376.png "Pong.")
 
-## Features
+### Features
 
-### Architecture
-* Carefully designed ECS (Entity–Component–System) engine
-* Separated into base engine and game implementation (for future use!)
+#### Architecture
+. <sub>Carefully designed ECS (Entity–Component–System) engine</sub>  
+. <sub>Separated into base engine and game implementation (for future use!)</sub>
 
-### Artificial Intelligence
-* So far just a trivial AI, although challenging enough.
+#### Artificial Intelligence
+. <sub>So far just a trivial AI, although challenging enough.</sub>
 
-### Graphics
-* Camera effects (shaking)
-* Chromatic aberration
-* Hardware-accelerated graphics (DirectX 11.0)
-* Motion blur
-* Noise (ISO) shader
-* Object animations
-* Particle effects
+#### Graphics
+. <sub>Camera effects (shaking)</sub>
+. <sub>Chromatic aberration</sub>
+. <sub>Hardware-accelerated graphics (DirectX 11.0)</sub>
+. <sub>Motion blur</sub>
+. <sub>Noise (ISO) shader</sub>
+. <sub>Object animations</sub>
+. <sub>Particle effects</sub>
 
-### Physics
-* Binary search for precise time-of-collision resolution
-* Collision detection (Separating Axis Theorem)
-* Realistic physics with fourth-order Runge–Kutta integration
-* Rigid body dynamics with convex polytopes
+#### Physics
+. <sub>Binary search for precise time-of-collision resolution</sub>
+. <sub>Collision detection (Separating Axis Theorem)</sub>
+. <sub>Realistic physics with fourth-order Runge–Kutta integration</sub>
+. <sub>Rigid body dynamics with convex polytopes</sub>
 
-## Sound
-* Background music
-* Multi-channel sound effects
+### Sound
+. <sub>Background music</sub>
+. <sub>Multi-channel sound effects</sub>
