@@ -79,10 +79,6 @@ public class SharpDXGraphicsMgr: IGraphicsMgr {
         set {
             var shader = (SharpDXShader)value;
 
-            if (shader == null) {
-                throw new System.Exception("lol");
-            }
-
             if (shader == m_PixelShader) {
                 return;
             }
@@ -102,10 +98,6 @@ public class SharpDXGraphicsMgr: IGraphicsMgr {
         get { return m_RenderTarget; }
         set {
             var renderTarget = (SharpDXRenderTarget)value;
-
-            if (value == null) {
-                throw new System.Exception("lol");
-            }
 
             if (renderTarget == m_RenderTarget) {
                 return;
@@ -136,10 +128,6 @@ public class SharpDXGraphicsMgr: IGraphicsMgr {
         get { return m_VertexShader; }
         set {
             var shader = (SharpDXShader)value;
-
-            if (shader == null) {
-                throw new System.Exception("lol");
-            }
 
             if (shader == m_VertexShader) {
                 return;
@@ -177,7 +165,7 @@ public class SharpDXGraphicsMgr: IGraphicsMgr {
     public void Cleanup() {
         m_DeviceContext.PixelShader.Set(null);
         m_DeviceContext.VertexShader.Set(null);
-        
+
         m_SwapChain.Dispose();
         m_SwapChain = null;
 
@@ -265,7 +253,7 @@ public class SharpDXGraphicsMgr: IGraphicsMgr {
 
         var desc = new D3D11.BufferDescription(64, D3D11.ResourceUsage.Default, D3D11.BindFlags.ConstantBuffer, D3D11.CpuAccessFlags.None, D3D11.ResourceOptionFlags.None, 0);
         var o = Matrix4x4.Identity();
-       
+
         m_ShaderParams = D3D11.Buffer.Create(Device, ref o, desc);
         m_DeviceContext.VertexShader.SetConstantBuffer(0, m_ShaderParams);
 
@@ -327,7 +315,7 @@ public class SharpDXGraphicsMgr: IGraphicsMgr {
         const D3D11.DeviceCreationFlags DEBUG_FLAG = D3D11.DeviceCreationFlags.None;
 #endif
 
-            D3D11.Device.CreateWithSwapChain(DriverType.Hardware, D3D11.DeviceCreationFlags.SingleThreaded | DEBUG_FLAG, swapChainDesc, out Device, out m_SwapChain);
+        D3D11.Device.CreateWithSwapChain(DriverType.Hardware, D3D11.DeviceCreationFlags.SingleThreaded | DEBUG_FLAG, swapChainDesc, out Device, out m_SwapChain);
         m_DeviceContext = Device.ImmediateContext;
 
         var rsd = new D3D11.RasterizerStateDescription {
