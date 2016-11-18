@@ -16,7 +16,7 @@ using SharpDX;
 using SharpDX.Direct3D;
 using SharpDX.DXGI;
 
-using D3D11   = SharpDX.Direct3D11;
+using D3D11 = SharpDX.Direct3D11;
 
 /*-------------------------------------
  * CLASSES
