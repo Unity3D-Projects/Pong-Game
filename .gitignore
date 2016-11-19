@@ -1,4 +1,5 @@
 *.csproj.user
+*.pyc
 .#*
 /.vs/
 /bin/

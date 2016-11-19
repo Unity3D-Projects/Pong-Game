@@ -1,3 +1,0 @@
-[submodule "build/pymake"]
-	path = build/pymake
-	url = git@github.com:philiparvidsson/pymake.git
