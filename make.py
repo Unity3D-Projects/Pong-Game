@@ -17,7 +17,6 @@ CSC = 'C:\\Program Files (x86)\\MSBuild\\14.0\\Bin\\csc.exe'
 FLAGS = [
 #    '/debug',
 #    '/define:DEBUG',
-    '/define:RELEASE',
     '/langversion:6',
     '/nologo',
     '/optimize',
@@ -84,7 +83,7 @@ def clean():
 
 @target()
 def content():
-    copy('Content', os.path.join(BINDIR, 'Content'))
+    copy('res', os.path.join(BINDIR, 'Content'))
 
 @target()
 def libs():
@@ -105,7 +104,8 @@ def program():
 
 @target()
 def run():
-    subprocess.call([os.path.join(BINDIR, TARGET)])
+    os.chdir(BINDIR)
+    subprocess.call([TARGET])
 
 #---------------------------------------
 # FUNCTIONS
