@@ -2,11 +2,9 @@
 # IMPORTS
 #---------------------------------------
 
-import fnmatch
-import os
-import shutil
-import subprocess
 import sys
+sys.path.insert(0, 'tools/pymake')
+from pymake import *
 
 #---------------------------------------
 # CONSTANTS
@@ -17,9 +15,8 @@ CSC = 'C:\\Program Files (x86)\\MSBuild\\14.0\\Bin\\csc.exe'
 FLAGS = [
 #    '/debug',
 #    '/define:DEBUG',
-    '/langversion:6',
     '/nologo',
-    '/optimize',
+    '/o',
     '/platform:x64',
     '/target:exe'
 ]
@@ -50,36 +47,17 @@ LIBDIRS = [
 ]
 
 #---------------------------------------
-# GLOBALS
+# FUNCTIONS
 #---------------------------------------
 
-targets = {}
-
-#---------------------------------------
-# DECORATORS
-#---------------------------------------
-
-def target(*args):
-    def wrapper(func):
-        func.dependencies = args
-        name = func.__name__
-        targets[name] = func
-        return func
-
-    return wrapper
-
-#---------------------------------------
-# TARGETS
-#---------------------------------------
-
-@target('content', 'libs', 'program')
+@target('compile', 'content', 'libs')
 def all():
     pass
 
 @target()
 def clean():
     if os.path.isdir(BINDIR):
-        shutil.rmtree(BINDIR)
+        remove_dir(BINDIR)
 
 @target()
 def content():
@@ -90,7 +68,7 @@ def libs():
     copy('lib/SharpDX', BINDIR, '*.dll')
 
 @target()
-def program():
+def compile():
     if not os.path.exists(BINDIR):
         os.mkdir(BINDIR)
 
@@ -100,7 +78,7 @@ def program():
     out     = ['/out:' + os.path.join(BINDIR, TARGET)]
     sources = ['/recurse:' + os.path.join(SRCDIR, '*.cs')]
 
-    subprocess.call([CSC] + flags + libdirs + libs + out + sources)
+    run_cmd(CSC, flags + libdirs + libs + out + sources)
 
 @target()
 def run():
@@ -108,58 +86,7 @@ def run():
     subprocess.call([TARGET])
 
 #---------------------------------------
-# FUNCTIONS
-#---------------------------------------
-
-def copy(srcpath, destpath, pattern=None):
-    if os.path.isfile(srcpath):
-        if pattern and not fnmatch.fnmatch(srcpath, pattern):
-            return
-
-        if os.path.exists(destpath):
-            srcmt = os.path.getmtime(srcpath)
-            destmt = os.path.getmtime(destpath)
-            if srcmt <= destmt:
-                return
-
-        path, filename = os.path.split(destpath)
-        print 'copying', filename, 'to', path
-
-        shutil.copyfile(srcpath, destpath)
-        return
-
-    if not os.path.exists(destpath):
-        os.makedirs(destpath)
-
-    for s in os.listdir(srcpath):
-        dest = os.path.join(destpath, s)
-        src = os.path.join(srcpath, s)
-
-        if os.path.isfile(s):
-            copy(src, dest, pattern)
-        else:
-            copy(src, dest, pattern)
-
-def make(target):
-    func = targets[target]
-
-    for dep in func.dependencies:
-        make(dep)
-
-    print
-    func()
-
-#---------------------------------------
 # SCRIPT
 #---------------------------------------
 
-if __name__ == '__main__':
-    s = 'all'
-    if len(sys.argv) > 1:
-        s = sys.argv[1]
-
-    if s not in targets:
-        print 'no such target:', s
-        sys.exit()
-
-    make(s)
+make(sys.argv[1] if len(sys.argv) > 1 else 'all')
