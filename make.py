@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import os, sys
 sys.path.insert(0, os.path.join('build/pymake'))
 from pymake import *
@@ -66,7 +67,7 @@ def compile():
 @target
 def run():
     os.chdir(BINDIR)
-    run_program(TARGET)
+    run_program(NAME)
 
 #---------------------------------------
 # SCRIPT
