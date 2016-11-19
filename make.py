@@ -15,8 +15,9 @@ import sys
 CSC = 'C:\\Program Files (x86)\\MSBuild\\14.0\\Bin\\csc.exe'
 
 FLAGS = [
-    '/debug',
-    '/define:DEBUG',
+#    '/debug',
+#    '/define:DEBUG',
+    '/define:RELEASE',
     '/langversion:6',
     '/nologo',
     '/optimize',
@@ -101,6 +102,10 @@ def program():
     sources = ['/recurse:' + os.path.join(SRCDIR, '*.cs')]
 
     subprocess.call([CSC] + flags + libdirs + libs + out + sources)
+
+@target()
+def run():
+    subprocess.call([os.path.join(BINDIR, TARGET)])
 
 #---------------------------------------
 # FUNCTIONS
