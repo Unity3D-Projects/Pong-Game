@@ -157,12 +157,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
-    <None Include=".projectile" />
     <None Include="Content\Images\Splash.psd" />
     <None Include="Content\Shaders\Afterimage.ps.hlsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="LICENSE.md" />
+    <None Include="make.py" />
     <None Include="README.md" />
     <None Include="Content\Fonts\earthorbiter.ttf" />
     <None Include="Content\Shaders\Soft.ps.hlsl">
