@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import os, sys
-sys.path.insert(0, os.path.join('build/pymake'))
+sys.path.insert(0, os.path.join('build', 'pymake'))
 from pymake import *
 
 NAME = 'Pong.exe'
