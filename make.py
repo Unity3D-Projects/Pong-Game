@@ -20,7 +20,7 @@ FLAGS = [
     '/nologo',
     '/o',
     '/platform:x64',
-    '/target:exe'
+    '/target:winexe'
 ]
 
 TARGET = 'Pong.exe'
