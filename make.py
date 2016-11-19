@@ -2,8 +2,10 @@
 # IMPORTS
 #---------------------------------------
 
+import os
 import sys
-sys.path.insert(0, 'tools/pymake')
+
+sys.path.insert(0, os.path.join('build/pymake'))
 from pymake import *
 
 #---------------------------------------
