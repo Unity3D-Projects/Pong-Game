@@ -1,43 +1,43 @@
 #!/usr/bin/env python
+
 import os, sys
-sys.path.insert(0, os.path.join('build', 'pymake'))
-from pymake import *
+sys.path.insert(0, os.path.join('build', 'pymake2'))
+from pymake2 import *
 
-import csc
+from pymake2.template.csharp import csc
 
-@target
+@default_target(conf=csc.DEFAULT_CONF)
 @depends_on('compile', 'content', 'libs')
 def all(conf):
     pass
 
-@target
+@target(conf=csc.DEFAULT_CONF)
 def content(conf):
     copy('res', os.path.join(conf.bindir, 'Content'))
 
-@target
+@target(conf=csc.DEFAULT_CONF)
 def libs(conf):
     copy(r'lib\SharpDX', conf.bindir, '*.dll')
 
-pymake(csc.defaultConf(), {
-    'name': 'Pong.exe',
+pymake2({ 'name': 'Pong.exe',
 
-    'flags': ['/target:winexe',
-              #'/debug',
-              #'/define:DEBUG',
-              '/o',
-              '/platform:x64'],
+          'flags': ['/nologo',
+                    #'/debug',
+                    #'/define:DEBUG',
+                    '/optimize',
+                    '/target:winexe',
+                    '/platform:x64'],
 
-    'libs': ['PresentationCore.dll',
-             'System.IO.dll',
-             'System.Runtime.dll',
-             'WindowsBase.dll',
+          'libdirs': csc.DEFAULT_CONF['libdirs'] + [r'lib\SharpDX'],
 
-             'SharpDX.D3DCompiler.dll',
-             'SharpDX.DXGI.dll',
-             'SharpDX.Direct3D11.dll',
-             'SharpDX.Mathematics.dll',
-             'SharpDX.XAudio2.dll',
-             'SharpDX.dll'],
+          'libs': ['PresentationCore.dll',
+                   'System.IO.dll',
+                   'System.Runtime.dll',
+                   'WindowsBase.dll',
 
-    'libdirs': [r'lib\SharpDX'],
-})
+                   'SharpDX.D3DCompiler.dll',
+                   'SharpDX.DXGI.dll',
+                   'SharpDX.Direct3D11.dll',
+                   'SharpDX.Mathematics.dll',
+                   'SharpDX.XAudio2.dll',
+                   'SharpDX.dll'] })
