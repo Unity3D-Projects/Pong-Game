@@ -41,19 +41,28 @@ def content(conf):
     copy('res', os.path.join(conf.bindir, 'Content'))
 
 @target(conf=csc.conf)
-@depends_on('primusge')
 def libs(conf):
     copy(r'lib\PrimusGE\bin', conf.bindir, '*.dll')
     copy(r'lib\PrimusGE\lib\SharpDX', conf.bindir, '*.dll')
 
-@target
-def primusge(conf):
+@after_target('clean')
+def primusge_clean(conf):
+    """
+    Cleans the PrimusGE game engine.
+    """
+    cwd = os.getcwd()
+    os.chdir('lib/PrimusGE')
+    run_program('python', [ 'make.py', 'clean' ])
+    os.chdir(cwd)
+
+@before_target('compile')
+def primuisge_compile(conf):
     """
     Builds the PrimusGE game engine.
     """
     cwd = os.getcwd()
     os.chdir('lib/PrimusGE')
-    run_program('python', [ 'make.py' ])
+    run_program('python', [ 'make.py', 'compile' ])
     os.chdir(cwd)
 
 pymake2(conf)
