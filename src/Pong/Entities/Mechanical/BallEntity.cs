@@ -6,11 +6,11 @@ namespace Pong.Entities.Mechanical {
 
 using System;
 
-using Base.Components.Graphical;
-using Base.Components.Physical;
-using Base.Core;
-using Base.Math;
-using Base.Math.Geom;
+using PrimusGE.Components.Graphical;
+using PrimusGE.Components.Physical;
+using PrimusGE.Core;
+using PrimusGE.Math;
+using PrimusGE.Math.Geom;
 
 using Components;
 

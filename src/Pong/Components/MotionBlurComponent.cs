@@ -4,7 +4,7 @@
  * USINGS
  *-----------------------------------*/
 
-using Base.Math;
+using PrimusGE.Math;
 
 /*-------------------------------------
  * CLASSES

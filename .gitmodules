@@ -1,0 +1,3 @@
+[submodule "lib/PrimusGE"]
+	path = lib/PrimusGE
+	url = git@github.com:philiparvidsson/PrimusGE.git

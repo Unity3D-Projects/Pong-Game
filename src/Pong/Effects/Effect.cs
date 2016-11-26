@@ -4,8 +4,8 @@
  * USINGS
  *-----------------------------------*/
 
-using Base.Components;
-using Base.Core;
+using PrimusGE.Components;
+using PrimusGE.Core;
 
 using Components;
 

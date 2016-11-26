@@ -7,18 +7,18 @@ namespace Pong.Scenes {
 using System;
 using System.Collections.Generic;
 
-using Base.Components.AI;
-using Base.Components.Graphical;
-using Base.Components.Input;
-using Base.Components.Physical;
-using Base.Core;
-using Base.Graphics;
-using Base.Graphics.Animation;
-using Base.Graphics.Shaders;
-using Base.Input;
-using Base.Math;
-using Base.Messages;
-using Base.Subsystems;
+using PrimusGE.Components.AI;
+using PrimusGE.Components.Graphical;
+using PrimusGE.Components.Input;
+using PrimusGE.Components.Physical;
+using PrimusGE.Core;
+using PrimusGE.Graphics;
+using PrimusGE.Graphics.Animation;
+using PrimusGE.Graphics.Shaders;
+using PrimusGE.Input;
+using PrimusGE.Math;
+using PrimusGE.Messages;
+using PrimusGE.Subsystems;
 
 using AI.Trivial;
 using Components;

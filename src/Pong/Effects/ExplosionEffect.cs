@@ -6,10 +6,10 @@
 
 using System;
 
-using Base.Components;
-using Base.Components.Physical;
-using Base.Core;
-using Base.Math;
+using PrimusGE.Components;
+using PrimusGE.Components.Physical;
+using PrimusGE.Core;
+using PrimusGE.Math;
 
 using Entities.Graphical;
 
@@ -64,7 +64,7 @@ public sealed class ExplosionEffect: Effect {
 
             body.Angle = theta;
             body.AngularVelocity = w;
-            body.Velocity = new Base.Math.Vector2(vx, vy);
+            body.Velocity = new Vector2(vx, vy);
 
             particle.AddComponents(
                 new LifetimeComponent { Lifetime = a }

@@ -7,9 +7,9 @@
 using System;
 using System.Windows.Forms;
 
-using Base.Core;
-using Base.Graphics.SharpDXImpl;
-using Base.Sound.SharpDXImpl;
+using PrimusGE.Core;
+using PrimusGE.Graphics.SharpDXImpl;
+using PrimusGE.Sound.SharpDXImpl;
 
 using Scenes;
 

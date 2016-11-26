@@ -6,8 +6,8 @@
 
 using System;
 
-using Base.Math;
-using Base.Subsystems;
+using PrimusGE.Math;
+using PrimusGE.Subsystems;
 
 /*-------------------------------------
  * CLASSES

@@ -14,12 +14,15 @@ conf = { 'name': 'Pong.exe',
                    '/target:winexe',
                    '/platform:x64'],
 
-         'libdirs': csc.conf.libdirs + [ r'lib\SharpDX' ],
+         'libdirs': csc.conf.libdirs + [ r'lib\PrimusGE\bin',
+                                         r'lib\PrimusGE\lib\SharpDX' ],
 
          'libs': [ 'PresentationCore.dll',
                    'System.IO.dll',
                    'System.Runtime.dll',
                    'WindowsBase.dll',
+
+                   'PrimusGE.dll',
 
                    'SharpDX.D3DCompiler.dll',
                    'SharpDX.DXGI.dll',
@@ -38,7 +41,19 @@ def content(conf):
     copy('res', os.path.join(conf.bindir, 'Content'))
 
 @target(conf=csc.conf)
+@depends_on('primusge')
 def libs(conf):
-    copy(r'lib\SharpDX', conf.bindir, '*.dll')
+    copy(r'lib\Gecs-eng\bin', conf.bindir, '*.dll')
+    copy(r'lib\Gecs-eng\lib\SharpDX', conf.bindir, '*.dll')
+
+@target
+def primusge(conf):
+    """
+    Builds the PrimusGE game engine.
+    """
+    cwd = os.getcwd()
+    os.chdir('lib/PrimusGE')
+    run_program('python', [ 'make.py' ])
+    os.chdir(cwd)
 
 pymake2(conf)

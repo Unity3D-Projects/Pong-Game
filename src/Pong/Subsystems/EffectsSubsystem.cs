@@ -4,7 +4,7 @@
  * USINGS
  *-----------------------------------*/
 
-using Base.Core;
+using PrimusGE.Core;
 
 using Components;
 

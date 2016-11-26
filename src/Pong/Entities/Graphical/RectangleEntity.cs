@@ -4,11 +4,11 @@
  * USINGS
  *-----------------------------------*/
 
-using Base.Components.Graphical;
-using Base.Components.Physical;
-using Base.Core;
-using Base.Graphics;
-using Base.Math;
+using PrimusGE.Components.Graphical;
+using PrimusGE.Components.Physical;
+using PrimusGE.Core;
+using PrimusGE.Graphics;
+using PrimusGE.Math;
 
 using Components;
 

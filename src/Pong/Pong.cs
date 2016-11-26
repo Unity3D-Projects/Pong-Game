@@ -8,12 +8,12 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 
-using Base.Core;
-using Base.Graphics;
-using Base.Graphics.Shaders;
-using Base.Graphics.Textures;
-using Base.Math;
-using Base.Sound;
+using PrimusGE.Core;
+using PrimusGE.Graphics;
+using PrimusGE.Graphics.Shaders;
+using PrimusGE.Graphics.Textures;
+using PrimusGE.Math;
+using PrimusGE.Sound;
 
 /*-------------------------------------
  * CLASSES

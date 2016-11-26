@@ -6,9 +6,9 @@
 
 using System;
 
-using Base.Components.Input;
-using Base.Components.Physical;
-using Base.Core;
+using PrimusGE.Components.Input;
+using PrimusGE.Components.Physical;
+using PrimusGE.Core;
 
 /*-------------------------------------
  * CLASSES
