@@ -40,6 +40,11 @@ def all(conf):
 def content(conf):
     copy('res', os.path.join(conf.bindir, 'Content'))
 
+@target
+def init(conf):
+    run_program('git', [ 'submodule', 'init' ])
+    run_program('git', [ 'submodule', 'update' ])
+
 @target(conf=csc.conf)
 def libs(conf):
     copy(r'lib\PrimusGE\bin', conf.bindir, '*.dll')
