@@ -43,8 +43,8 @@ def content(conf):
 @target(conf=csc.conf)
 @depends_on('primusge')
 def libs(conf):
-    copy(r'lib\Gecs-eng\bin', conf.bindir, '*.dll')
-    copy(r'lib\Gecs-eng\lib\SharpDX', conf.bindir, '*.dll')
+    copy(r'lib\PrimusGE\bin', conf.bindir, '*.dll')
+    copy(r'lib\PrimusGE\lib\SharpDX', conf.bindir, '*.dll')
 
 @target
 def primusge(conf):
