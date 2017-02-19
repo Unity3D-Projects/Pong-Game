@@ -31,3 +31,20 @@
 <strong>Sound</strong>  
 . <sub>Background music</sub>  
 . <sub>Multi-channel sound effects</sub>
+
+## Building
+
+Requires: [git](https://git-scm.com/downloads), [Python 2.7](https://www.python.org/downloads/release/python-2712/)
+
+1. Clone this repository by typing `git clone https://github.com/philiparvidsson/Pong-Game.git` in your terminal.
+2. Chdir into the Pong-Game directory.
+3. Type `python make.py init all`.
+4. Run Pong.exe in the bin directory.
+
+Or, copy this and run it to download, build and run the game:
+
+`git clone https://github.com/philiparvidsson/Pong-Game.git && cd Pong-Game && python make.py init all run`
+
+## Video
+
+[![Starburst Gameplay Trailer](https://img.youtube.com/vi/vTRIYzlEDfw/0.jpg)](https://youtu.be/vTRIYzlEDfw)
