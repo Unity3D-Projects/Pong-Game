@@ -6,7 +6,7 @@
 
 ### Features
 
-<strong>Architecture<strong>  
+<strong>Architecture</strong>  
 . <sub>Carefully designed ECS (Entity–Component–System) engine</sub>  
 . <sub>Separated into base engine and game implementation (for future use!)</sub>
 
