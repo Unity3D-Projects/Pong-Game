@@ -1,4 +1,4 @@
-﻿namespace Pong.Scenes {
+namespace Pong.Scenes {
 
 /*-------------------------------------
  * USINGS
@@ -33,14 +33,14 @@ public class SplashScene: Scene {
         base.Init();
 
         Pong.Preload();
-
+        
         Pong.SndMusic.Play();
 
         var g = Game.Inst.Graphics;
 
         Pong.PsChromaticAberration.SetTextures(Pong.RenderTargets[0]);
-        Pong.PsSoft              .SetTextures(Pong.RenderTargets[0]);
-        Pong.PsBlend               .SetTextures(g.TextureMgr.White, Pong.RenderTargets[0]);
+        Pong.PsSoft               .SetTextures(Pong.RenderTargets[0]);
+        Pong.PsBlend              .SetTextures(g.TextureMgr.White, Pong.RenderTargets[0]);
         Pong.PsNoise              .SetTextures(Pong.RenderTargets[0]);
     }
 
@@ -52,7 +52,7 @@ public class SplashScene: Scene {
         var fadeVal = Math.Min(0.5f*m_Time*m_Time, 1.0f);
 
         Pong.PsChromaticAberration.SetConstants(0.85f*fadeVal   );
-        Pong.PsBlend               .SetConstants(fadeVal*fadeVal );
+        Pong.PsBlend              .SetConstants(fadeVal*fadeVal );
         Pong.PsNoise              .SetConstants(Pong.Rnd(1, 999));
 
         g.BeginFrame();
@@ -69,8 +69,8 @@ public class SplashScene: Scene {
             Pong.PsBlend.SetConstants(0.86f);
         }
 
-        g.ApplyPostFX(Pong.RenderTargets[0], Pong.PsBlend );
-        g.ApplyPostFX(Pong.RenderTargets[0], Pong.PsSoft);
+        g.ApplyPostFX(Pong.RenderTargets[0], Pong.PsBlend);
+        g.ApplyPostFX(Pong.RenderTargets[0], Pong.PsSoft );
         g.ApplyPostFX(g.ScreenRenderTarget , Pong.PsNoise);
 
         g.EndFrame();
