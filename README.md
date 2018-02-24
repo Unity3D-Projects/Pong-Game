@@ -47,4 +47,4 @@ Or, copy this and run it to download, build and run the game:
 
 ## Video
 
-[![Starburst Gameplay Trailer](https://img.youtube.com/vi/vTRIYzlEDfw/0.jpg)](https://youtu.be/vTRIYzlEDfw)
+[![Pong Game](https://img.youtube.com/vi/vTRIYzlEDfw/0.jpg)](https://youtu.be/vTRIYzlEDfw)
